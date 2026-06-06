@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://cr4xuiouukpdx"]
+
+[ext_resource type="Script" uid="uid://d1odc4de7pkdt" path="res://Player/player_script.gd" id="1_l8h54"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hvfyp"]
+radius = 0.28222656
+height = 1.8
+
+[sub_resource type="Gradient" id="Gradient_l8h54"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.13945578, 0.1632653, 0.19387755)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4ntmi"]
+gradient = SubResource("Gradient_l8h54")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[node name="Player" type="CharacterBody3D" unique_id=452002403]
+collision_layer = 2
+collision_mask = 17
+script = ExtResource("1_l8h54")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1605091897]
+shape = SubResource("CapsuleShape3D_hvfyp")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1337991480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51537395, 0)
+
+[node name="interaction_ray" type="RayCast3D" parent="Camera3D" unique_id=48862161]
+target_position = Vector3(0, 0, -4)
+collision_mask = 5
+collide_with_areas = true
+
+[node name="crosshair" type="TextureRect" parent="." unique_id=776713406]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_4ntmi")
+
+[node name="inventory_label" type="Label" parent="." unique_id=2058826100]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "IRON"
+
+[node name="health_label" type="Label" parent="." unique_id=457185464]
+offset_top = 36.0
+offset_right = 41.0
+offset_bottom = 59.0
+text = "IRON"

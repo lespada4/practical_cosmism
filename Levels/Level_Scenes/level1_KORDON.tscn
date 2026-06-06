@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://bkiul8xv6adjg"]
+
+[ext_resource type="PackedScene" uid="uid://cr4xuiouukpdx" path="res://Player/player.tscn" id="1_a5bde"]
+[ext_resource type="Resource" uid="uid://crsciskm4sp5t" path="res://items/moonshine.tres" id="2_cu8n7"]
+[ext_resource type="PackedScene" uid="uid://c0xj6ejvhp3if" path="res://Object_Scenes/resource_pile.tscn" id="2_o78as"]
+[ext_resource type="Script" uid="uid://cboqshlyq5vga" path="res://Objects_Scripts/danger_zone.gd" id="3_0riot"]
+[ext_resource type="Resource" uid="uid://boccx0roxggnf" path="res://items/iron.tres" id="3_blk61"]
+[ext_resource type="PackedScene" uid="uid://cx0631ojhnuue" path="res://Object_Scenes/building_site.tscn" id="4_4kpr1"]
+[ext_resource type="Resource" uid="uid://s1hymwyfxif8" path="res://items/steel.tres" id="4_q3his"]
+[ext_resource type="PackedScene" uid="uid://bvf8hc31dmraf" path="res://Object_Scenes/still.tscn" id="5_vxags"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_yriis"]
+size = Vector3(32, 1, 32)
+
+[sub_resource type="Gradient" id="Gradient_a5bde"]
+offsets = PackedFloat32Array(0.062043797, 0.4489051, 0.77737224, 1)
+colors = PackedColorArray(0.5928721, 0.5235053, 0.0387882, 1, 0.26607582, 0.33858973, 0.18893531, 1, 0.36781427, 0.39615777, 0.14219141, 1, 0.67729443, 0.5712751, 1.92523e-07, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_o78as"]
+frequency = 0.69
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0riot"]
+width = 64
+height = 40
+noise = SubResource("FastNoiseLite_o78as")
+color_ramp = SubResource("Gradient_a5bde")
+seamless_blend_skirt = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4kpr1"]
+albedo_texture = SubResource("NoiseTexture2D_0riot")
+uv1_scale = Vector3(64, 64, 64)
+texture_filter = 0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bsav1"]
+size = Vector3(3.9013672, 2.7459717, 4.0307617)
+
+[node name="Level" type="Node3D" unique_id=7041059]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="." unique_id=309595749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1471252e-05, -0.5268602, 0.0051101446)
+use_collision = true
+mesh = SubResource("BoxMesh_yriis")
+material = SubResource("StandardMaterial3D_4kpr1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=601724832]
+transform = Transform3D(1, 0, 0, 0, 0.74508035, 0.6669747, 0, -0.6669747, 0.74508035, 0, 0, 0)
+
+[node name="ResourcePile" parent="." unique_id=74034621 instance=ExtResource("2_o78as")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.34847546, 0.47313976, -2.2281134)
+item = ExtResource("2_cu8n7")
+
+[node name="ResourcePile3" parent="." unique_id=774099753 instance=ExtResource("2_o78as")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5744781, 0.47313976, -2.2281134)
+item = ExtResource("3_blk61")
+amount = 32
+
+[node name="ResourcePile2" parent="." unique_id=1319743114 instance=ExtResource("2_o78as")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5396063, 0.47313976, -2.2281134)
+item = ExtResource("4_q3his")
+
+[node name="Danger_Zone" type="Area3D" parent="." unique_id=1587165251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.88993406, -0.026860237, -4.641963)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("3_0riot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Danger_Zone" unique_id=629755675]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87298584, -1.5153809)
+shape = SubResource("BoxShape3D_bsav1")
+debug_color = Color(0.874417, 0.09531733, 0, 0.8862745)
+
+[node name="Building_Site" parent="." unique_id=207193160 instance=ExtResource("4_4kpr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0053949356, 0.6787224, 3.4974246)
+build_scene = ExtResource("5_vxags")
+
+[node name="Player" parent="." unique_id=452002403 instance=ExtResource("1_a5bde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8472873, 1.9540522, -0.6313447)

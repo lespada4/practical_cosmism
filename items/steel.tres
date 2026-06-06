@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://s1hymwyfxif8"]
+
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="1_enndb"]
+[ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/Item_Res/Item_Res_Script.gd" id="2_ehjh1"]
+
+[sub_resource type="Gradient" id="Gradient_enndb"]
+offsets = PackedFloat32Array(0.4931973, 1)
+colors = PackedColorArray(0.13895398, 0.17207491, 0.29280335, 1, 0.47880358, 0.26460338, 0.9999619, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_8biea"]
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ehjh1"]
+width = 32
+height = 32
+noise = SubResource("FastNoiseLite_8biea")
+color_ramp = SubResource("Gradient_enndb")
+seamless = true
+
+[resource]
+script = ExtResource("2_ehjh1")
+id = 2
+display_name = "Steel"
+icon = SubResource("NoiseTexture2D_ehjh1")
+collectable_scene = ExtResource("1_enndb")
+metadata/_custom_type_script = "uid://cjv8wtpf5o1id"
