@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://cr4xuiouukpdx"]
 
 [ext_resource type="Script" uid="uid://d1odc4de7pkdt" path="res://Player/player_script.gd" id="1_l8h54"]
+[ext_resource type="Script" uid="uid://dbtt5ap7725tm" path="res://Player/inventory_system/inventory.gd" id="2_4ntmi"]
+[ext_resource type="Script" uid="uid://cfhangcefpspl" path="res://Player/inventory_system/inventory_bar.gd" id="3_btcbx"]
+[ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="4_gwnis"]
+[ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://Player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hvfyp"]
 radius = 0.28222656
@@ -33,28 +37,50 @@ target_position = Vector3(0, 0, -4)
 collision_mask = 5
 collide_with_areas = true
 
-[node name="crosshair" type="TextureRect" parent="." unique_id=776713406]
+[node name="Inventory" type="Node" parent="." unique_id=136037942]
+script = ExtResource("2_4ntmi")
+
+[node name="UI_LAYER" type="CanvasLayer" parent="." unique_id=1060750778]
+
+[node name="crosshair" type="TextureRect" parent="UI_LAYER" unique_id=776713406]
 texture_filter = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_4ntmi")
 
-[node name="inventory_label" type="Label" parent="." unique_id=2058826100]
-offset_right = 40.0
+[node name="inventory_label" type="Label" parent="UI_LAYER" unique_id=2058826100]
+offset_right = 41.0
 offset_bottom = 23.0
 text = "IRON"
 
-[node name="health_label" type="Label" parent="." unique_id=457185464]
+[node name="health_label" type="Label" parent="UI_LAYER" unique_id=457185464]
 offset_top = 36.0
 offset_right = 41.0
 offset_bottom = 59.0
 text = "IRON"
+
+[node name="InventoryBar" type="HBoxContainer" parent="UI_LAYER" unique_id=299301559]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -46.0
+offset_right = 20.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("3_btcbx")
+slot_scene = ExtResource("4_gwnis")
+
+[node name="FullInventory" parent="UI_LAYER" unique_id=594815198 instance=ExtResource("5_k53q1")]

@@ -2,12 +2,18 @@
 
 [ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="1_0cgu3"]
 [ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/Item_Res/Item_Res_Script.gd" id="2_g3btv"]
-[ext_resource type="Texture2D" uid="uid://15imtfqhybd1" path="res://icon.svg" id="2_rgbm7"]
+
+[sub_resource type="Gradient" id="Gradient_0cgu3"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g3btv"]
+gradient = SubResource("Gradient_0cgu3")
+width = 16
+height = 16
 
 [resource]
 script = ExtResource("2_g3btv")
 id = 3
 display_name = "Moonshine"
-icon = ExtResource("2_rgbm7")
+icon = SubResource("GradientTexture2D_g3btv")
 collectable_scene = ExtResource("1_0cgu3")
 metadata/_custom_type_script = "uid://cjv8wtpf5o1id"

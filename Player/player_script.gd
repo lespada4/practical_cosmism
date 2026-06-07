@@ -8,14 +8,15 @@ extends CharacterBody3D
 @export var coyote_time = 0.1
 @export var build_distance_min: float = 1
 @export var build_distance_max: float = 5.0
-
-@onready var health_label: Label = $health_label
+@onready var full_inventory: Panel = $UI_LAYER/FullInventory
 @onready var interaction_ray: RayCast3D = $Camera3D/interaction_ray
-@onready var inventory_label: Label = $inventory_label
 @onready var camera: Camera3D = $Camera3D
-@onready var crosshair: TextureRect = $crosshair
+@onready var inventory: Inventory = $Inventory
+@onready var crosshair: TextureRect = $UI_LAYER/crosshair
+@onready var inventory_label: Label = $UI_LAYER/inventory_label
+@onready var health_label: Label = $UI_LAYER/health_label
+@onready var inventory_bar: HBoxContainer = $UI_LAYER/InventoryBar
 
-var inventory_stacks: Array[ItemStack] = []
 var head_bob_time = 0.0
 var is_moving = false
 var camera_default_height = 0.0
@@ -32,9 +33,18 @@ var current_blueprint_id: String = ""
 func _ready():
 	camera_default_height = camera.transform.origin.y
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	update_inventory_display()
 	update_health_display()
 	add_to_group("player")
+	
+	# Тестовые предметы
+	inventory.add_item(1, 10)  # 10 iron
+	inventory.add_item(2, 5)   # 5 steel
+	inventory.add_item(3, 2)   # 2 moonshine
+	
+	
+	# Подключаем обновление UI
+	inventory.inventory_updated.connect(update_inventory_display)
+	update_inventory_display()
 
 func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -42,7 +52,6 @@ func _input(event):
 		camera.rotate_x(-event.relative.y * mouse_sensitivity)
 		camera.rotation.x = clamp(camera.rotation.x, -1.5, 1.5)
 		
-		# Обновляем дальность постройки при движении камеры
 		if build_mode:
 			update_build_distance_by_camera()
 	
@@ -57,10 +66,6 @@ func _input(event):
 			enter_build_mode("still")
 		else:
 			exit_build_mode()
-	
-	if event.is_action_pressed("drink"):
-		drink_moonshine()
-	
 	if build_mode and event.is_action_pressed("rotate_building") and current_ghost:
 		current_ghost.rotate_y(deg_to_rad(45))
 
@@ -90,9 +95,9 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and coyote_timer > 0:
 		velocity.y = jump_velocity
 	
-	# Увеличенная гравитация и ускорение падения
-	var gravity = 14.0  # вместо 9.8
-	var fall_multiplier = 2.0  # ускорение при падении
+	# Гравитация с ускорением падения
+	var gravity = 14.0
+	var fall_multiplier = 2.0
 	
 	if velocity.y < 0:
 		velocity.y -= gravity * fall_multiplier * delta
@@ -124,63 +129,12 @@ func try_interact():
 		hit.interact(self)
 
 func collect_item(item_id: int, amount: int):
-	add_item_stack(item_id, amount)
-	update_inventory_display()
-
-func add_item_stack(item_id: int, amount: int) -> bool:
-	var item = ItemRegistry.get_item(item_id)
-	if not item:
-		return false
-	
-	for stack in inventory_stacks:
-		if stack.item.id == item_id and stack.quantity < item.max_stack:
-			var space = item.max_stack - stack.quantity
-			var to_add = min(space, amount)
-			stack.quantity += to_add
-			amount -= to_add
-			if amount == 0:
-				update_inventory_display()
-				return true
-	
-	while amount > 0:
-		var to_add = min(item.max_stack, amount)
-		var new_stack = ItemStack.new()
-		new_stack.item = item
-		new_stack.quantity = to_add
-		inventory_stacks.append(new_stack)
-		amount -= to_add
-	
-	update_inventory_display()
-	return true
-
-func remove_item_stack(item_id: int, amount: int) -> bool:
-	var remaining = amount
-	for i in range(inventory_stacks.size() - 1, -1, -1):
-		var stack = inventory_stacks[i]
-		if stack.item.id == item_id:
-			if stack.quantity > remaining:
-				stack.quantity -= remaining
-				remaining = 0
-				update_inventory_display()
-				return true
-			else:
-				remaining -= stack.quantity
-				inventory_stacks.remove_at(i)
-	
-	update_inventory_display()
-	return remaining == 0
-
-func get_item_count(item_id: int) -> int:
-	var total = 0
-	for stack in inventory_stacks:
-		if stack.item.id == item_id:
-			total += stack.quantity
-	return total
+	inventory.add_item(item_id, amount)
 
 func update_inventory_display():
-	var iron = get_item_count(1)
-	var steel = get_item_count(2)
-	var moonshine = get_item_count(3)
+	var iron = inventory.get_item_count(1)
+	var steel = inventory.get_item_count(2)
+	var moonshine = inventory.get_item_count(3)
 	inventory_label.text = "Iron: " + str(iron) + "  Steel: " + str(steel) + "  Moonshine: " + str(moonshine)
 
 func update_health_display():
@@ -202,12 +156,6 @@ func apply_damage(amount: float, _type):
 func stop_damage(_type):
 	current_damage = 0.0
 
-func drink_moonshine():
-	if get_item_count(3) > 0:
-		remove_item_stack(3, 1)
-		radiation = max(radiation - 15, 0)
-		update_health_display()
-		update_inventory_display()
 
 func die():
 	get_tree().reload_current_scene()
@@ -262,12 +210,10 @@ func try_build():
 	
 	var blueprint = BlueprintRegistry.get_blueprint(current_blueprint_id)
 	
-	for item_id in blueprint.build_costs:
-		if get_item_count(item_id) < blueprint.build_costs[item_id]:
-			return
+	if not inventory.has_items(blueprint.build_costs):
+		return
 	
-	for item_id in blueprint.build_costs:
-		remove_item_stack(item_id, blueprint.build_costs[item_id])
+	inventory.consume_items(blueprint.build_costs)
 	
 	var building = blueprint.building_scene.instantiate()
 	building.global_transform = current_ghost.global_transform

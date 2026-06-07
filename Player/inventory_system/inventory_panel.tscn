@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://du8seix03gmxp"]
+
+[ext_resource type="Script" uid="uid://b83r8xod2lws4" path="res://Player/inventory_system/inventory_panel.gd" id="1_32xni"]
+[ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="1_nrpbs"]
+
+[node name="InventoryPanel" type="Panel" unique_id=594815198 node_paths=PackedStringArray("grid_container")]
+custom_minimum_size = Vector2(256, 256)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_32xni")
+slot_scene = ExtResource("1_nrpbs")
+grid_container = NodePath("GridContainer")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=193230854]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -124.0
+offset_right = 16.0
+offset_bottom = 124.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 7
+
+[node name="Button" type="Button" parent="." unique_id=339298426]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = 92.0
+offset_right = 20.5
+offset_bottom = 123.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "EXIT"
