@@ -8,13 +8,12 @@ var active_slot: int = 0
 var player: CharacterBody3D = null
 
 func _ready():
+	add_to_group("hotbar")
 	create_slots()
 	set_active_slot(0)
 	
 	await get_tree().process_frame
 	find_player_and_connect()
-
-
 
 func find_player_and_connect():
 	player = get_tree().get_first_node_in_group("player")
@@ -45,7 +44,7 @@ func create_slots():
 		var slot = slot_scene.instantiate()
 		add_child(slot)
 		slots.append(slot)
-		slot.set_slot(i, -1, 0, true)  # true — это хотбар слот
+		slot.set_slot(i, -1, 0, true)
 		slot.gui_input.connect(_on_slot_gui_input.bind(i))
 
 func _on_slot_gui_input(event: InputEvent, slot_index: int):
@@ -59,19 +58,17 @@ func use_item_from_slot(slot_index: int):
 	if not player or not player.inventory:
 		return
 	
-	if slot_index < player.inventory.slots.size():
-		var slot = player.inventory.slots[slot_index]
-		if slot and slot.item:
-			use_item(slot.item.id)
+	var slot = player.inventory.get_hotbar_slot(slot_index)
+	if slot and slot.item:
+		use_item(slot.item.id)
 
 func use_current_item():
 	if not player or not player.inventory:
 		return
 	
-	if active_slot < player.inventory.slots.size():
-		var slot = player.inventory.slots[active_slot]
-		if slot and slot.item:
-			use_item(slot.item.id)
+	var slot = player.inventory.get_hotbar_slot(active_slot)
+	if slot and slot.item:
+		use_item(slot.item.id)
 
 func use_item(item_id: int):
 	if ItemActions.use(player, item_id):
@@ -84,7 +81,7 @@ func update_hotbar():
 	for i in range(slot_count):
 		var slot_data = player.inventory.get_hotbar_slot(i)
 		if slot_data and slot_data.item:
-			slots[i].set_slot(i, slot_data.item.id, slot_data.quantity, true)  # true — хотбар слот
+			slots[i].set_slot(i, slot_data.item.id, slot_data.quantity, true)
 		else:
 			slots[i].clear_slot()
 	

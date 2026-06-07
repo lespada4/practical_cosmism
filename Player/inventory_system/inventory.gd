@@ -3,11 +3,11 @@ class_name Inventory
 
 signal inventory_updated
 
-var hotbar_slots: Array[ItemStack] = []  # 9 слотов
-var main_slots: Array[ItemStack] = []    # 20-28 слотов
+var hotbar_slots: Array[ItemStack] = []
+var main_slots: Array[ItemStack] = []
 
 var hotbar_size: int = 9
-var main_size: int = 20
+var main_size: int = 28
 
 func _ready():
 	clear()
@@ -23,10 +23,8 @@ func clear():
 		main_slots.append(null)
 
 func add_item(item_id: int, amount: int) -> bool:
-	# Сначала ищем в хотбаре
 	if try_add_to_slots(hotbar_slots, item_id, amount):
 		return true
-	# Потом в основном инвентаре
 	if try_add_to_slots(main_slots, item_id, amount):
 		return true
 	return false
@@ -38,7 +36,6 @@ func try_add_to_slots(slots_array: Array, item_id: int, amount: int) -> bool:
 	
 	var remaining = amount
 	
-	# Поиск существующих стаков
 	for i in range(slots_array.size()):
 		var slot = slots_array[i]
 		if slot and slot.item.id == item_id and slot.quantity < item.max_stack:
@@ -50,7 +47,6 @@ func try_add_to_slots(slots_array: Array, item_id: int, amount: int) -> bool:
 			if remaining == 0:
 				return true
 	
-	# Поиск пустых слотов
 	for i in range(slots_array.size()):
 		if slots_array[i] == null:
 			var to_add = min(item.max_stack, remaining)
@@ -68,15 +64,13 @@ func try_add_to_slots(slots_array: Array, item_id: int, amount: int) -> bool:
 func remove_item(item_id: int, amount: int) -> bool:
 	var remaining = amount
 	
-	# Сначала из хотбара
-	if remove_from_slots(hotbar_slots, item_id, remaining, remaining):
+	if remove_from_slots(hotbar_slots, item_id, remaining):
 		return true
-	# Потом из основного
-	if remove_from_slots(main_slots, item_id, remaining, remaining):
+	if remove_from_slots(main_slots, item_id, remaining):
 		return true
 	return false
 
-func remove_from_slots(slots_array: Array, item_id: int, amount: int, _remaining_ref) -> bool:
+func remove_from_slots(slots_array: Array, item_id: int, amount: int) -> bool:
 	var remaining = amount
 	for i in range(slots_array.size() - 1, -1, -1):
 		var slot = slots_array[i]
@@ -90,17 +84,9 @@ func remove_from_slots(slots_array: Array, item_id: int, amount: int, _remaining
 				remaining -= slot.quantity
 				slots_array[i] = null
 	
+	if remaining != amount:
+		inventory_updated.emit()
 	return remaining == 0
-
-func get_item_count(item_id: int) -> int:
-	var total = 0
-	for slot in hotbar_slots:
-		if slot and slot.item.id == item_id:
-			total += slot.quantity
-	for slot in main_slots:
-		if slot and slot.item.id == item_id:
-			total += slot.quantity
-	return total
 
 func swap_slots(from_hotbar: bool, from_index: int, to_hotbar: bool, to_index: int):
 	var from_array = hotbar_slots if from_hotbar else main_slots
@@ -121,3 +107,23 @@ func get_main_slot(index: int) -> ItemStack:
 	if index < main_slots.size():
 		return main_slots[index]
 	return null
+
+func get_item_count(item_id: int) -> int:
+	var total = 0
+	for slot in hotbar_slots:
+		if slot and slot.item.id == item_id:
+			total += slot.quantity
+	for slot in main_slots:
+		if slot and slot.item.id == item_id:
+			total += slot.quantity
+	return total
+
+func has_items(requirements: Dictionary) -> bool:
+	for item_id in requirements:
+		if get_item_count(item_id) < requirements[item_id]:
+			return false
+	return true
+
+func consume_items(requirements: Dictionary):
+	for item_id in requirements:
+		remove_item(item_id, requirements[item_id])

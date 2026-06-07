@@ -36,7 +36,6 @@ func is_empty() -> bool:
 	return item_id == -1
 
 func _get_drag_data(_at_position):
-	print("_get_drag_data: is_hotbar_slot=", is_hotbar_slot)
 	if is_empty():
 		return null
 	

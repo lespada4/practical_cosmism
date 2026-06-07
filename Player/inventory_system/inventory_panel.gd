@@ -2,7 +2,7 @@ extends Panel
 
 @export var slot_scene: PackedScene
 @export var grid_container: GridContainer
-@export var slot_count: int = 20
+@export var slot_count: int = 28
 
 var slots: Array = []
 var is_open: bool = false
@@ -34,7 +34,7 @@ func create_slots():
 		var slot = slot_scene.instantiate()
 		grid_container.add_child(slot)
 		slots.append(slot)
-		slot.set_slot(i, -1, 0)
+		slot.set_slot(i, -1, 0, false)
 
 func update_inventory():
 	var player = get_tree().get_first_node_in_group("player")
@@ -44,7 +44,7 @@ func update_inventory():
 	for i in range(slot_count):
 		var slot_data = player.inventory.get_main_slot(i)
 		if slot_data and slot_data.item:
-			slots[i].set_slot(i, slot_data.item.id, slot_data.quantity)
+			slots[i].set_slot(i, slot_data.item.id, slot_data.quantity, false)
 		else:
 			slots[i].clear_slot()
 
