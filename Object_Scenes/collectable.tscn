@@ -9,14 +9,17 @@ height = 32
 [sub_resource type="SphereShape3D" id="SphereShape3D_cb2ip"]
 radius = 0.2357258
 
-[node name="Collectable" type="Area3D" unique_id=1407293811]
+[node name="Collectable" type="Area3D" unique_id=602802524]
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("1_cb2ip")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=784491483]
-billboard = 1
 texture = SubResource("NoiseTexture2D_cb2ip")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1450258228]
 shape = SubResource("SphereShape3D_cb2ip")
+
+[node name="GroundCheck" type="RayCast3D" parent="." unique_id=913912912]
+target_position = Vector3(0, -0.4, 0)
+collision_mask = 33

@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @export var speed = 3.0
 @export var mouse_sensitivity = 0.002
-@export var jump_velocity = 5
+@export var jump_velocity = 6
 @export var head_bob_intensity = 0.05
 @export var head_bob_speed = 14.0
 @export var coyote_time = 0.1
@@ -90,7 +90,15 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and coyote_timer > 0:
 		velocity.y = jump_velocity
 	
-	velocity.y -= 9.8 * delta
+	# Увеличенная гравитация и ускорение падения
+	var gravity = 14.0  # вместо 9.8
+	var fall_multiplier = 2.0  # ускорение при падении
+	
+	if velocity.y < 0:
+		velocity.y -= gravity * fall_multiplier * delta
+	else:
+		velocity.y -= gravity * delta
+	
 	move_and_slide()
 	
 	if current_damage > 0:
