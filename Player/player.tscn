@@ -37,6 +37,9 @@ target_position = Vector3(0, 0, -4)
 collision_mask = 5
 collide_with_areas = true
 
+[node name="Dropper" type="Marker3D" parent="Camera3D" unique_id=329195604]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51537395, -0.6049105)
+
 [node name="Inventory" type="Node" parent="." unique_id=136037942]
 script = ExtResource("2_4ntmi")
 

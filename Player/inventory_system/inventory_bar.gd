@@ -62,6 +62,9 @@ func use_item_from_slot(slot_index: int):
 	if slot and slot.item:
 		use_item(slot.item.id)
 
+func get_active_slot() -> int:
+	return active_slot
+
 func use_current_item():
 	if not player or not player.inventory:
 		return
