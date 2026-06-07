@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://t68m8a033qv4"]
+
+[ext_resource type="Script" uid="uid://ngxuwvaqagrn" path="res://Objects_Scripts/ghost.gd" id="1_njiek"]
+
+[node name="Ghost" type="Area3D" unique_id=1036920598]
+collision_layer = 2
+collision_mask = 33
+script = ExtResource("1_njiek")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=130141700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50556535, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=878213625]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50556535, 0)

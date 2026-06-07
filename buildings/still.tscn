@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bvf8hc31dmraf"]
+
+[ext_resource type="Script" uid="uid://dh8rhn0p6uo6y" path="res://Objects_Scripts/still_apparatus_script.gd" id="1_buw0a"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_w4b6p"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_buw0a"]
+albedo_color = Color(0.9224966, 1.2462019, 1.1715008, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jbbp0"]
+height = 1.0
+radial_segments = 5
+rings = 1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_w4b6p"]
+
+[node name="Still" type="StaticBody3D" unique_id=994451120 groups=["building"]]
+collision_layer = 36
+collision_mask = 3
+script = ExtResource("1_buw0a")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1199868520]
+transform = Transform3D(0.365, 0, 0, 0, 0.365, 0, 0, 0, 0.365, 0, 0.95385134, 0)
+mesh = SubResource("BoxMesh_w4b6p")
+surface_material_override/0 = SubResource("StandardMaterial3D_buw0a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=222495902]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5109482, 0)
+mesh = SubResource("CylinderMesh_jbbp0")
+surface_material_override/0 = SubResource("StandardMaterial3D_buw0a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=114453733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5109482, 0)
+shape = SubResource("BoxShape3D_w4b6p")
