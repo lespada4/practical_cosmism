@@ -28,9 +28,13 @@ func _physics_process(delta):
 	if ground_checker.is_colliding():
 		var hit = ground_checker.get_collision_point()
 		global_position.y = hit.y
+		if not is_valid:
+			is_valid = true
+			update_all_colors(Color(0, 1, 0, 0.5))
 	else:
-		is_valid = false
-		update_all_colors(Color(1, 0, 0, 0.5))
+		if is_valid:
+			is_valid = false
+			update_all_colors(Color(1, 0, 0, 0.5))
 
 func copy_all_meshes(source: Node):
 	var meshes = find_all_mesh_instances(source)
