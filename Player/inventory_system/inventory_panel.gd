@@ -10,7 +10,6 @@ var is_open: bool = false
 func _ready():
 	create_slots()
 	hide()
-	
 	var player = get_tree().get_first_node_in_group("player")
 	if player and player.inventory:
 		player.inventory.inventory_updated.connect(update_inventory)
@@ -22,7 +21,6 @@ func _input(event):
 func toggle():
 	is_open = not is_open
 	visible = is_open
-	
 	if is_open:
 		update_inventory()
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -40,11 +38,13 @@ func update_inventory():
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or not player.inventory:
 		return
-	
 	for i in range(slot_count):
-		var slot_data = player.inventory.get_main_slot(i)
-		if slot_data and slot_data.item:
-			slots[i].set_slot(i, slot_data.item.id, slot_data.quantity, false)
+		if i < player.inventory.main_slots.size():
+			var slot_data = player.inventory.get_main_slot(i)
+			if slot_data and slot_data.item:
+				slots[i].set_slot(i, slot_data.item.id, slot_data.quantity, false)
+			else:
+				slots[i].clear_slot()
 		else:
 			slots[i].clear_slot()
 

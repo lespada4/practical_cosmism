@@ -25,33 +25,45 @@ func apply_velocity(vel: Vector3):
 func _ready():
 	await get_tree().create_timer(1.0).timeout
 	can_collect = true
+	check_player_inside()
 
 func _physics_process(delta):
 	sprite.rotate_y(delta * 3.0)
 	
-	if not grounded:
+	# Всегда проверяем наличие земли
+	ground_check.force_raycast_update()
+	var has_ground = ground_check.is_colliding()
+	
+	if not has_ground:
+		# Земли нет — падаем
+		grounded = false
 		velocity.y -= fall_gravity * delta
 		position += velocity * delta
-		
-		ground_check.force_raycast_update()
-		if ground_check.is_colliding():
-			var hit_point = ground_check.get_collision_point()
-			if position.y <= hit_point.y + 0.2:
-				position.y = hit_point.y + 0.2
-				velocity.y = 0
-				velocity.x *= 0.3
-				velocity.z *= 0.3
-				grounded = true
-				
-				if velocity.length() < 0.1:
-					velocity = Vector3.ZERO
-	else:
+	elif not grounded:
+		# Земля есть, но мы ещё не приземлились
+		var hit_point = ground_check.get_collision_point()
+		position.y = hit_point.y + 0.2
+		velocity.y = 0
+		velocity.x *= 0.3
+		velocity.z *= 0.3
+		grounded = true
+	elif grounded and velocity.length() > 0.1:
+		# На земле, но есть горизонтальное движение
 		velocity.x *= 0.3
 		velocity.z *= 0.3
 		position += velocity * delta
 		
 		if velocity.length() < 0.05:
 			velocity = Vector3.ZERO
+	# Если grounded и нет движения — ничего не делаем
+
+func check_player_inside():
+	var bodies = get_overlapping_bodies()
+	for body in bodies:
+		if body.name == "Player" and can_collect:
+			body.collect_item(item_id, amount)
+			queue_free()
+			return
 
 func _on_body_entered(body):
 	if body.name == "Player" and can_collect:

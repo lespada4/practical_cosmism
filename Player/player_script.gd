@@ -10,19 +10,20 @@ extends CharacterBody3D
 @export var gravity_up = 10.0
 @export var gravity_down = 32.0
 @export var jump_cut_multiplier = 0.4
-@export var air_control = 0.15
+@export var air_control = 3
 @export var acceleration = 32.0
 @export var friction = 32.0
 
-@onready var full_inventory: Panel = $UI_LAYER/FullInventory
+@onready var inventory: Inventory = $Inventory
 @onready var interaction_ray: RayCast3D = $Camera3D/interaction_ray
 @onready var camera: Camera3D = $Camera3D
-@onready var inventory: Inventory = $Inventory
-@onready var crosshair: TextureRect = $UI_LAYER/crosshair
-@onready var inventory_label: Label = $UI_LAYER/inventory_label
-@onready var health_label: Label = $UI_LAYER/health_label
-@onready var inventory_bar: HBoxContainer = $UI_LAYER/InventoryBar
 @onready var dropper: Marker3D = $Camera3D/Dropper
+@onready var crosshair: TextureRect = $UI_LAYER/Control/crosshair
+@onready var inventory_label: Label = $UI_LAYER/Control/inventory_label
+@onready var health_label: Label = $UI_LAYER/Control/health_label
+@onready var inventory_bar: HBoxContainer = $UI_LAYER/Control/InventoryBar
+@onready var full_inventory: Panel = $UI_LAYER/Control/FullInventory
+@onready var crafting_ui: Panel = $UI_LAYER/Control/craftingUI
 
 var head_bob_time = 0.0
 var is_moving = false
@@ -75,7 +76,8 @@ func _input(event):
 			enter_build_mode("still")
 		else:
 			exit_build_mode()
-	
+	if event.is_action_pressed("craft"):
+		crafting_ui.open("player")
 	if build_mode and event.is_action_pressed("rotate_building") and current_ghost:
 		current_ghost.rotate_y(deg_to_rad(45))
 	
@@ -219,16 +221,13 @@ func drop_item_in_world(item_id: int, quantity: int):
 		return
 	
 	var collectable = item_resource.collectable_scene.instantiate()
-	
 	get_parent().add_child(collectable)
 	collectable.setup(item_resource, quantity)
-	
 	collectable.global_position = dropper.global_position
 	
 	var forward = -camera.global_transform.basis.z
 	var throw_dir = forward + Vector3(0, 0.5, 0)
 	throw_dir = throw_dir.normalized()
-	
 	throw_dir.x += randf_range(-0.2, 0.2)
 	throw_dir.z += randf_range(-0.2, 0.2)
 	throw_dir = throw_dir.normalized()

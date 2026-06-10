@@ -15,6 +15,7 @@ collision_mask = 2
 script = ExtResource("1_cb2ip")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=784491483]
+texture_filter = 0
 texture = SubResource("NoiseTexture2D_cb2ip")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1450258228]

@@ -8,18 +8,23 @@
 [ext_resource type="PackedScene" uid="uid://cx0631ojhnuue" path="res://Object_Scenes/building_site.tscn" id="4_4kpr1"]
 [ext_resource type="Resource" uid="uid://s1hymwyfxif8" path="res://items/steel.tres" id="4_q3his"]
 [ext_resource type="PackedScene" uid="uid://bvf8hc31dmraf" path="res://buildings/still.tscn" id="5_vxags"]
+[ext_resource type="Script" uid="uid://c7hues82hux8v" path="res://Objects_Scripts/mold_spawner.gd" id="9_q3his"]
+[ext_resource type="PackedScene" uid="uid://dvbyvnu26s18h" path="res://Object_Scenes/mold.tscn" id="10_6m3iq"]
+[ext_resource type="Script" uid="uid://c7syr5jnxqe8h" path="res://Objects_Scripts/mold_zone_danger.gd" id="11_6m3iq"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_yriis"]
 size = Vector3(32, 1, 32)
 
 [sub_resource type="Gradient" id="Gradient_a5bde"]
 offsets = PackedFloat32Array(0.062043797, 0.4489051, 0.77737224, 1)
-colors = PackedColorArray(0.5928721, 0.5235053, 0.0387882, 1, 0.26607582, 0.33858973, 0.18893531, 1, 0.36781427, 0.39615777, 0.14219141, 1, 0.67729443, 0.5712751, 1.92523e-07, 1)
+colors = PackedColorArray(0.5928721, 0.5235053, 0.0387882, 1, 0.34950554, 0.3123113, 0.12203585, 1, 0.43053705, 0.37138084, 0.12505841, 1, 0.67729443, 0.5712751, 1.92523e-07, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_o78as"]
-frequency = 0.69
+noise_type = 0
+frequency = 0.7328
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0riot"]
+resource_name = "level1_KORDON"
 width = 64
 height = 40
 noise = SubResource("FastNoiseLite_o78as")
@@ -27,6 +32,7 @@ color_ramp = SubResource("Gradient_a5bde")
 seamless_blend_skirt = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4kpr1"]
+albedo_color = Color(0.877923, 0.7664161, 0.6570835, 1)
 albedo_texture = SubResource("NoiseTexture2D_0riot")
 uv1_scale = Vector3(64, 64, 64)
 texture_filter = 0
@@ -108,3 +114,40 @@ mesh = SubResource("BoxMesh_blk61")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D" unique_id=464827691]
 shape = SubResource("ConcavePolygonShape3D_q3his")
+
+[node name="Molder" type="Node3D" parent="." unique_id=1541043894 node_paths=PackedStringArray("spawn_points")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.081903, 0.0004632473, 2.2294216)
+script = ExtResource("9_q3his")
+mold_scene = ExtResource("10_6m3iq")
+spawn_points = [NodePath("MOLDPOINT"), NodePath("MOLDPOINT2"), NodePath("MOLDPOINT3"), NodePath("MOLDPOINT4"), NodePath("MOLDPOINT5"), NodePath("MOLDPOINT6")]
+spawn_interval = 10.0
+
+[node name="MOLDPOINT" type="Marker3D" parent="Molder" unique_id=497293562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35952282, 0, 1.2736101)
+
+[node name="MOLDPOINT2" type="Marker3D" parent="Molder" unique_id=167743097]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.084878, 0, 1.0761161)
+
+[node name="MOLDPOINT3" type="Marker3D" parent="Molder" unique_id=960377925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.074688, 0, -0.43679714)
+
+[node name="MOLDPOINT4" type="Marker3D" parent="Molder" unique_id=480243425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4065409, 4.7683716e-07, -0.38390923)
+
+[node name="MOLDPOINT5" type="Marker3D" parent="Molder" unique_id=853627890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7416673, 0, 1.207365)
+
+[node name="MOLDPOINT6" type="Marker3D" parent="Molder" unique_id=1916514375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.410779, 0.0900718, -1.4120569)
+
+[node name="Mold_Zone_Danger" type="Area3D" parent="." unique_id=1140103519 node_paths=PackedStringArray("mold_spawner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.739973, -0.026860237, 4.03166)
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("11_6m3iq")
+mold_spawner = NodePath("../Molder")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mold_Zone_Danger" unique_id=1980050998]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87298584, -1.5153809)
+shape = SubResource("BoxShape3D_bsav1")
+debug_color = Color(0.874417, 0.09531733, 0, 0.8862745)

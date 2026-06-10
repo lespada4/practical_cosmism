@@ -11,7 +11,6 @@ func _ready():
 	add_to_group("hotbar")
 	create_slots()
 	set_active_slot(0)
-	
 	await get_tree().process_frame
 	find_player_and_connect()
 
@@ -29,7 +28,6 @@ func _input(event):
 		if event.is_action_pressed("hotbar_" + str(i + 1)):
 			set_active_slot(i)
 			break
-	
 	if event.is_action_pressed("use_item"):
 		use_current_item()
 
@@ -45,30 +43,24 @@ func create_slots():
 		add_child(slot)
 		slots.append(slot)
 		slot.set_slot(i, -1, 0, true)
-		slot.gui_input.connect(_on_slot_gui_input.bind(i))
 
 func _on_slot_gui_input(event: InputEvent, slot_index: int):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		set_active_slot(slot_index)
-	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
-		use_item_from_slot(slot_index)
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			set_active_slot(slot_index)
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			use_item_from_slot(slot_index)
 
 func use_item_from_slot(slot_index: int):
 	if not player or not player.inventory:
 		return
-	
 	var slot = player.inventory.get_hotbar_slot(slot_index)
 	if slot and slot.item:
 		use_item(slot.item.id)
 
-func get_active_slot() -> int:
-	return active_slot
-
 func use_current_item():
 	if not player or not player.inventory:
 		return
-	
 	var slot = player.inventory.get_hotbar_slot(active_slot)
 	if slot and slot.item:
 		use_item(slot.item.id)
@@ -80,14 +72,12 @@ func use_item(item_id: int):
 func update_hotbar():
 	if not player or not player.inventory:
 		return
-	
 	for i in range(slot_count):
 		var slot_data = player.inventory.get_hotbar_slot(i)
 		if slot_data and slot_data.item:
 			slots[i].set_slot(i, slot_data.item.id, slot_data.quantity, true)
 		else:
 			slots[i].clear_slot()
-	
 	update_active_highlight()
 
 func get_inventory():

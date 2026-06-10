@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvf8hc31dmraf"]
 
-[ext_resource type="Script" uid="uid://dh8rhn0p6uo6y" path="res://Objects_Scripts/still_apparatus_script.gd" id="1_buw0a"]
+[ext_resource type="Script" uid="uid://dh8rhn0p6uo6y" path="res://Objects_Scripts/craft_station.gd" id="1_buw0a"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_w4b6p"]
 
