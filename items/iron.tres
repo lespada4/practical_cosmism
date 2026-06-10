@@ -2,24 +2,12 @@
 
 [ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="1_fmf53"]
 [ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/Item_Res/Item_Res_Script.gd" id="1_vhq3y"]
-
-[sub_resource type="Gradient" id="Gradient_s8rhg"]
-colors = PackedColorArray(0.36942756, 0.14855659, 0, 1, 0.8001707, 0.35514212, 0, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_8biea"]
-frequency = 1.0
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_eimd4"]
-width = 32
-height = 32
-noise = SubResource("FastNoiseLite_8biea")
-color_ramp = SubResource("Gradient_s8rhg")
-seamless = true
+[ext_resource type="Texture2D" uid="uid://c8uco6q2cw7jc" path="res://Textures/Item_Icons/scrap_iron.png" id="2_s8rhg"]
 
 [resource]
 script = ExtResource("1_vhq3y")
 id = 1
 display_name = "Iron"
-icon = SubResource("NoiseTexture2D_eimd4")
+icon = ExtResource("2_s8rhg")
 collectable_scene = ExtResource("1_fmf53")
 metadata/_custom_type_script = "uid://cjv8wtpf5o1id"
