@@ -12,3 +12,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50556535, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=878213625]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.50556535, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1613490698]
+target_position = Vector3(0, -11, 0)

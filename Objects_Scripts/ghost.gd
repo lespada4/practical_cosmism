@@ -2,16 +2,14 @@ extends Area3D
 
 var blueprint: Blueprint
 var is_valid: bool = true
+@onready var ground_checker: RayCast3D = $RayCast3D
 
 func setup(bp: Blueprint):
 	blueprint = bp
 	
 	var building = bp.building_scene.instantiate()
-	
-	# Копируем все MeshInstance3D
 	copy_all_meshes(building)
 	
-	# Копируем коллизию
 	var collision_shape = building.get_node("CollisionShape3D")
 	if collision_shape and collision_shape.shape:
 		$CollisionShape3D.shape = collision_shape.shape
@@ -25,8 +23,16 @@ func setup(bp: Blueprint):
 	await get_tree().process_frame
 	check_initial_overlap()
 
+func _physics_process(delta):
+	ground_checker.force_raycast_update()
+	if ground_checker.is_colliding():
+		var hit = ground_checker.get_collision_point()
+		global_position.y = hit.y
+	else:
+		is_valid = false
+		update_all_colors(Color(1, 0, 0, 0.5))
+
 func copy_all_meshes(source: Node):
-	# Рекурсивно ищем все MeshInstance3D
 	var meshes = find_all_mesh_instances(source)
 	for mesh_instance in meshes:
 		var new_mesh_instance = MeshInstance3D.new()
@@ -70,7 +76,6 @@ func _on_body_exited(body):
 	update_all_colors(Color(0, 1, 0, 0.5))
 
 func apply_materials():
-	# Применяем материал ко всем MeshInstance3D
 	for child in get_children():
 		if child is MeshInstance3D:
 			var mat = StandardMaterial3D.new()

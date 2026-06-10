@@ -13,6 +13,7 @@ radial_segments = 5
 rings = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w4b6p"]
+size = Vector3(1, 0.67581177, 1)
 
 [node name="Still" type="StaticBody3D" unique_id=994451120 groups=["building"]]
 collision_layer = 36
@@ -30,5 +31,5 @@ mesh = SubResource("CylinderMesh_jbbp0")
 surface_material_override/0 = SubResource("StandardMaterial3D_buw0a")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=114453733]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5109482, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6730423, 0)
 shape = SubResource("BoxShape3D_w4b6p")

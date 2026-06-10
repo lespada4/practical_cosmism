@@ -14,6 +14,7 @@ extends CharacterBody3D
 @export var acceleration = 32.0
 @export var friction = 32.0
 
+
 @onready var inventory: Inventory = $Inventory
 @onready var interaction_ray: RayCast3D = $Camera3D/interaction_ray
 @onready var camera: Camera3D = $Camera3D
@@ -35,12 +36,10 @@ var build_distance: float = 3.0
 var is_jumping: bool = false
 var jump_horizontal_velocity: Vector3 = Vector3.ZERO
 
-# Строительство
 var build_mode: bool = false
 var current_ghost: Area3D = null
 var current_blueprint_id: String = ""
 
-# Спринт
 var is_sprinting: bool = false
 
 func _ready():
@@ -198,8 +197,6 @@ func stop_damage(_type):
 func die():
 	get_tree().reload_current_scene()
 
-# ========== ВЫКИДЫВАНИЕ ПРЕДМЕТОВ ==========
-
 func drop_current_item():
 	if not inventory:
 		return
@@ -235,8 +232,6 @@ func drop_item_in_world(item_id: int, quantity: int):
 	if collectable.has_method("apply_velocity"):
 		collectable.apply_velocity(throw_dir * 6.0)
 
-# ========== СИСТЕМА СТРОИТЕЛЬСТВА ==========
-
 func enter_build_mode(blueprint_id: String):
 	var blueprint = BlueprintRegistry.get_blueprint(blueprint_id)
 	if not blueprint:
@@ -266,18 +261,7 @@ func update_ghost_position():
 	forward.y = 0
 	forward = forward.normalized()
 	
-	var target_pos = camera.global_position + forward * build_distance
-	
-	var space_state = get_world_3d().direct_space_state
-	var ray_start = target_pos + Vector3(0, 2, 0)
-	var ray_end = target_pos - Vector3(0, 10, 0)
-	var query = PhysicsRayQueryParameters3D.create(ray_start, ray_end)
-	var result = space_state.intersect_ray(query)
-	
-	if result:
-		target_pos.y = result.position.y
-	
-	current_ghost.global_position = target_pos
+	current_ghost.global_position = camera.global_position + forward * build_distance
 
 func try_build():
 	if not current_ghost or not current_ghost.get_valid():
@@ -293,6 +277,7 @@ func try_build():
 	var building = blueprint.building_scene.instantiate()
 	building.global_transform = current_ghost.global_transform
 	building.rotation = current_ghost.rotation
+	building.position.y -= 0.2
 	get_parent().add_child(building)
 	
 	exit_build_mode()
