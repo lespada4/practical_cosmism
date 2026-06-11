@@ -23,7 +23,7 @@ func setup(bp: Blueprint):
 	await get_tree().process_frame
 	check_initial_overlap()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	ground_checker.force_raycast_update()
 	if ground_checker.is_colliding():
 		var hit = ground_checker.get_collision_point()

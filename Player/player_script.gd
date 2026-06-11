@@ -14,24 +14,24 @@ extends CharacterBody3D
 @export var acceleration = 32.0
 @export var friction = 32.0
 
-
 @onready var inventory: Inventory = $Inventory
+@onready var health_system: Node = $HealthSystem
 @onready var interaction_ray: RayCast3D = $Camera3D/interaction_ray
 @onready var camera: Camera3D = $Camera3D
 @onready var dropper: Marker3D = $Camera3D/Dropper
 @onready var crosshair: TextureRect = $UI_LAYER/Control/crosshair
 @onready var inventory_label: Label = $UI_LAYER/Control/inventory_label
 @onready var health_label: Label = $UI_LAYER/Control/health_label
+@onready var radiation_label: Label = $UI_LAYER/Control/radiation_label
 @onready var inventory_bar: HBoxContainer = $UI_LAYER/Control/InventoryBar
 @onready var full_inventory: Panel = $UI_LAYER/Control/FullInventory
 @onready var crafting_ui: Panel = $UI_LAYER/Control/craftingUI
+@onready var protection_label: Label = $UI_LAYER/Control/protection_label
 
 var head_bob_time = 0.0
 var is_moving = false
 var camera_default_height = 0.0
 var coyote_timer = 0.0
-var radiation = 0.0
-var current_damage = 0.0
 var build_distance: float = 3.0
 var is_jumping: bool = false
 var jump_horizontal_velocity: Vector3 = Vector3.ZERO
@@ -45,16 +45,23 @@ var is_sprinting: bool = false
 func _ready():
 	camera_default_height = camera.transform.origin.y
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	update_health_display()
 	add_to_group("player")
 	
+	# Подключаем сигналы HealthSystem
+	health_system.died.connect(_on_death)
+	health_system.health_changed.connect(update_health_display)
+	health_system.radiation_changed.connect(update_radiation_display)
+	
+	# Тестовые предметы
 	inventory.add_item(1, 10)
 	inventory.add_item(2, 5)
-	inventory.add_item(3, 2)
+	inventory.add_item(3, 55)
 	
 	inventory.inventory_updated.connect(update_inventory_display)
 	update_inventory_display()
-
+	update_health_display(health_system.health)
+	update_radiation_display(health_system.radiation, health_system.radiation_stage)
+	health_system.protection_changed.connect(update_protection_display)
 func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)
@@ -75,8 +82,10 @@ func _input(event):
 			enter_build_mode("still")
 		else:
 			exit_build_mode()
+	
 	if event.is_action_pressed("craft"):
 		crafting_ui.open("player")
+	
 	if build_mode and event.is_action_pressed("rotate_building") and current_ghost:
 		current_ghost.rotate_y(deg_to_rad(45))
 	
@@ -144,12 +153,6 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	
-	if current_damage > 0:
-		radiation += current_damage * delta
-		if radiation >= 100:
-			die()
-		update_health_display()
-	
 	if build_mode and current_ghost:
 		update_ghost_position()
 	
@@ -185,17 +188,46 @@ func update_inventory_display():
 	var moonshine = inventory.get_item_count(3)
 	inventory_label.text = "Iron: " + str(iron) + "  Steel: " + str(steel) + "  Moonshine: " + str(moonshine)
 
-func update_health_display():
-	health_label.text = "Radiation: " + str(round(radiation)) + "%"
+func update_health_display(new_health: float):
+	health_label.text = "HP: " + str(round(new_health)) + "%"
 
-func apply_damage(amount: float, _type):
-	current_damage = amount
+func update_radiation_display(radiation: float, stage: int):
+	var color = Color.WHITE
+	match stage:
+		0: color = Color.GREEN
+		1: color = Color.YELLOW
+		2: color = Color.ORANGE
+		3: color = Color.RED
+	
+	radiation_label.text = "Rad: " + str(round(radiation)) + "%"
+	radiation_label.modulate = color
 
-func stop_damage(_type):
-	current_damage = 0.0
+func apply_damage(amount: float, damage_type: int):
+	match damage_type:
+		1:  # RADIATION
+			health_system.apply_environment_radiation(amount)
+		2:  # POISON
+			health_system.apply_poison_damage(amount)
 
-func die():
+func stop_damage(damage_type: int):
+	match damage_type:
+		1:
+			health_system.stop_environment_radiation()
+		2:
+			health_system.stop_poison_damage()
+
+func _on_death():
 	get_tree().reload_current_scene()
+
+# ========== ПРОКСИ-МЕТОДЫ ДЛЯ ПРЕДМЕТОВ ==========
+
+func use_moonshine():
+	health_system.use_moonshine()
+
+func use_antirad():
+	health_system.use_antirad()
+
+# ========== ВЫКИДЫВАНИЕ ПРЕДМЕТОВ ==========
 
 func drop_current_item():
 	if not inventory:
@@ -231,6 +263,17 @@ func drop_item_in_world(item_id: int, quantity: int):
 	
 	if collectable.has_method("apply_velocity"):
 		collectable.apply_velocity(throw_dir * 6.0)
+
+func update_protection_display(resistance: float, timer: float):
+	if resistance > 0:
+		# Форматируем до 1 знака после запятой
+		var resistance_str = "%.1f" % resistance
+		protection_label.text = "Prot: " + resistance_str + "% (" + str(round(timer)) + "s)"
+		protection_label.visible = true
+	else:
+		protection_label.visible = false
+
+# ========== СИСТЕМА СТРОИТЕЛЬСТВА ==========
 
 func enter_build_mode(blueprint_id: String):
 	var blueprint = BlueprintRegistry.get_blueprint(blueprint_id)

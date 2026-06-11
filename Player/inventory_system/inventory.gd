@@ -55,6 +55,7 @@ func try_add_to_slots(slots_array: Array, item_id: int, amount: int) -> bool:
 	return remaining == 0
 
 func remove_item(item_id: int, amount: int) -> bool:
+	print("remove_item called: ", item_id, " x", amount)
 	var remaining = amount
 	if remove_from_slots(hotbar_slots, item_id, remaining):
 		return true

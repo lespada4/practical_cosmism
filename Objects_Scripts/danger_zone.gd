@@ -1,13 +1,10 @@
 extends Area3D
 
-enum DamageType {RADIATION, POISON}
+enum DamageType {RADIATION = 1, POISON = 2}
 
 @export var damage_type: DamageType = DamageType.RADIATION
 @export var damage_per_second: float = 10.0
 
-func _ready():
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
 
 func _on_body_entered(body):
 	if body.has_method("apply_damage"):

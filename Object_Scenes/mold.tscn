@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bga5us7gpk2y5" path="res://Textures/Textures32x32/mold_64.png" id="3_ybysb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ybysb"]
-size = Vector3(0.3088379, 0.011889648, 0.31640625)
+size = Vector3(0.6286621, 0.011889648, 0.6738281)
 
 [node name="Mold" type="StaticBody3D" unique_id=1382753722 groups=["resource"]]
 collision_layer = 4

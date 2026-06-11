@@ -52,6 +52,7 @@ func _on_slot_gui_input(event: InputEvent, slot_index: int):
 			use_item_from_slot(slot_index)
 
 func use_item_from_slot(slot_index: int):
+	print("use_item_from_slot: ", slot_index)
 	if not player or not player.inventory:
 		return
 	var slot = player.inventory.get_hotbar_slot(slot_index)
@@ -66,8 +67,8 @@ func use_current_item():
 		use_item(slot.item.id)
 
 func use_item(item_id: int):
-	if ItemActions.use(player, item_id):
-		player.inventory.remove_item(item_id, 1)
+	ItemActions.use(player, item_id)
+
 
 func update_hotbar():
 	if not player or not player.inventory:

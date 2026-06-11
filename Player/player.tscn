@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d1odc4de7pkdt" path="res://Player/player_script.gd" id="1_l8h54"]
 [ext_resource type="Script" uid="uid://dbtt5ap7725tm" path="res://Player/inventory_system/inventory.gd" id="2_4ntmi"]
 [ext_resource type="Script" uid="uid://cfhangcefpspl" path="res://Player/inventory_system/inventory_bar.gd" id="3_btcbx"]
+[ext_resource type="Script" uid="uid://dcqaclfu5yi0m" path="res://Player/health_system.gd" id="3_vtle1"]
 [ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="4_gwnis"]
 [ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://Player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
 [ext_resource type="PackedScene" uid="uid://ds8ha6qxiwji4" path="res://Player/inventory_system/CraftUI.tscn" id="6_fhl08"]
@@ -46,13 +47,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51537395, -0.6049105)
 [node name="Inventory" type="Node" parent="." unique_id=136037942]
 script = ExtResource("2_4ntmi")
 
+[node name="HealthSystem" type="Node" parent="." unique_id=2105577971]
+script = ExtResource("3_vtle1")
+
 [node name="UI_LAYER" type="CanvasLayer" parent="." unique_id=1060750778]
 
 [node name="Control" type="Control" parent="UI_LAYER" unique_id=346092612]
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="crosshair" type="TextureRect" parent="UI_LAYER/Control" unique_id=776713406]
 texture_filter = 1
@@ -62,10 +68,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 524.0
-offset_top = 272.0
-offset_right = 588.0
-offset_bottom = 336.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_4ntmi")
@@ -77,10 +83,47 @@ offset_bottom = 23.0
 text = "IRON"
 
 [node name="health_label" type="Label" parent="UI_LAYER/Control" unique_id=457185464]
-layout_mode = 0
-offset_top = 36.0
-offset_right = 41.0
-offset_bottom = 59.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+offset_top = -53.0
+offset_right = -58.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "IRON"
+
+[node name="protection_label" type="Label" parent="UI_LAYER/Control" unique_id=600902683]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+offset_top = -133.0
+offset_right = -58.0
+offset_bottom = -110.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="radiation_label" type="Label" parent="UI_LAYER/Control" unique_id=269009251]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+offset_top = -93.0
+offset_right = -58.0
+offset_bottom = -70.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "IRON"
 
 [node name="InventoryBar" type="HBoxContainer" parent="UI_LAYER/Control" unique_id=299301559]
@@ -90,25 +133,21 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 536.0
-offset_top = 562.0
-offset_right = 576.0
-offset_bottom = 594.0
+offset_left = -20.0
+offset_top = -41.0
+offset_right = 20.0
+offset_bottom = -9.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("3_btcbx")
 slot_scene = ExtResource("4_gwnis")
 
 [node name="FullInventory" parent="UI_LAYER/Control" unique_id=594815198 instance=ExtResource("5_k53q1")]
+visible = false
 layout_mode = 1
-offset_left = 428.0
-offset_top = 176.0
-offset_right = 684.0
-offset_bottom = 432.0
+offset_left = -128.0
+offset_right = 128.0
 
 [node name="craftingUI" parent="UI_LAYER/Control" unique_id=1454859508 instance=ExtResource("6_fhl08")]
+visible = false
 layout_mode = 1
-offset_left = 386.0
-offset_top = 143.0
-offset_right = 726.0
-offset_bottom = 465.0
