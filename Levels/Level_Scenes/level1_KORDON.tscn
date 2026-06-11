@@ -660,6 +660,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5736918, 1.0083735, 17.1751
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("3_0riot")
+grade = 5
 damage_per_second = 50.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Danger_Zone" unique_id=629755675]
