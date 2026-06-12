@@ -39,6 +39,7 @@ folder_colors={
 "res://Cosmism_Trenchbroom/": "yellow",
 "res://Global_Scripts/": "pink",
 "res://Levels/": "teal",
+"res://NPC/": "purple",
 "res://Object_Models/": "green",
 "res://Object_Scenes/": "green",
 "res://Objects_Scripts/": "green",

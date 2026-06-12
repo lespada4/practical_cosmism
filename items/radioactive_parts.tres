@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://cgr67bxgyf8tu"]
+
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="1_bjv71"]
+[ext_resource type="Texture2D" uid="uid://cxxlvjuep5qhq" path="res://Textures/Textures32x32/steel_32.png" id="2_7fni3"]
+[ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/Item_Res/Item_Res_Script.gd" id="2_7obt5"]
+
+[resource]
+script = ExtResource("2_7obt5")
+id = 7
+display_name = "Radioactive Parts"
+icon = ExtResource("2_7fni3")
+collectable_scene = ExtResource("1_bjv71")
+radiation_emission = 1.5
+metadata/_custom_type_script = "uid://cjv8wtpf5o1id"

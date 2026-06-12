@@ -62,6 +62,7 @@ func _ready():
 	update_health_display(health_system.health)
 	update_radiation_display(health_system.radiation, health_system.radiation_stage)
 	health_system.protection_changed.connect(update_protection_display)
+	inventory.inventory_updated.connect(_on_inventory_updated)
 func _input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)
@@ -217,7 +218,8 @@ func stop_damage(damage_type: int):
 			health_system.stop_poison_damage()
 
 func _on_death():
-	get_tree().reload_current_scene()
+	if get_tree():
+		get_tree().reload_current_scene()
 
 # ========== ПРОКСИ-МЕТОДЫ ДЛЯ ПРЕДМЕТОВ ==========
 
@@ -226,6 +228,9 @@ func use_moonshine():
 
 func use_antirad():
 	health_system.use_antirad()
+
+func use_cockroach():
+	health_system.use_cockroach()
 
 # ========== ВЫКИДЫВАНИЕ ПРЕДМЕТОВ ==========
 
@@ -324,3 +329,7 @@ func try_build():
 	get_parent().add_child(building)
 	
 	exit_build_mode()
+
+func _on_inventory_updated():
+	var emission = inventory.get_total_radiation_emission()
+	health_system.apply_inventory_radiation(emission)

@@ -140,6 +140,16 @@ func has_items(requirements: Dictionary) -> bool:
 			return false
 	return true
 
+func get_total_radiation_emission() -> float:
+	var total = 0.0
+	for slot in hotbar_slots:
+		if slot and slot.item:
+			total += slot.item.radiation_emission * slot.quantity
+	for slot in main_slots:
+		if slot and slot.item:
+			total += slot.item.radiation_emission * slot.quantity
+	return total
+
 func consume_items(requirements: Dictionary):
 	for item_id in requirements:
 		remove_item(item_id, requirements[item_id])

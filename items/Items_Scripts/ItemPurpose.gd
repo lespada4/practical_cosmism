@@ -3,11 +3,12 @@ class_name ItemActions
 
 enum ItemType { CONSUMABLE, TOOL, EQUIPMENT }
 
+
 static var items = {
 	3: {"method": "use_moonshine", "type": ItemType.CONSUMABLE},
-	5: {"method": "use_antirad", "type": ItemType.CONSUMABLE},
-	# 6: {"method": "use_hammer", "type": ItemType.TOOL},
+	8: {"method": "use_cockroach", "type": ItemType.CONSUMABLE},
 }
+
 
 static func use(player, item_id: int) -> bool:
 	if items.has(item_id):

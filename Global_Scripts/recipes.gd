@@ -17,6 +17,8 @@ func register_recipes():
 	
 	# Печка (furnace)
 	add_recipe(6, 1, {1: 2}, "furnace")  # 2 iron = 1 molten iron
+	# recipe_registry.gd
+	add_recipe(100, 1, {1: 10, 2: 5, 7: 3}, "player")  # 10 iron + 5 steel + 3 radioactive parts = Beacon
 
 func add_recipe(result_id: int, quantity: int, ingredients: Dictionary, station: String):
 	recipes.append({

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://cy7la0eg3mcn0"]
+
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="1_c28qr"]
+[ext_resource type="Texture2D" uid="uid://daeqy5pke2070" path="res://Textures/Item_Icons/kukarachos.png" id="2_4nwwu"]
+[ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/Item_Res/Item_Res_Script.gd" id="2_5k0e4"]
+
+[resource]
+script = ExtResource("2_5k0e4")
+id = 8
+display_name = "rochkok"
+icon = ExtResource("2_4nwwu")
+collectable_scene = ExtResource("1_c28qr")
+metadata/_custom_type_script = "uid://cjv8wtpf5o1id"

@@ -20,6 +20,9 @@
 [ext_resource type="Script" uid="uid://c7hues82hux8v" path="res://Objects_Scripts/mold_spawner.gd" id="9_q3his"]
 [ext_resource type="PackedScene" uid="uid://dvbyvnu26s18h" path="res://Object_Scenes/mold.tscn" id="10_6m3iq"]
 [ext_resource type="Script" uid="uid://c7syr5jnxqe8h" path="res://Objects_Scripts/mold_zone_danger.gd" id="11_6m3iq"]
+[ext_resource type="Resource" uid="uid://cgr67bxgyf8tu" path="res://items/radioactive_parts.tres" id="12_vndgd"]
+[ext_resource type="PackedScene" uid="uid://bqgr7wbsj6l03" path="res://NPC/scenes/cockroach.tscn" id="22_h2myv"]
+[ext_resource type="PackedScene" uid="uid://cweqfmgmpdgtt" path="res://Object_Scenes/beacon.tscn" id="22_t3ov0"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_0mesh"]
 _surfaces = [{
@@ -646,6 +649,10 @@ environment = SubResource("Environment_0mesh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3447957, 0.58327323, 11.833813)
 item = ExtResource("2_cu8n7")
 
+[node name="ResourcePile4" parent="." unique_id=1530888178 instance=ExtResource("2_o78as")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2323978, 0.20121843, 11.833813)
+item = ExtResource("12_vndgd")
+
 [node name="ResourcePile3" parent="." unique_id=774099753 instance=ExtResource("2_o78as")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2839887, 0.7857144, 11.745963)
 item = ExtResource("3_blk61")
@@ -700,6 +707,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.19007239, 1.5, 1.1357863)
 [node name="MOLDPOINT6" type="Marker3D" parent="Molder" unique_id=1916514375]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1571396, 1.5, 2.6621828)
 
+[node name="Asmongold" type="Node3D" parent="." unique_id=1705266752 node_paths=PackedStringArray("spawn_points")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41229272, -3.3802211, -4.268159)
+script = ExtResource("9_q3his")
+mold_scene = ExtResource("22_h2myv")
+spawn_points = [NodePath("Roach"), NodePath("Roach2"), NodePath("Roach3"), NodePath("Roach4"), NodePath("Roach5")]
+spawn_interval = 10.0
+
+[node name="Roach" type="Marker3D" parent="Asmongold" unique_id=266245344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3027945, 1.4637566, 0.6467831)
+
+[node name="Roach2" type="Marker3D" parent="Asmongold" unique_id=525915027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9343138, 1.4637566, 0.8540158)
+
+[node name="Roach3" type="Marker3D" parent="Asmongold" unique_id=2141977569]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.281695, 1.4637566, 0.62820625)
+
+[node name="Roach4" type="Marker3D" parent="Asmongold" unique_id=998296652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6236936, 1.4637566, 1.9726853)
+
+[node name="Roach5" type="Marker3D" parent="Asmongold" unique_id=924499547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.97541416, 1.4637566, 2.1075795)
+
+[node name="Building_Site2" parent="." unique_id=373442422 instance=ExtResource("4_4kpr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9587054, 0.92740417, 8.625475)
+build_scene = ExtResource("22_t3ov0")
+
 [node name="Mold_Zone_Danger" type="Area3D" parent="." unique_id=1140103519 node_paths=PackedStringArray("mold_spawner")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2071476, -2.3829126, -2.8690598)
 collision_layer = 8
@@ -716,6 +749,9 @@ debug_color = Color(0.874417, 0.09531733, 0, 0.8862745)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3135383, 0.50000024, 21.456724)
 use_collision = true
 size = Vector3(13.260742, 1, 8.143677)
+
+[node name="Cockroach" parent="." unique_id=1024034281 instance=ExtResource("22_h2myv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9856759, -1.1332635, -2.6046972)
 
 [connection signal="body_entered" from="Danger_Zone" to="Danger_Zone" method="_on_body_entered"]
 [connection signal="body_exited" from="Danger_Zone" to="Danger_Zone" method="_on_body_exited"]

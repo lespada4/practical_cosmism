@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://bqgr7wbsj6l03"]
+
+[ext_resource type="Script" uid="uid://b3tn7lhkfr08a" path="res://NPC/scripts/cockroach_script.gd" id="1_2fx18"]
+[ext_resource type="Texture2D" uid="uid://daeqy5pke2070" path="res://Textures/Item_Icons/kukarachos.png" id="1_72oao"]
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="2_7jegv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2fx18"]
+size = Vector3(0.28222656, 0.08154297, 0.14941406)
+
+[node name="Cockroach" type="CharacterBody3D" unique_id=1024034281]
+collision_layer = 4
+script = ExtResource("1_2fx18")
+collectable_scene = ExtResource("2_7jegv")
+
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=1474008975]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.050696388, 0)
+modulate = Color(2.5025156, 2.5025156, 2.5025156, 1)
+texture_filter = 0
+texture = ExtResource("1_72oao")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1679765933]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.013916016, 0)
+shape = SubResource("BoxShape3D_2fx18")
+
+[node name="usi" type="Marker3D" parent="." unique_id=1261346306]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15408546, 0.050161324, 0)
