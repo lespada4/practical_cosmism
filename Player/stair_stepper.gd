@@ -7,7 +7,7 @@ const CAMERA_RETURN_SPEED:    float = 12.0
 
 var _stair_snap_cooldown:          float = 0.0
 var _snapped_to_stairs_last_frame: bool  = false
-var _last_frame_was_on_floor:      int   = -INF
+var _last_frame_was_on_floor: int = -1000000
 var _saved_camera_global_pos              = null
 
 # Ссылки устанавливаются через initialize()
@@ -36,7 +36,7 @@ func process_stairs(delta: float, wish_dir: Vector3, move_speed: float) -> bool:
 	return true
 
 # Вызывать в _process игрока для плавного возврата камеры
-func process_camera_smooth(delta: float, move_speed: float) -> void:
+func process_camera_smooth(delta: float, _move_speed: float) -> void:
 	if _saved_camera_global_pos == null:
 		return
 	_camera.global_position.y = _saved_camera_global_pos.y
@@ -125,3 +125,17 @@ func _run_body_test_motion(from: Transform3D, motion: Vector3, result = null) ->
 	params.from   = from
 	params.motion = motion
 	return PhysicsServer3D.body_test_motion(_body.get_rid(), params, result)
+
+
+
+#_snap_up_stairs_check изнутри:
+#_run_body_test_motion(global_transform, expected * Vector3(1,0,1)) — толкает капсулу горизонтально, Vector3(1,0,1) обнуляет Y чтобы не учитывать вертикаль.
+#low_result.get_collision_normal() — нормаль поверхности с которой столкнулись. Проверяем abs(normal.y) > 0.7 — если Y нормали большой, значит это пол а не стена, ступеньки нет.
+#global_transform.translated(...) — создаёт новый трансформ сдвинутый вверх и вперёд, не двигая реальное тело.
+#test_move(step_pos, Vector3(0, -MAX_STEP_HEIGHT*2, 0), down_result) — с воображаемой позиции опускается вниз и ищет пол.
+#down_result.get_travel() — вектор на сколько реально сдвинулось тело до коллизии. Прибавляем к step_pos.origin чтобы получить точную позицию на поверхности ступени.
+#apply_floor_snap() — встроенный метод Godot, прижимает тело к полу после телепортации.
+#
+#_snap_down_to_stairs_check изнутри:
+#Engine.get_physics_frames() - _last_frame_was_on_floor <= STAIR_SNAP_DOWN_FRAMES — проверяет был ли игрок на полу последние N кадров. Без этого при шаге вниз игрок уже "в воздухе" и снап не сработает.
+#result.get_travel().y — отрицательное число, насколько нужно опустить тело до следующей поверхности.
