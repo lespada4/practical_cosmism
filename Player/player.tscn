@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dcqaclfu5yi0m" path="res://Player/health_system.gd" id="3_vtle1"]
 [ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="4_gwnis"]
 [ext_resource type="Script" uid="uid://dfcpgvuw2dtw8" path="res://Player/building_system.gd" id="4_od3ui"]
+[ext_resource type="Script" uid="uid://py3dohw4lbye" path="res://Player/stair_stepper.gd" id="5_apopc"]
 [ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://Player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
 [ext_resource type="PackedScene" uid="uid://ds8ha6qxiwji4" path="res://Player/inventory_system/CraftUI.tscn" id="6_fhl08"]
 
@@ -70,6 +71,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51537395, -0.6049105)
 
 [node name="Inventory" type="Node" parent="." unique_id=136037942]
 script = ExtResource("2_4ntmi")
+
+[node name="StairStepper" type="Node" parent="." unique_id=459112024]
+script = ExtResource("5_apopc")
 
 [node name="HealthSystem" type="Node" parent="." unique_id=2105577971]
 script = ExtResource("3_vtle1")
