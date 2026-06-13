@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="2_7jegv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2fx18"]
-size = Vector3(0.28222656, 0.08154297, 0.14941406)
+size = Vector3(0.3779297, 0.08154297, 0.33007813)
 
 [node name="Cockroach" type="CharacterBody3D" unique_id=1024034281]
 collision_layer = 4

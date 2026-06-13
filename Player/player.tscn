@@ -1,12 +1,28 @@
 [gd_scene format=3 uid="uid://cr4xuiouukpdx"]
 
 [ext_resource type="Script" uid="uid://d1odc4de7pkdt" path="res://Player/player_script.gd" id="1_l8h54"]
+[ext_resource type="Script" uid="uid://vo74e4st4k1j" path="res://Player/CameraController.gd" id="2_00tjw"]
 [ext_resource type="Script" uid="uid://dbtt5ap7725tm" path="res://Player/inventory_system/inventory.gd" id="2_4ntmi"]
+[ext_resource type="Shader" uid="uid://c2d6nvrfhvkhw" path="res://Shaders/filter_retro_fps.gdshader" id="2_x3vf3"]
 [ext_resource type="Script" uid="uid://cfhangcefpspl" path="res://Player/inventory_system/inventory_bar.gd" id="3_btcbx"]
 [ext_resource type="Script" uid="uid://dcqaclfu5yi0m" path="res://Player/health_system.gd" id="3_vtle1"]
 [ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="4_gwnis"]
+[ext_resource type="Script" uid="uid://dfcpgvuw2dtw8" path="res://Player/building_system.gd" id="4_od3ui"]
 [ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://Player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
 [ext_resource type="PackedScene" uid="uid://ds8ha6qxiwji4" path="res://Player/inventory_system/CraftUI.tscn" id="6_fhl08"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_apopc"]
+shader = ExtResource("2_x3vf3")
+shader_parameter/resolution_x = 640
+shader_parameter/resolution_y = 480
+shader_parameter/color_bit_depth = 16
+shader_parameter/dither_strength = 0.03
+shader_parameter/jitter_amount = 0.0
+shader_parameter/jitter_speed = 0.0
+shader_parameter/jitter_frequency = 0.0
+shader_parameter/chromatic_aberration_strength = 0.010000000475
+shader_parameter/vignette_strength = 0.8
+shader_parameter/vignette_radius = 0.9
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hvfyp"]
 radius = 0.28222656
@@ -27,21 +43,29 @@ collision_layer = 2
 collision_mask = 49
 script = ExtResource("1_l8h54")
 
+[node name="Shader" type="ColorRect" parent="." unique_id=1941807911]
+material = SubResource("ShaderMaterial_apopc")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1605091897]
 shape = SubResource("CapsuleShape3D_hvfyp")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1337991480]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.51537395, 0)
+[node name="CameraController" type="Node3D" parent="." unique_id=1104547581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6199315, 0)
+script = ExtResource("2_00tjw")
 
-[node name="interaction_ray" type="RayCast3D" parent="Camera3D" unique_id=48862161]
+[node name="Camera3D" type="Camera3D" parent="CameraController" unique_id=1337991480]
+
+[node name="interaction_ray" type="RayCast3D" parent="CameraController/Camera3D" unique_id=48862161]
 target_position = Vector3(0, 0, -2)
 collision_mask = 5
 collide_with_areas = true
 
-[node name="BuildingPos" type="Marker3D" parent="Camera3D/interaction_ray" unique_id=1182476434]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1698174)
-
-[node name="Dropper" type="Marker3D" parent="Camera3D" unique_id=329195604]
+[node name="Dropper" type="Marker3D" parent="CameraController/Camera3D" unique_id=329195604]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.51537395, -0.6049105)
 
 [node name="Inventory" type="Node" parent="." unique_id=136037942]
@@ -49,6 +73,9 @@ script = ExtResource("2_4ntmi")
 
 [node name="HealthSystem" type="Node" parent="." unique_id=2105577971]
 script = ExtResource("3_vtle1")
+
+[node name="BuildingSystem" type="Node" parent="." unique_id=1048852922]
+script = ExtResource("4_od3ui")
 
 [node name="UI_LAYER" type="CanvasLayer" parent="." unique_id=1060750778]
 

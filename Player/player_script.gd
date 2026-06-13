@@ -2,23 +2,35 @@ extends CharacterBody3D
 
 @export var speed = 3.0
 @export var sprint_speed = 5.0
-@export var mouse_sensitivity = 0.002
 @export var jump_velocity = 5
-@export var head_bob_intensity = 0.05
-@export var head_bob_speed = 14.0
 @export var coyote_time = 0.1
-@export var gravity_up = 10.0
-@export var gravity_down = 32.0
+
 @export var jump_cut_multiplier = 0.4
 @export var air_control = 3
 @export var acceleration = 32.0
 @export var friction = 32.0
+const GRAVITY_UP = 10.0
+const GRAVITY_DOWN = 32.0
 
+# ===== STAIRS =====
+const MAX_STEP_HEIGHT:        float = 0.5
+const STAIR_SNAP_COOLDOWN:    float = 0.01
+const STAIR_SNAP_DOWN_FRAMES: int   = 3
+
+var _stair_snap_cooldown:         float = 0.0
+var _snapped_to_stairs_last_frame: bool  = false
+var _last_frame_was_on_floor:      int   = -INF
+var _saved_camera_global_pos              = null
+
+# ===== NODES =====
 @onready var inventory: Inventory = $Inventory
-@onready var health_system: Node = $HealthSystem
-@onready var interaction_ray: RayCast3D = $Camera3D/interaction_ray
-@onready var camera: Camera3D = $Camera3D
-@onready var dropper: Marker3D = $Camera3D/Dropper
+@onready var health_system: HealthSystem = $HealthSystem
+@onready var building_system: Node = $BuildingSystem
+@onready var camera_controller: CameraController = $CameraController
+@onready var camera: Camera3D = $CameraController/Camera3D
+@onready var interaction_ray: RayCast3D = $CameraController/Camera3D/interaction_ray
+@onready var dropper: Marker3D = $CameraController/Camera3D/Dropper
+
 @onready var crosshair: TextureRect = $UI_LAYER/Control/crosshair
 @onready var inventory_label: Label = $UI_LAYER/Control/inventory_label
 @onready var health_label: Label = $UI_LAYER/Control/health_label
@@ -28,153 +40,212 @@ extends CharacterBody3D
 @onready var crafting_ui: Panel = $UI_LAYER/Control/craftingUI
 @onready var protection_label: Label = $UI_LAYER/Control/protection_label
 
-var head_bob_time = 0.0
-var is_moving = false
-var camera_default_height = 0.0
 var coyote_timer = 0.0
-var build_distance: float = 3.0
 var is_jumping: bool = false
-var jump_horizontal_velocity: Vector3 = Vector3.ZERO
-
-var build_mode: bool = false
-var current_ghost: Area3D = null
-var current_blueprint_id: String = ""
-
 var is_sprinting: bool = false
 
 func _ready():
-	camera_default_height = camera.transform.origin.y
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	add_to_group("player")
-	
-	# Подключаем сигналы HealthSystem
+
+	building_system.initialize(self, camera_controller.get_camera(), crosshair)
+
 	health_system.died.connect(_on_death)
 	health_system.health_changed.connect(update_health_display)
 	health_system.radiation_changed.connect(update_radiation_display)
-	
-	# Тестовые предметы
+
+	inventory.inventory_updated.connect(_on_inventory_updated)
+
 	inventory.add_item(1, 10)
 	inventory.add_item(2, 5)
-	inventory.add_item(3, 55)
-	
+	inventory.add_item(3, 2)
+
 	inventory.inventory_updated.connect(update_inventory_display)
 	update_inventory_display()
 	update_health_display(health_system.health)
 	update_radiation_display(health_system.radiation, health_system.radiation_stage)
 	health_system.protection_changed.connect(update_protection_display)
-	inventory.inventory_updated.connect(_on_inventory_updated)
+
 func _input(event):
-	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * mouse_sensitivity)
-		camera.rotate_x(-event.relative.y * mouse_sensitivity)
-		camera.rotation.x = clamp(camera.rotation.x, -1.5, 1.5)
-		
-		if build_mode:
-			update_build_distance_by_camera()
-	
+	camera_controller.handle_input(event)
+
+	if event is InputEventMouseMotion and building_system.is_build_mode:
+		building_system.update_build_distance_by_camera()
+
 	if event.is_action_pressed("interact"):
-		if build_mode:
-			try_build()
+		if building_system.is_build_mode:
+			building_system.try_build(inventory)
 		else:
 			try_interact()
-	
-	if event.is_action_pressed("build_mode"):
-		if not build_mode:
-			enter_build_mode("still")
-		else:
-			exit_build_mode()
-	
+
 	if event.is_action_pressed("craft"):
 		crafting_ui.open("player")
-	
-	if build_mode and event.is_action_pressed("rotate_building") and current_ghost:
-		current_ghost.rotate_y(deg_to_rad(45))
-	
+
 	if event.is_action_pressed("sprint"):
 		is_sprinting = true
-	
+
 	if event.is_action_released("sprint"):
 		is_sprinting = false
-	
+
 	if event.is_action_pressed("drop_item"):
 		drop_current_item()
 
-func update_build_distance_by_camera():
-	var t = (camera.rotation.x + 1.5) / 3.0
-	t = clamp(t, 0.0, 1.0)
-	build_distance = lerp(1.0, 5.0, t)
-
 func _physics_process(delta):
-	var input_dir = Input.get_vector("left", "right", "forward", "back")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
-	is_moving = direction != Vector3.ZERO
-	
-	var current_speed = sprint_speed if (is_sprinting and is_moving and is_on_floor()) else speed
-	
-	if is_on_floor():
-		coyote_timer = coyote_time
-		is_jumping = false
-		jump_horizontal_velocity = Vector3.ZERO
-		
-		if direction:
-			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleration * delta)
-			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleration * delta)
-		else:
-			velocity.x = move_toward(velocity.x, 0, friction * delta)
-			velocity.z = move_toward(velocity.z, 0, friction * delta)
-	else:
-		coyote_timer -= delta
-		
-		if is_jumping:
-			if direction:
-				velocity.x = lerp(velocity.x, direction.x * current_speed, air_control * delta * 10)
-				velocity.z = lerp(velocity.z, direction.z * current_speed, air_control * delta * 10)
-			else:
-				velocity.x = move_toward(velocity.x, 0, friction * 0.2 * delta)
-				velocity.z = move_toward(velocity.z, 0, friction * 0.2 * delta)
-	
-	if Input.is_action_just_pressed("jump") and coyote_timer > 0:
-		velocity.y = jump_velocity
-		is_jumping = true
-		jump_horizontal_velocity = Vector3(velocity.x, 0, velocity.z)
-		
-		if is_sprinting and direction:
-			velocity.x = direction.x * sprint_speed * 1.2
-			velocity.z = direction.z * sprint_speed * 1.2
-			jump_horizontal_velocity = Vector3(velocity.x, 0, velocity.z)
-	
-	if Input.is_action_just_released("jump") and velocity.y > 0:
-		velocity.y *= jump_cut_multiplier
-	
-	if velocity.y > 0:
-		velocity.y -= gravity_up * delta
-	else:
-		velocity.y -= gravity_down * delta
-	
-	move_and_slide()
-	
-	if build_mode and current_ghost:
-		update_ghost_position()
-	
-	update_head_bob(delta)
+	_stair_snap_cooldown = max(_stair_snap_cooldown - delta, 0.0)
 
-func update_head_bob(delta):
-	if is_moving and is_on_floor():
-		head_bob_time += delta * head_bob_speed
-		var vertical = sin(head_bob_time) * head_bob_intensity
-		var horizontal = cos(head_bob_time * 0.5) * head_bob_intensity
-		camera.transform.origin = Vector3(horizontal, camera_default_height + vertical, 0)
+	# ===== КАМЕРА =====
+	camera_controller.update_rotation(delta)
+
+	# ===== ВВОД =====
+	var input_dir = Input.get_vector("left", "right", "forward", "back")
+
+	var camera_forward = camera_controller.get_camera_forward()
+	camera_forward.y = 0
+	camera_forward = camera_forward.normalized()
+
+	var camera_right = camera_controller.get_camera().global_transform.basis.x
+	camera_right.y = 0
+	camera_right = camera_right.normalized()
+
+	var direction = (camera_forward * -input_dir.y + camera_right * input_dir.x).normalized()
+	var wish_dir = direction
+
+	# ===== СКОРОСТЬ =====
+	var current_speed = sprint_speed if (is_sprinting and direction != Vector3.ZERO and is_on_floor()) else speed
+
+	# ===== ГРАВИТАЦИЯ =====
+	if not is_on_floor():
+		velocity.y -= GRAVITY_DOWN * delta
+	
+	# ===== ПРЫЖОК =====
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity.y = jump_velocity
+
+	# ===== ДВИЖЕНИЕ =====
+	if direction != Vector3.ZERO:
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
 	else:
-		head_bob_time = 0
-		camera.transform.origin = Vector3(0, camera_default_height, 0)
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
+
+	# ===== СТУПЕНЬКИ =====
+	if not _snap_up_stairs_check(delta, wish_dir, current_speed):
+		move_and_slide()
+		_snap_down_to_stairs_check()
+
+	# ===== ПЛАВНЫЙ ВОЗВРАТ КАМЕРЫ =====
+	_slide_camera_smooth_back_to_origin(delta, current_speed)
+
+	# ===== СИСТЕМЫ =====
+	camera_controller.update_head_bob(delta, direction != Vector3.ZERO, is_on_floor())
+
+	if building_system.is_build_mode:
+		building_system.update_ghost_position()
+
+# =====================================================
+#  СИСТЕМА СТУПЕНЕК (PhysicsTestMotion — как в большом скрипте)
+# =====================================================
+
+func _snap_up_stairs_check(delta: float, wish_dir: Vector3, move_speed: float) -> bool:
+	if _stair_snap_cooldown > 0:
+		return false
+	if not is_on_floor() and not _snapped_to_stairs_last_frame:
+		return false
+	if velocity.y > 0:
+		return false
+
+	var move_dir = wish_dir if wish_dir.length() > 0.1 else (velocity * Vector3(1, 0, 1)).normalized()
+	if move_dir.length() < 0.1:
+		return false
+
+	var expected   = move_dir * move_speed * delta
+	var low_result = PhysicsTestMotionResult3D.new()
+	if not _run_body_test_motion(global_transform, expected * Vector3(1, 0, 1), low_result):
+		return false
+
+	var contact_normal = low_result.get_collision_normal()
+	if abs(contact_normal.y) > 0.7:
+		return false
+
+	var step_pos    = global_transform.translated(expected + Vector3(0, MAX_STEP_HEIGHT * 2, 0))
+	var down_result = KinematicCollision3D.new()
+	if not test_move(step_pos, Vector3(0, -MAX_STEP_HEIGHT * 2, 0), down_result):
+		return false
+
+	var col = down_result.get_collider()
+	if not (col.is_class("StaticBody3D") or col.is_class("CSGShape3D")):
+		return false
+
+	var step_h = ((step_pos.origin + down_result.get_travel()) - global_position).y
+	if step_h > MAX_STEP_HEIGHT or step_h <= 0.01:
+		return false
+	if (down_result.get_position() - global_position).y > MAX_STEP_HEIGHT:
+		return false
+
+	_save_camera_pos_for_smoothing()
+	global_position = step_pos.origin + down_result.get_travel()
+	apply_floor_snap()
+	_stair_snap_cooldown          = STAIR_SNAP_COOLDOWN
+	_snapped_to_stairs_last_frame = true
+	return true
+
+func _snap_down_to_stairs_check() -> void:
+	var did_snap          = false
+	var was_on_floor_last = Engine.get_physics_frames() - _last_frame_was_on_floor <= STAIR_SNAP_DOWN_FRAMES
+
+	if not is_on_floor() and velocity.y <= 0 and (was_on_floor_last or _snapped_to_stairs_last_frame):
+		var result = PhysicsTestMotionResult3D.new()
+		if _run_body_test_motion(global_transform, Vector3(0, -MAX_STEP_HEIGHT, 0), result):
+			_save_camera_pos_for_smoothing()
+			position.y += result.get_travel().y
+			apply_floor_snap()
+			did_snap = true
+
+	if is_on_floor():
+		_last_frame_was_on_floor = Engine.get_physics_frames()
+
+	_snapped_to_stairs_last_frame = did_snap
+
+func _run_body_test_motion(from: Transform3D, motion: Vector3, result = null) -> bool:
+	if not result:
+		result = PhysicsTestMotionResult3D.new()
+	var params   = PhysicsTestMotionParameters3D.new()
+	params.from  = from
+	params.motion = motion
+	return PhysicsServer3D.body_test_motion(get_rid(), params, result)
+
+func is_surface_too_steep(normal: Vector3) -> bool:
+	return normal.angle_to(Vector3.UP) > floor_max_angle
+
+# =====================================================
+#  СГЛАЖИВАНИЕ КАМЕРЫ НА СТУПЕНЬКАХ
+# =====================================================
+
+func _save_camera_pos_for_smoothing() -> void:
+	if _saved_camera_global_pos == null:
+		_saved_camera_global_pos = camera.global_position
+
+func _slide_camera_smooth_back_to_origin(delta: float, move_speed: float) -> void:
+	if _saved_camera_global_pos == null:
+		return
+	camera.global_position.y = _saved_camera_global_pos.y
+	camera.position.y = move_toward(
+		camera.position.y, 0.0,
+		max(velocity.length() * delta * 2.0, move_speed * delta)
+	)
+	_saved_camera_global_pos = camera.global_position
+	if camera.position.y == 0.0:
+		_saved_camera_global_pos = null
+
+# =====================================================
+#  ОСТАЛЬНЫЕ ФУНКЦИИ
+# =====================================================
 
 func try_interact():
 	if not interaction_ray.is_colliding():
 		return
-	
 	var hit = interaction_ray.get_collider()
-	
 	if hit.is_in_group("resource") and hit.has_method("collect"):
 		hit.collect()
 	elif hit.has_method("interact"):
@@ -184,8 +255,8 @@ func collect_item(item_id: int, amount: int):
 	inventory.add_item(item_id, amount)
 
 func update_inventory_display():
-	var iron = inventory.get_item_count(1)
-	var steel = inventory.get_item_count(2)
+	var iron     = inventory.get_item_count(1)
+	var steel    = inventory.get_item_count(2)
 	var moonshine = inventory.get_item_count(3)
 	inventory_label.text = "Iron: " + str(iron) + "  Steel: " + str(steel) + "  Moonshine: " + str(moonshine)
 
@@ -199,29 +270,34 @@ func update_radiation_display(radiation: float, stage: int):
 		1: color = Color.YELLOW
 		2: color = Color.ORANGE
 		3: color = Color.RED
-	
 	radiation_label.text = "Rad: " + str(round(radiation)) + "%"
 	radiation_label.modulate = color
 
+func update_protection_display(resistance: float, timer: float):
+	if resistance > 0:
+		var resistance_str = "%.1f" % resistance
+		protection_label.text = "Prot: " + resistance_str + "% (" + str(round(timer)) + "s)"
+		protection_label.visible = true
+	else:
+		protection_label.visible = false
+
 func apply_damage(amount: float, damage_type: int):
 	match damage_type:
-		1:  # RADIATION
-			health_system.apply_environment_radiation(amount)
-		2:  # POISON
-			health_system.apply_poison_damage(amount)
+		1: health_system.apply_environment_radiation(amount)
+		2: health_system.apply_poison_damage(amount)
 
 func stop_damage(damage_type: int):
 	match damage_type:
-		1:
-			health_system.stop_environment_radiation()
-		2:
-			health_system.stop_poison_damage()
+		1: health_system.stop_environment_radiation()
+		2: health_system.stop_poison_damage()
 
 func _on_death():
 	if get_tree():
 		get_tree().reload_current_scene()
 
-# ========== ПРОКСИ-МЕТОДЫ ДЛЯ ПРЕДМЕТОВ ==========
+func _on_inventory_updated():
+	var emission = inventory.get_total_radiation_emission()
+	health_system.apply_inventory_radiation(emission)
 
 func use_moonshine():
 	health_system.use_moonshine()
@@ -232,20 +308,15 @@ func use_antirad():
 func use_cockroach():
 	health_system.use_cockroach()
 
-# ========== ВЫКИДЫВАНИЕ ПРЕДМЕТОВ ==========
-
 func drop_current_item():
 	if not inventory:
 		return
-	
 	var active_slot = inventory_bar.active_slot
-	var slot_data = inventory.get_hotbar_slot(active_slot)
+	var slot_data   = inventory.get_hotbar_slot(active_slot)
 	if not slot_data or not slot_data.item:
 		return
-	
-	var item_id = slot_data.item.id
+	var item_id  = slot_data.item.id
 	var quantity = 1
-	
 	if inventory.remove_item(item_id, quantity):
 		drop_item_in_world(item_id, quantity)
 
@@ -253,83 +324,22 @@ func drop_item_in_world(item_id: int, quantity: int):
 	var item_resource = ItemRegistry.get_item(item_id)
 	if not item_resource or not item_resource.collectable_scene:
 		return
-	
 	var collectable = item_resource.collectable_scene.instantiate()
 	get_parent().add_child(collectable)
 	collectable.setup(item_resource, quantity)
 	collectable.global_position = dropper.global_position
-	
-	var forward = -camera.global_transform.basis.z
-	var throw_dir = forward + Vector3(0, 0.5, 0)
+	var forward    = camera_controller.get_camera_forward()
+	var throw_dir  = forward + Vector3(0, 0.5, 0)
 	throw_dir = throw_dir.normalized()
 	throw_dir.x += randf_range(-0.2, 0.2)
 	throw_dir.z += randf_range(-0.2, 0.2)
 	throw_dir = throw_dir.normalized()
-	
 	if collectable.has_method("apply_velocity"):
 		collectable.apply_velocity(throw_dir * 6.0)
 
-func update_protection_display(resistance: float, timer: float):
-	if resistance > 0:
-		# Форматируем до 1 знака после запятой
-		var resistance_str = "%.1f" % resistance
-		protection_label.text = "Prot: " + resistance_str + "% (" + str(round(timer)) + "s)"
-		protection_label.visible = true
-	else:
-		protection_label.visible = false
-
-# ========== СИСТЕМА СТРОИТЕЛЬСТВА ==========
-
-func enter_build_mode(blueprint_id: String):
-	var blueprint = BlueprintRegistry.get_blueprint(blueprint_id)
-	if not blueprint:
-		return
-	
-	current_blueprint_id = blueprint_id
-	build_mode = true
-	build_distance = 3.0
-	
-	current_ghost = preload("res://blueprints/ghost/ghost.tscn").instantiate()
-	add_child(current_ghost)
-	current_ghost.setup(blueprint)
-	crosshair.visible = false
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func exit_build_mode():
-	if current_ghost:
-		current_ghost.queue_free()
-		current_ghost = null
-	build_mode = false
-	current_blueprint_id = ""
-	crosshair.visible = true
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-func update_ghost_position():
-	var forward = -camera.global_transform.basis.z
-	forward.y = 0
-	forward = forward.normalized()
-	
-	current_ghost.global_position = camera.global_position + forward * build_distance
-
-func try_build():
-	if not current_ghost or not current_ghost.get_valid():
-		return
-	
-	var blueprint = BlueprintRegistry.get_blueprint(current_blueprint_id)
-	
-	if not inventory.has_items(blueprint.build_costs):
-		return
-	
-	inventory.consume_items(blueprint.build_costs)
-	
-	var building = blueprint.building_scene.instantiate()
-	building.global_transform = current_ghost.global_transform
-	building.rotation = current_ghost.rotation
-	building.position.y -= 0.2
-	get_parent().add_child(building)
-	
-	exit_build_mode()
-
-func _on_inventory_updated():
-	var emission = inventory.get_total_radiation_emission()
-	health_system.apply_inventory_radiation(emission)
+func show_demo_complete():
+	print("DEMO COMPLETE! Congratulations!")
+	if has_node("UI_LAYER/Control/DemoCompleteLabel"):
+		$UI_LAYER/Control/DemoCompleteLabel.visible = true
+		await get_tree().create_timer(3.0).timeout
+		$UI_LAYER/Control/DemoCompleteLabel.visible = false

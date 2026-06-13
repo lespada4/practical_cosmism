@@ -24,10 +24,25 @@ func find_player_and_connect():
 		find_player_and_connect()
 
 func _input(event):
+	# Цифровые клавиши 1-9
 	for i in range(slot_count):
 		if event.is_action_pressed("hotbar_" + str(i + 1)):
 			set_active_slot(i)
 			break
+	
+	# Прокрутка колесиком мыши
+	if event.is_action_pressed("scroll_up"):
+		var new_slot = active_slot - 1
+		if new_slot < 0:
+			new_slot = slot_count - 1
+		set_active_slot(new_slot)
+	
+	if event.is_action_pressed("scroll_down"):
+		var new_slot = active_slot + 1
+		if new_slot >= slot_count:
+			new_slot = 0
+		set_active_slot(new_slot)
+	
 	if event.is_action_pressed("use_item"):
 		use_current_item()
 
@@ -68,7 +83,6 @@ func use_current_item():
 
 func use_item(item_id: int):
 	ItemActions.use(player, item_id)
-
 
 func update_hotbar():
 	if not player or not player.inventory:
