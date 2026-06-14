@@ -14,6 +14,7 @@ material = SubResource("StandardMaterial3D_i3nn4")
 collision_layer = 5
 collision_mask = 3
 script = ExtResource("1_htjnr")
+initial_sink = 0.1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2068787444]
 mesh = SubResource("BoxMesh_htjnr")

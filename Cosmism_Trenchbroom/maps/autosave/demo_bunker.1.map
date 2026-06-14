@@ -1,0 +1,222 @@
+// Game: PracticalCosmism
+// Format: Standard
+// entity 0
+{
+"wad" ""
+"classname" "worldspawn"
+// brush 0
+{
+( -48 -32 -128 ) ( -48 -31 -128 ) ( -48 -32 -127 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -128 ) ( -32 -32 -127 ) ( -31 -32 -128 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -128 ) ( -31 -32 -128 ) ( -32 -31 -128 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -112 ) ( -16 65 -112 ) ( -15 64 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -112 ) ( -15 64 -112 ) ( -16 64 -111 ) Textures32x32/concrete_32 0 0 0 1 1
+( 144 64 -112 ) ( 144 64 -111 ) ( 144 65 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+// brush 1
+{
+( 0 -32 -112 ) ( 0 -31 -112 ) ( 0 -32 -111 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -112 ) ( -32 -32 -111 ) ( -31 -32 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -112 ) ( -31 -32 -112 ) ( -32 -31 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -96 ) ( -16 65 -96 ) ( -15 64 -96 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -96 ) ( -15 64 -96 ) ( -16 64 -95 ) Textures32x32/concrete_32 0 0 0 1 1
+( 144 64 -96 ) ( 144 64 -95 ) ( 144 65 -96 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+// brush 2
+{
+( 16 -32 -96 ) ( 16 -31 -96 ) ( 16 -32 -95 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -96 ) ( -32 -32 -95 ) ( -31 -32 -96 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -96 ) ( -31 -32 -96 ) ( -32 -31 -96 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -80 ) ( -16 65 -80 ) ( -15 64 -80 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -80 ) ( -15 64 -80 ) ( -16 64 -79 ) Textures32x32/concrete_32 0 0 0 1 1
+( 144 64 -80 ) ( 144 64 -79 ) ( 144 65 -80 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+// brush 3
+{
+( 32 -32 -80 ) ( 32 -31 -80 ) ( 32 -32 -79 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -80 ) ( -32 -32 -79 ) ( -31 -32 -80 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -80 ) ( -31 -32 -80 ) ( -32 -31 -80 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -64 ) ( -16 65 -64 ) ( -15 64 -64 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -64 ) ( -15 64 -64 ) ( -16 64 -63 ) Textures32x32/concrete_32 0 0 0 1 1
+( 144 64 -64 ) ( 144 64 -63 ) ( 144 65 -64 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+// brush 4
+{
+( 48 -32 -64 ) ( 48 -31 -64 ) ( 48 -32 -63 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -64 ) ( -32 -32 -63 ) ( -31 -32 -64 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -64 ) ( -31 -32 -64 ) ( -32 -31 -64 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -48 ) ( -16 65 -48 ) ( -15 64 -48 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -48 ) ( -15 64 -48 ) ( -16 64 -47 ) Textures32x32/concrete_32 0 0 0 1 1
+( 144 64 -48 ) ( 144 64 -47 ) ( 144 65 -48 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+// brush 5
+{
+( 64 -32 -48 ) ( 64 -31 -48 ) ( 64 -32 -47 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -48 ) ( -32 -32 -47 ) ( -31 -32 -48 ) Textures32x32/concrete_32 0 0 0 1 1
+( -32 -32 -48 ) ( -31 -32 -48 ) ( -32 -31 -48 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -32 ) ( -16 65 -32 ) ( -15 64 -32 ) Textures32x32/concrete_32 0 0 0 1 1
+( -16 64 -32 ) ( -15 64 -32 ) ( -16 64 -31 ) Textures32x32/concrete_32 0 0 0 1 1
+( 144 64 -32 ) ( 144 64 -31 ) ( 144 65 -32 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+}
+// entity 1
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "Basement"
+"_tb_id" "1"
+"_tb_layer_sort_index" "0"
+// brush 0
+{
+( -48 112 -112 ) ( -48 113 -112 ) ( -48 112 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 80 -112 ) ( -128 80 -111 ) ( -127 80 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -64 -128 ) ( -319 -64 -128 ) ( -320 -63 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 112 -112 ) ( -128 113 -112 ) ( -127 112 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 144 -112 ) ( -127 144 -112 ) ( -128 144 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 112 -112 ) ( -32 112 -111 ) ( -32 113 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 1
+{
+( -496 128 -112 ) ( -496 129 -112 ) ( -496 128 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 128 -112 ) ( -320 128 -111 ) ( -319 128 -112 ) Textures32x32/iron_32 0 0 0 1 1
+( -320 128 -112 ) ( -319 128 -112 ) ( -320 129 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 144 48 ) ( -32 145 48 ) ( -31 144 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 144 -96 ) ( -31 144 -96 ) ( -32 144 -95 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 144 -96 ) ( -32 144 -95 ) ( -32 145 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 2
+{
+( -496 -112 -112 ) ( -496 -111 -112 ) ( -496 -112 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -112 -112 ) ( -320 -112 -111 ) ( -319 -112 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -112 -112 ) ( -319 -112 -112 ) ( -320 -111 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -96 48 ) ( -32 -95 48 ) ( -31 -96 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -96 -96 ) ( -31 -96 -96 ) ( -32 -96 -95 ) Textures32x32/iron_32 0 0 0 1 1
+( -32 -96 -96 ) ( -32 -96 -95 ) ( -32 -95 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 3
+{
+( -496 -48 -112 ) ( -496 -47 -112 ) ( -496 -48 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -96 -112 ) ( -320 -96 -111 ) ( -319 -96 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -48 -112 ) ( -319 -48 -112 ) ( -320 -47 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -304 128 48 ) ( -304 129 48 ) ( -303 128 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -304 128 -96 ) ( -303 128 -96 ) ( -304 128 -95 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -480 128 -96 ) ( -480 128 -95 ) ( -480 129 -96 ) Textures32x32/iron_32 0 0 0 1 1
+}
+// brush 4
+{
+( -496 -64 48 ) ( -496 -63 48 ) ( -496 -64 49 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -112 48 ) ( -320 -112 49 ) ( -319 -112 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -64 48 ) ( -319 -64 48 ) ( -320 -63 48 ) Textures32x32/steel_32 0 0 0 1 1
+( -128 112 64 ) ( -128 113 64 ) ( -127 112 64 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 144 64 ) ( -127 144 64 ) ( -128 144 65 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 112 64 ) ( -32 112 65 ) ( -32 113 64 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 5
+{
+( -48 -96 -112 ) ( -48 -95 -112 ) ( -48 -96 -111 ) Textures32x32/iron_32 0 0 0 1 1
+( -48 -96 -112 ) ( -48 -96 -111 ) ( -47 -96 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -48 -96 -112 ) ( -47 -96 -112 ) ( -48 -95 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -32 48 ) ( -32 -31 48 ) ( -31 -32 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -48 -48 -112 ) ( -47 -48 -112 ) ( -48 -48 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -32 -96 ) ( -32 -32 -95 ) ( -32 -31 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 6
+{
+( -48 64 -112 ) ( -48 65 -112 ) ( -48 64 -111 ) Textures32x32/iron_32 0 0 0 1 1
+( -32 80 -96 ) ( -32 80 -95 ) ( -31 80 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -48 64 -112 ) ( -47 64 -112 ) ( -48 65 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 128 48 ) ( -32 129 48 ) ( -31 128 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 128 -96 ) ( -31 128 -96 ) ( -32 128 -95 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 128 -96 ) ( -32 128 -95 ) ( -32 129 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 7
+{
+( -496 -64 -128 ) ( -496 -63 -128 ) ( -496 -64 -127 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -112 -128 ) ( -320 -112 -127 ) ( -319 -112 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -64 -128 ) ( -319 -64 -128 ) ( -320 -63 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 112 -112 ) ( -128 113 -112 ) ( -127 112 -112 ) Textures32x32/steel_32 0 0 0 1 1
+( -128 144 -112 ) ( -127 144 -112 ) ( -128 144 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -48 112 -112 ) ( -48 112 -111 ) ( -48 113 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 8
+{
+( -48 112 -112 ) ( -48 113 -112 ) ( -48 112 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -112 -128 ) ( -320 -112 -127 ) ( -319 -112 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -320 -64 -128 ) ( -319 -64 -128 ) ( -320 -63 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 112 -112 ) ( -128 113 -112 ) ( -127 112 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -128 -48 -112 ) ( -127 -48 -112 ) ( -128 -48 -111 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 112 -112 ) ( -32 112 -111 ) ( -32 113 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 9
+{
+( -48 64 -112 ) ( -48 65 -112 ) ( -48 64 -111 ) Textures32x32/iron_32 0 0 0 1 1
+( -48 64 -112 ) ( -48 64 -111 ) ( -47 64 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -48 64 -128 ) ( -47 64 -128 ) ( -48 65 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 128 48 ) ( -32 129 48 ) ( -31 128 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 80 -96 ) ( -31 80 -96 ) ( -32 80 -95 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 128 -96 ) ( -32 128 -95 ) ( -32 129 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+// brush 10
+{
+( -48 -96 -112 ) ( -48 -95 -112 ) ( -48 -96 -111 ) Textures32x32/iron_32 0 0 0 1 1
+( -48 -48 -112 ) ( -48 -48 -111 ) ( -47 -48 -112 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -48 -96 -128 ) ( -47 -96 -128 ) ( -48 -95 -128 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -32 48 ) ( -32 -31 48 ) ( -31 -32 48 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -32 -96 ) ( -31 -32 -96 ) ( -32 -32 -95 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+( -32 -32 -96 ) ( -32 -32 -95 ) ( -32 -31 -96 ) Textures32x32/concrete_orange_32 0 0 0 1 1
+}
+}
+// entity 2
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "Wall"
+"_tb_id" "4"
+"_tb_linked_group_id" "{5547294a-c0e1-4dbe-b6a9-4e2ad2cda6b0}"
+"_tb_layer" "1"
+// brush 0
+{
+( -256 -96 -112 ) ( -256 -95 -112 ) ( -256 -96 -111 ) Textures32x32/concrete_32 0 0 0 1 1
+( -256 -96 -112 ) ( -256 -96 -111 ) ( -255 -96 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -256 -96 -112 ) ( -255 -96 -112 ) ( -256 -95 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -240 48 48 ) ( -240 49 48 ) ( -239 48 48 ) Textures32x32/concrete_32 0 0 0 1 1
+( -240 128 -96 ) ( -239 128 -96 ) ( -240 128 -95 ) Textures32x32/concrete_32 0 0 0 1 1
+( -240 48 -96 ) ( -240 48 -95 ) ( -240 49 -96 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+}
+// entity 3
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "Wall2"
+"_tb_id" "6"
+"_tb_linked_group_id" "{1623135c-af15-4163-9f95-3fab7f513845}"
+"_tb_layer" "1"
+}
+// entity 4
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "Wall"
+"_tb_id" "5"
+"_tb_linked_group_id" "{a40ca42b-4ad0-432c-a95c-e15b3322639c}"
+"_tb_transformation" "1 0 0 -112 0 1 0 0 0 0 1 0 0 0 0 1"
+"_tb_group" "6"
+// brush 0
+{
+( -368 -96 -112 ) ( -368 -95 -112 ) ( -368 -96 -111 ) Textures32x32/concrete_32 0 0 0 1 1
+( -368 -96 -112 ) ( -368 -96 -111 ) ( -367 -96 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -368 -96 -112 ) ( -367 -96 -112 ) ( -368 -95 -112 ) Textures32x32/concrete_32 0 0 0 1 1
+( -352 48 48 ) ( -352 49 48 ) ( -351 48 48 ) Textures32x32/concrete_32 0 0 0 1 1
+( -352 128 -96 ) ( -351 128 -96 ) ( -352 128 -95 ) Textures32x32/concrete_32 0 0 0 1 1
+( -352 48 -96 ) ( -352 48 -95 ) ( -352 49 -96 ) Textures32x32/concrete_32 0 0 0 1 1
+}
+}
+// entity 5
+{
+"classname" "func_group"
+"_tb_type" "_tb_layer"
+"_tb_name" "Surface"
+"_tb_id" "7"
+"_tb_layer_sort_index" "1"
+}

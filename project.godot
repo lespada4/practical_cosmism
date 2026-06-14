@@ -44,6 +44,7 @@ folder_colors={
 "res://Object_Scenes/": "green",
 "res://Objects_Scripts/": "green",
 "res://Player/": "pink",
+"res://SFX/": "orange",
 "res://Shaders/": "purple",
 "res://Textures/": "purple",
 "res://blueprints/": "blue",

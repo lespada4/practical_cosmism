@@ -2,6 +2,7 @@ extends HBoxContainer
 
 @export var slot_scene: PackedScene
 @export var slot_count: int = 9
+@onready var item_name_label: Label = $"../item name"
 
 var slots: Array = []
 var active_slot: int = 0
@@ -51,6 +52,7 @@ func set_active_slot(index: int):
 		return
 	active_slot = index
 	update_active_highlight()
+	update_item_name_display()
 
 func create_slots():
 	for i in range(slot_count):
@@ -94,6 +96,7 @@ func update_hotbar():
 		else:
 			slots[i].clear_slot()
 	update_active_highlight()
+	update_item_name_display()
 
 func get_inventory():
 	return player.inventory if player else null
@@ -113,3 +116,14 @@ func update_active_highlight():
 			var inactive_style = StyleBoxFlat.new()
 			inactive_style.bg_color = Color(0, 0, 0, 0.6)
 			slots[i].add_theme_stylebox_override("panel", inactive_style)
+
+func update_item_name_display():
+	if not player or not player.inventory:
+		item_name_label.text = ""
+		return
+	
+	var slot = player.inventory.get_hotbar_slot(active_slot)
+	if slot and slot.item:
+		item_name_label.text = slot.item.display_name
+	else:
+		item_name_label.text = ""

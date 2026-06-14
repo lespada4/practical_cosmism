@@ -19,7 +19,7 @@ const GRAVITY_DOWN = 32.0
 @onready var camera: Camera3D = $CameraController/Camera3D
 @onready var interaction_ray: RayCast3D = $CameraController/Camera3D/interaction_ray
 @onready var dropper: Marker3D = $CameraController/Camera3D/Dropper
-@onready var stair_stepper: Node = $StairStepper  # <-- дочерняя нода с StairStepper.gd
+@onready var stair_stepper: Node = $StairStepper
 
 @onready var crosshair: TextureRect = $UI_LAYER/Control/crosshair
 @onready var inventory_label: Label = $UI_LAYER/Control/inventory_label
@@ -33,14 +33,13 @@ const GRAVITY_DOWN = 32.0
 var coyote_timer = 0.0
 var is_jumping: bool = false
 var is_sprinting: bool = false
+var jump_held: bool = false
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	add_to_group("player")
 
-	# Инициализируем StairStepper — передаём себя и камеру
 	stair_stepper.initialize(self, camera)
-
 	building_system.initialize(self, camera_controller.get_camera(), crosshair)
 
 	health_system.died.connect(_on_death)
@@ -48,11 +47,6 @@ func _ready():
 	health_system.radiation_changed.connect(update_radiation_display)
 
 	inventory.inventory_updated.connect(_on_inventory_updated)
-
-	inventory.add_item(1, 10)
-	inventory.add_item(2, 5)
-	inventory.add_item(3, 2)
-
 	inventory.inventory_updated.connect(update_inventory_display)
 	update_inventory_display()
 	update_health_display(health_system.health)
@@ -76,18 +70,22 @@ func _input(event):
 
 	if event.is_action_pressed("sprint"):
 		is_sprinting = true
-
 	if event.is_action_released("sprint"):
 		is_sprinting = false
 
 	if event.is_action_pressed("drop_item"):
 		drop_current_item()
 
-func _physics_process(delta):
-	# ===== КАМЕРА =====
+	if event.is_action_pressed("jump"):
+		jump_held = true
+	if event.is_action_released("jump"):
+		jump_held = false
+
+func _process(delta: float) -> void:
+	rotation.y = camera_controller.get_h_rotation()
 	camera_controller.update_rotation(delta)
 
-	# ===== ВВОД =====
+func _physics_process(delta):
 	var input_dir = Input.get_vector("left", "right", "forward", "back")
 
 	var camera_forward = camera_controller.get_camera_forward()
@@ -99,34 +97,52 @@ func _physics_process(delta):
 	camera_right = camera_right.normalized()
 
 	var direction = (camera_forward * -input_dir.y + camera_right * input_dir.x).normalized()
-
-	# ===== СКОРОСТЬ =====
 	var current_speed = sprint_speed if (is_sprinting and direction != Vector3.ZERO and is_on_floor()) else speed
 
-	# ===== ГРАВИТАЦИЯ =====
-	if not is_on_floor():
+	if is_on_floor():
+		coyote_timer = coyote_time
+		is_jumping = false
+
+		if direction != Vector3.ZERO:
+			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleration * delta)
+			velocity.z = move_toward(velocity.z, direction.z * current_speed, acceleration * delta)
+		else:
+			velocity.x = move_toward(velocity.x, 0, friction * delta)
+			velocity.z = move_toward(velocity.z, 0, friction * delta)
+
+		if jump_held and coyote_timer > 0:
+			velocity.y = jump_velocity
+			is_jumping = true
+			coyote_timer = 0
+	else:
+		coyote_timer -= delta
+
+		if is_jumping:
+			if direction != Vector3.ZERO:
+				velocity.x = lerp(velocity.x, direction.x * current_speed, air_control * delta * 10)
+				velocity.z = lerp(velocity.z, direction.z * current_speed, air_control * delta * 10)
+			else:
+				velocity.x = move_toward(velocity.x, 0, friction * 0.2 * delta)
+				velocity.z = move_toward(velocity.z, 0, friction * 0.2 * delta)
+
+	if Input.is_action_just_pressed("jump") and coyote_timer > 0:
+		velocity.y = jump_velocity
+		is_jumping = true
+		if is_sprinting and direction != Vector3.ZERO:
+			velocity.x = direction.x * sprint_speed * 1.2
+			velocity.z = direction.z * sprint_speed * 1.2
+
+	if Input.is_action_just_released("jump") and velocity.y > 0:
+		velocity.y *= jump_cut_multiplier
+
+	if velocity.y > 0:
+		velocity.y -= GRAVITY_UP * delta
+	else:
 		velocity.y -= GRAVITY_DOWN * delta
 
-	# ===== ПРЫЖОК =====
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = jump_velocity
-
-	# ===== ДВИЖЕНИЕ =====
-	if direction != Vector3.ZERO:
-		velocity.x = direction.x * current_speed
-		velocity.z = direction.z * current_speed
-	else:
-		velocity.x = move_toward(velocity.x, 0, current_speed)
-		velocity.z = move_toward(velocity.z, 0, current_speed)
-
-	# ===== СТУПЕНЬКИ =====
-	# StairStepper сам вызывает move_and_slide() внутри
 	stair_stepper.process_stairs(delta, direction, current_speed)
-
-	# ===== ПЛАВНЫЙ ВОЗВРАТ КАМЕРЫ =====
 	stair_stepper.process_camera_smooth(delta, current_speed)
 
-	# ===== СИСТЕМЫ =====
 	camera_controller.update_head_bob(delta, direction != Vector3.ZERO, is_on_floor())
 
 	if building_system.is_build_mode:
@@ -136,6 +152,8 @@ func try_interact():
 	if not interaction_ray.is_colliding():
 		return
 	var hit = interaction_ray.get_collider()
+	if not is_instance_valid(hit):
+		return
 	if hit.is_in_group("resource") and hit.has_method("collect"):
 		hit.collect()
 	elif hit.has_method("interact"):
@@ -145,8 +163,8 @@ func collect_item(item_id: int, amount: int):
 	inventory.add_item(item_id, amount)
 
 func update_inventory_display():
-	var iron      = inventory.get_item_count(1)
-	var steel     = inventory.get_item_count(2)
+	var iron = inventory.get_item_count(1)
+	var steel = inventory.get_item_count(2)
 	var moonshine = inventory.get_item_count(3)
 	inventory_label.text = "Iron: " + str(iron) + "  Steel: " + str(steel) + "  Moonshine: " + str(moonshine)
 
@@ -202,10 +220,10 @@ func drop_current_item():
 	if not inventory:
 		return
 	var active_slot = inventory_bar.active_slot
-	var slot_data   = inventory.get_hotbar_slot(active_slot)
+	var slot_data = inventory.get_hotbar_slot(active_slot)
 	if not slot_data or not slot_data.item:
 		return
-	var item_id  = slot_data.item.id
+	var item_id = slot_data.item.id
 	var quantity = 1
 	if inventory.remove_item(item_id, quantity):
 		drop_item_in_world(item_id, quantity)
@@ -218,7 +236,7 @@ func drop_item_in_world(item_id: int, quantity: int):
 	get_parent().add_child(collectable)
 	collectable.setup(item_resource, quantity)
 	collectable.global_position = dropper.global_position
-	var forward   = camera_controller.get_camera_forward()
+	var forward = camera_controller.get_camera_forward()
 	var throw_dir = forward + Vector3(0, 0.5, 0)
 	throw_dir = throw_dir.normalized()
 	throw_dir.x += randf_range(-0.2, 0.2)

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cegug2ide0cd4"
-path.s3tc="res://.godot/imported/iron.png-3a8986922e75faaab77204b416210a38.s3tc.ctex"
+uid="uid://metjl4uhvhu0"
+path.s3tc="res://.godot/imported/vat_iron_32.png-b96174cf2de7d3bdc3e93be6bbcaa593.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Item_Icons/iron.png"
-dest_files=["res://.godot/imported/iron.png-3a8986922e75faaab77204b416210a38.s3tc.ctex"]
+source_file="res://Textures/Textures32x32/vat_iron_32.png"
+dest_files=["res://.godot/imported/vat_iron_32.png-b96174cf2de7d3bdc3e93be6bbcaa593.s3tc.ctex"]
 
 [params]
 

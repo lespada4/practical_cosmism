@@ -11,6 +11,9 @@
 [ext_resource type="Script" uid="uid://py3dohw4lbye" path="res://Player/stair_stepper.gd" id="5_apopc"]
 [ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://Player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
 [ext_resource type="PackedScene" uid="uid://ds8ha6qxiwji4" path="res://Player/inventory_system/CraftUI.tscn" id="6_fhl08"]
+[ext_resource type="AudioStream" uid="uid://c2nn5ik6ax5lo" path="res://SFX/Schetchik_gejgera_-_Malaya_aktivnost_(SkySound.cc).mp3" id="7_gu6f8"]
+[ext_resource type="AudioStream" uid="uid://bib5tbmyo3i35" path="res://SFX/radiaciya-zvuk-radiacii (1).mp3" id="9_dkpta"]
+[ext_resource type="AudioStream" uid="uid://7f4hp4q82gvh" path="res://SFX/zvuk-radiacii.mp3" id="12_5htga"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_apopc"]
 shader = ExtResource("2_x3vf3")
@@ -78,6 +81,15 @@ script = ExtResource("5_apopc")
 [node name="HealthSystem" type="Node" parent="." unique_id=2105577971]
 script = ExtResource("3_vtle1")
 
+[node name="GeigerLight" type="AudioStreamPlayer" parent="HealthSystem" unique_id=336254355]
+stream = ExtResource("7_gu6f8")
+
+[node name="GeigerMid" type="AudioStreamPlayer" parent="HealthSystem" unique_id=680598123]
+stream = ExtResource("12_5htga")
+
+[node name="GeigerHeavy" type="AudioStreamPlayer" parent="HealthSystem" unique_id=814992116]
+stream = ExtResource("9_dkpta")
+
 [node name="BuildingSystem" type="Node" parent="." unique_id=1048852922]
 script = ExtResource("4_od3ui")
 
@@ -90,6 +102,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="item name" type="Label" parent="UI_LAYER/Control" unique_id=1175331805]
+layout_mode = 0
+offset_left = 534.0
+offset_top = 558.0
+offset_right = 618.0
+offset_bottom = 581.0
+text = "item name"
+horizontal_alignment = 1
 
 [node name="crosshair" type="TextureRect" parent="UI_LAYER/Control" unique_id=776713406]
 texture_filter = 1
@@ -182,3 +203,11 @@ offset_right = 128.0
 [node name="craftingUI" parent="UI_LAYER/Control" unique_id=1454859508 instance=ExtResource("6_fhl08")]
 visible = false
 layout_mode = 1
+
+[node name="StairsAhead" type="RayCast3D" parent="." unique_id=896469524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3574887, -0.5209211)
+target_position = Vector3(0, -0.55, 0)
+
+[node name="StairsBelow" type="RayCast3D" parent="." unique_id=701526348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8957086, 0)
+target_position = Vector3(0, -0.75, 0)

@@ -6,11 +6,16 @@ signal radiation_changed(radiation: float, stage: int)
 signal died
 signal protection_changed(resistance: float, timer: float)
 
+@onready var geiger_light: AudioStreamPlayer = $GeigerLight
+@onready var geiger_mid: AudioStreamPlayer = $GeigerMid
+@onready var geiger_heavy: AudioStreamPlayer = $GeigerHeavy
+
 @export var max_health: float = 100.0
 
 var health: float = 100.0
 var radiation: float = 0.0
 var radiation_stage: int = 0
+var last_stage: int = -1
 
 # Входящая радиация от зон
 var environment_radiation: float = 0.0
@@ -28,6 +33,7 @@ var inventory_radiation: float = 0.0
 func _ready():
 	health = max_health
 	radiation = 0.0
+	update_geiger_sound()
 
 func _process(delta):
 	process_resistance_timer(delta)
@@ -72,6 +78,7 @@ func process_environment_radiation(delta):
 	if changed:
 		update_radiation_stage()
 		radiation_changed.emit(radiation, radiation_stage)
+		update_geiger_sound()
 
 func process_inventory_radiation(delta):
 	if inventory_radiation > 0:
@@ -80,6 +87,7 @@ func process_inventory_radiation(delta):
 		radiation += actual_radiation * delta
 		update_radiation_stage()
 		radiation_changed.emit(radiation, radiation_stage)
+		update_geiger_sound()
 
 func process_poison_damage(delta):
 	if poison_damage_per_sec > 0:
@@ -90,22 +98,47 @@ func process_poison_damage(delta):
 		health_changed.emit(health)
 
 func update_radiation_stage():
-	if radiation < 30:
+	if radiation < 10:
 		radiation_stage = 0
-	elif radiation < 60:
+	elif radiation < 40:
 		radiation_stage = 1
-	elif radiation < 100:
+	elif radiation < 80:
 		radiation_stage = 2
-	else:
+	elif radiation < 120:
 		radiation_stage = 3
+	else:
+		radiation_stage = 4
 
 func get_radiation_damage() -> float:
 	match radiation_stage:
-		0: return 0.0
-		1: return 2.0
-		2: return 5.0
-		3: return 10.0 + (radiation - 100) * 0.5
+		0, 1: return 0.0
+		2: return 2.0
+		3: return 5.0
+		4: return 10.0 + (radiation - 120) * 0.5
 	return 0.0
+
+# ========== ЗВУК ГЕЙГЕРА ==========
+
+func update_geiger_sound():
+	if radiation_stage == last_stage:
+		return
+	
+	last_stage = radiation_stage
+	
+	geiger_light.stop()
+	geiger_mid.stop()
+	geiger_heavy.stop()
+	
+	match radiation_stage:
+		0: return
+		1, 2:
+			geiger_light.play()
+		3:
+			geiger_mid.play()
+		4:
+			geiger_heavy.play()
+		_:
+			pass
 
 # ========== ВНЕШНИЕ ВОЗДЕЙСТВИЯ ==========
 
@@ -132,17 +165,19 @@ func heal_health(amount: float):
 
 func use_moonshine():
 	radiation = max(radiation - 10, 0)
-	radiation_resistance = radiation_resistance + 0.4
+	radiation_resistance = radiation_resistance + 30
 	resistance_timer = 20.0
 	
 	update_radiation_stage()
 	radiation_changed.emit(radiation, radiation_stage)
 	protection_changed.emit(radiation_resistance, resistance_timer)
+	update_geiger_sound()
 
 func use_antirad():
 	radiation = max(radiation - 30, 0)
 	update_radiation_stage()
 	radiation_changed.emit(radiation, radiation_stage)
+	update_geiger_sound()
 
 func use_cockroach():
 	health = min(health + 5, max_health)

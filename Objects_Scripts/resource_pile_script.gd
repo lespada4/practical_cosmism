@@ -23,6 +23,7 @@ var amount: int = 10
 var visual_nodes: Array = []
 var base_y: float = 0.0
 var current_sink: float = 0.0
+var is_queued: bool = false  # Флаг, чтобы не вызывать queue_free несколько раз
 
 func _ready():
 	match size_preset:
@@ -85,7 +86,7 @@ func apply_visual(scale_mult: float):
 			current_sink = initial_sink
 
 func collect():
-	if amount <= 0:
+	if amount <= 0 or is_queued:
 		return
 	
 	var is_last = (amount == 1)
@@ -95,13 +96,17 @@ func collect():
 	if is_last:
 		# Финальное погружение вниз
 		var target_y = base_y - (final_sink_depth - initial_sink)
+		is_queued = true
+		
+		# Отключаем коллизию, чтобы луч не мог повторно вызвать collect
+		$CollisionShape3D.disabled = true
 		
 		for child in visual_nodes:
 			var tween = create_tween()
 			tween.set_ease(Tween.EASE_IN)
 			tween.set_trans(Tween.TRANS_QUINT)
 			tween.tween_property(child, "position:y", target_y, 0.3)
-			tween.finished.connect(queue_free)
+			tween.finished.connect(_safe_queue_free)
 	else:
 		# Обычное погружение вниз
 		current_sink += sink_per_collect
@@ -117,3 +122,7 @@ func collect():
 	get_parent().add_child(collectable)
 	collectable.setup(item, 1)
 	collectable.global_position = global_position + Vector3(0, 1.5, 0)
+
+func _safe_queue_free():
+	if is_instance_valid(self):
+		queue_free()

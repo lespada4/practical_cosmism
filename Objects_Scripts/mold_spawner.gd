@@ -6,24 +6,33 @@ signal mold_count_changed(count: int)
 @export var spawn_points: Array[Node3D]
 @export var spawn_interval: float = 60.0
 @export var max_mold: int = 5
+@export var initial_delay: float = 30.0
 
 var current_mold: Array = []
+var is_spawning: bool = false
 
 func _ready():
 	await get_tree().process_frame
-	spawn_initial_mold()
+	start_initial_delay()
+
+func start_initial_delay():
+	await get_tree().create_timer(initial_delay).timeout
+	is_spawning = true
+	# Первая плесень — только одна
+	spawn_single_mold()
+	# Запускаем цикл периодического спавна
 	start_spawn_timer()
 
-func spawn_initial_mold():
-	for point in spawn_points:
-		if current_mold.size() >= max_mold:
-			break
+func spawn_single_mold():
+	var free_points = get_free_spawn_points()
+	if free_points.size() > 0:
+		var point = free_points[randi() % free_points.size()]
 		spawn_mold_at(point)
 
 func start_spawn_timer():
 	while true:
 		await get_tree().create_timer(spawn_interval).timeout
-		if current_mold.size() < max_mold:
+		if is_spawning and current_mold.size() < max_mold:
 			var free_points = get_free_spawn_points()
 			if free_points.size() > 0:
 				var point = free_points[randi() % free_points.size()]
