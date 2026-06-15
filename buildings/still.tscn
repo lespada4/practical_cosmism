@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dh8rhn0p6uo6y" path="res://Objects_Scripts/craft_station.gd" id="1_buw0a"]
 [ext_resource type="Texture2D" uid="uid://metjl4uhvhu0" path="res://Textures/Textures32x32/vat_iron_32.png" id="2_8tkjv"]
+[ext_resource type="Script" uid="uid://bmgn3nmer83ps" path="res://Objects_Scripts/electricity/electricity_consumer.gd" id="3_xvcsc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gir4x"]
 resource_name = "Metal"
@@ -52,7 +53,7 @@ size = Vector3(1, 0.67581177, 1)
 
 [node name="Still" type="StaticBody3D" unique_id=994451120 groups=["building"]]
 collision_layer = 36
-collision_mask = 3
+collision_mask = 35
 script = ExtResource("1_buw0a")
 
 [node name="Cylinder" type="MeshInstance3D" parent="." unique_id=1286672247]
@@ -62,3 +63,6 @@ mesh = SubResource("ArrayMesh_ud5ox")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=114453733]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6730423, 0)
 shape = SubResource("BoxShape3D_w4b6p")
+
+[node name="ElectricConsumer" type="Node" parent="." unique_id=376236065]
+script = ExtResource("3_xvcsc")

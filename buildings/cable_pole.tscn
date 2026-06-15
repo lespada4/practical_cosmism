@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://36aufpqabbex"]
+
+[ext_resource type="Script" uid="uid://5yfl4akti5sp" path="res://Objects_Scripts/cable_pole.gd" id="1_qhnbu"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ohknv"]
+radius = 3.8398438
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qhnbu"]
+height = 1.5898438
+radius = 1.4755859
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ohknv"]
+albedo_color = Color(0.42565316, 0.37253818, 0.28987783, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_o0jdu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5u70r"]
+emission_enabled = true
+emission = Color(0.72998315, 0.7033477, 0.22118613, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ohknv"]
+size = Vector3(0.5563965, 1.508667, 0.59472656)
+
+[node name="CablePole" type="StaticBody3D" unique_id=1389217617 node_paths=PackedStringArray("connection_point") groups=["building"]]
+collision_layer = 128
+collision_mask = 32
+script = ExtResource("1_qhnbu")
+connection_point = NodePath("ConnectionPoint")
+
+[node name="PoleConnectionArea" type="Area3D" parent="." unique_id=279729477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8021101, 0)
+collision_layer = 0
+collision_mask = 128
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PoleConnectionArea" unique_id=2000997880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20507813, 0)
+shape = SubResource("CylinderShape3D_ohknv")
+
+[node name="ConnectionArea" type="Area3D" parent="." unique_id=881087695]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8021101, 0)
+collision_layer = 0
+collision_mask = 32
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ConnectionArea" unique_id=1267296878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.20507813, 0)
+shape = SubResource("CylinderShape3D_qhnbu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1678537631]
+transform = Transform3D(0.2, 0, 0, 0, 1.5, 0, 0, 0, 0.2, 0, 0.696458, 0)
+material_override = SubResource("StandardMaterial3D_ohknv")
+mesh = SubResource("BoxMesh_o0jdu")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=347184325]
+transform = Transform3D(0.295, 0, 0, 0, 0.295, 0, 0, 0, 0.295, 0, 1.5525134, 0)
+mesh = SubResource("BoxMesh_o0jdu")
+surface_material_override/0 = SubResource("StandardMaterial3D_5u70r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=762766591]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9507915, 0)
+shape = SubResource("BoxShape3D_ohknv")
+
+[node name="ConnectionPoint" type="Marker3D" parent="." unique_id=1476285336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5995103, 0)

@@ -44,6 +44,7 @@ folder_colors={
 "res://Object_Models/": "green",
 "res://Object_Scenes/": "green",
 "res://Objects_Scripts/": "green",
+"res://Objects_Scripts/electricity/": "yellow",
 "res://Player/": "pink",
 "res://SFX/": "orange",
 "res://Shaders/": "purple",
@@ -183,6 +184,11 @@ scroll_down={
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"double_click":false,"script":null)
 ]
 }
+switch_camera_buildmode={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
 
 [layer_names]
 
@@ -193,6 +199,7 @@ scroll_down={
 3d_physics/layer_5="Collectables"
 3d_physics/layer_6="Buildings"
 3d_physics/layer_7="GhostChecker"
+3d_physics/layer_8="Cables"
 
 [physics]
 

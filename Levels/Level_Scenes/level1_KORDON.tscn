@@ -29,6 +29,9 @@
 [ext_resource type="PackedScene" uid="uid://cweqfmgmpdgtt" path="res://Object_Scenes/beacon.tscn" id="22_t3ov0"]
 [ext_resource type="PackedScene" uid="uid://cfxmbqkmripdp" path="res://Object_Models/SteelPileVisual.tscn" id="28_n0v23"]
 [ext_resource type="FontFile" uid="uid://bkabuxvj3gnjd" path="res://themes_for_ui/Minecraftia-Regular.ttf" id="29_adcst"]
+[ext_resource type="PackedScene" uid="uid://bvf8hc31dmraf" path="res://buildings/still.tscn" id="30_i8cec"]
+[ext_resource type="PackedScene" uid="uid://b6br1ew7m3afw" path="res://buildings/hard_fuel_generator.tscn" id="31_lc3uf"]
+[ext_resource type="Resource" uid="uid://c8u8mils1hx31" path="res://items/coal.tres" id="32_h846c"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lvpka"]
 _surfaces = [{
@@ -608,6 +611,19 @@ text = "СТРОИТЕЛЬСТВО
 Выпить водку - \"ПКМ\"
 "
 font = ExtResource("29_adcst")
+
+[node name="Still" parent="." unique_id=994451120 node_paths=PackedStringArray("generator") instance=ExtResource("30_i8cec")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8040104, 0.33566186, 10.49334)
+generator = NodePath("../HardFuelGenerator")
+
+[node name="HardFuelGenerator" parent="." unique_id=1500136369 instance=ExtResource("31_lc3uf")]
+transform = Transform3D(0.44288346, 0, 0.8965792, 0, 1, 0, -0.8965792, 0, 0.44288346, -1.62293, 0.25371218, 8.047532)
+
+[node name="Garbage7" parent="." unique_id=1376751483 instance=ExtResource("2_o78as")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8070011, 0.6917932, 11.90851)
+item = ExtResource("32_h846c")
+visual_scene = ExtResource("28_n0v23")
+size_preset = 0
 
 [connection signal="body_entered" from="Danger_Zone" to="Danger_Zone" method="_on_body_entered"]
 [connection signal="body_exited" from="Danger_Zone" to="Danger_Zone" method="_on_body_exited"]

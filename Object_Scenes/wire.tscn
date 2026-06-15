@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dmxcjxvnqclac"]
+
+[ext_resource type="Script" uid="uid://cooo5x83rxmmt" path="res://Objects_Scripts/electricity/wire.gd" id="1_burph"]
+
+[node name="Wire" type="Node3D" unique_id=769848086]
+script = ExtResource("1_burph")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2049464449]

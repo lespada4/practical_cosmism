@@ -47,6 +47,15 @@ func _input(event):
 	if event.is_action_pressed("use_item"):
 		use_current_item()
 
+func is_build_mode_active() -> bool:
+	if not player:
+		return false
+	# Проверяем, есть ли у игрока BuildingSystem и активен ли режим строительства
+	if player.has_node("BuildingSystem"):
+		var building_system = player.get_node("BuildingSystem")
+		return building_system.is_build_mode
+	return false
+
 func set_active_slot(index: int):
 	if index == active_slot:
 		return
@@ -69,6 +78,9 @@ func _on_slot_gui_input(event: InputEvent, slot_index: int):
 			use_item_from_slot(slot_index)
 
 func use_item_from_slot(slot_index: int):
+	if is_build_mode_active():
+		return  # Блокируем использование предметов в режиме строительства
+	
 	print("use_item_from_slot: ", slot_index)
 	if not player or not player.inventory:
 		return
@@ -77,6 +89,9 @@ func use_item_from_slot(slot_index: int):
 		use_item(slot.item.id)
 
 func use_current_item():
+	if is_build_mode_active():
+		return  # Блокируем использование предметов в режиме строительства
+	
 	if not player or not player.inventory:
 		return
 	var slot = player.inventory.get_hotbar_slot(active_slot)

@@ -227,6 +227,79 @@ offset_right = 136.0
 offset_bottom = 53.0
 grow_horizontal = 2
 
+[node name="BuildingUI" type="Control" parent="UI_LAYER/Control" unique_id=1794425566]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 418.0
+offset_top = 157.0
+offset_right = 458.0
+offset_bottom = 197.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="UI_LAYER/Control/BuildingUI" unique_id=1852427276]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.0
+offset_top = -67.0
+offset_right = 102.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BUILDING_NAME" type="Label" parent="UI_LAYER/Control/BuildingUI/Panel" unique_id=119823269]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -16.0
+offset_right = 98.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SwitchBetweenBuildings" type="HBoxContainer" parent="UI_LAYER/Control/BuildingUI" unique_id=1735196977]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -102.0
+offset_top = -20.0
+offset_right = 102.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 67
+alignment = 1
+
+[node name="<" type="Button" parent="UI_LAYER/Control/BuildingUI/SwitchBetweenBuildings" unique_id=1033714339]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+text = "<"
+icon_alignment = 1
+
+[node name=">" type="Button" parent="UI_LAYER/Control/BuildingUI/SwitchBetweenBuildings" unique_id=1957071993]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+text = ">"
+
 [node name="StairsAhead" type="RayCast3D" parent="." unique_id=896469524]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3574887, -0.5209211)
 target_position = Vector3(0, -0.55, 0)
