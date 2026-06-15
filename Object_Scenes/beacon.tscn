@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cweqfmgmpdgtt"]
 
+[ext_resource type="FontFile" uid="uid://bkabuxvj3gnjd" path="res://themes_for_ui/Minecraftia-Regular.ttf" id="1_8wkq4"]
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_f33lx"]
 frequency = 1.0
 
@@ -72,3 +74,12 @@ shape = SubResource("ConcavePolygonShape3D_4bv4x")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.805595, 0)
 mesh = SubResource("CylinderMesh_fk0ua")
 surface_material_override/0 = SubResource("StandardMaterial3D_mp041")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=252340062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0891521, 1.5804241, 1.103041)
+billboard = 1
+no_depth_test = true
+texture_filter = 0
+text = "ТЫ ПРОШЁЛ ТЕХНОДЕМКУ
+CONGRATULATIONS"
+font = ExtResource("1_8wkq4")

@@ -14,11 +14,13 @@ var build_distance: float = 3.0
 var player: CharacterBody3D
 var camera: Camera3D
 var crosshair: TextureRect
+var player_inventory: Inventory = null  # НОВОЕ
 
 func initialize(player_node: CharacterBody3D, camera_node: Camera3D, crosshair_node: TextureRect):
 	player = player_node
 	camera = camera_node
 	crosshair = crosshair_node
+	player_inventory = player_node.inventory  # НОВОЕ
 
 func _input(event: InputEvent):
 	if event.is_action_pressed("build_mode"):
@@ -29,6 +31,9 @@ func _input(event: InputEvent):
 
 func toggle_build_mode():
 	if not is_build_mode:
+		$"../UI_LAYER/Control/hint_label".text = "ЧТОБЫ ПОСТРОИТЬ НАЖМИ E"
+		$"../UI_LAYER/Control/hint_label".visible = true
+		
 		enter_build_mode("still")
 	else:
 		exit_build_mode()
@@ -44,7 +49,7 @@ func enter_build_mode(blueprint_id: String):
 	
 	current_ghost = preload("res://blueprints/ghost/ghost.tscn").instantiate()
 	player.add_child(current_ghost)
-	current_ghost.setup(blueprint)
+	current_ghost.setup(blueprint, player_inventory)  # ИЗМЕНЕНО (добавлен параметр)
 	
 	if crosshair:
 		crosshair.visible = false
@@ -52,6 +57,7 @@ func enter_build_mode(blueprint_id: String):
 	build_mode_toggled.emit(true)
 
 func exit_build_mode():
+	$"../UI_LAYER/Control/hint_label".hide()
 	if current_ghost:
 		current_ghost.queue_free()
 		current_ghost = null

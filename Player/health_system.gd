@@ -164,8 +164,8 @@ func heal_health(amount: float):
 # ========== ПРЕДМЕТЫ ==========
 
 func use_moonshine():
-	radiation = max(radiation - 10, 0)
-	radiation_resistance = radiation_resistance + 30
+	radiation = max(radiation - 15, 0)
+	radiation_resistance = radiation_resistance + 40
 	resistance_timer = 20.0
 	
 	update_radiation_stage()

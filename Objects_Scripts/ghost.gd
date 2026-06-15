@@ -2,10 +2,13 @@ extends Area3D
 
 var blueprint: Blueprint
 var is_valid: bool = true
+var player_inventory: Inventory = null  # НОВОЕ
+
 @onready var ground_checker: RayCast3D = $RayCast3D
 
-func setup(bp: Blueprint):
+func setup(bp: Blueprint, inventory: Inventory = null):  # ИЗМЕНЕНО (добавлен параметр)
 	blueprint = bp
+	player_inventory = inventory  # НОВОЕ
 	
 	var building = bp.building_scene.instantiate()
 	copy_all_meshes(building)
@@ -35,6 +38,16 @@ func _physics_process(_delta):
 		if is_valid:
 			is_valid = false
 			update_all_colors(Color(1, 0, 0, 0.5))
+	
+	# НОВОЕ: проверка ресурсов и жёлтый цвет
+	if is_valid and ground_checker.is_colliding() and player_inventory and blueprint:
+		var has_all = true
+		for item_id in blueprint.build_costs:
+			if player_inventory.get_item_count(item_id) < blueprint.build_costs[item_id]:
+				has_all = false
+				break
+		if not has_all:
+			update_all_colors(Color(1, 1, 0, 0.5))  # Жёлтый
 
 func copy_all_meshes(source: Node):
 	var meshes = find_all_mesh_instances(source)

@@ -14,7 +14,7 @@ collectable_scene = ExtResource("2_7jegv")
 
 [node name="Sprite3D" type="Sprite3D" parent="." unique_id=1474008975]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.050696388, 0)
-modulate = Color(2.5025156, 2.5025156, 2.5025156, 1)
+modulate = Color(0.13149942, 0.13149942, 0.13149942, 1)
 texture_filter = 0
 texture = ExtResource("1_72oao")
 

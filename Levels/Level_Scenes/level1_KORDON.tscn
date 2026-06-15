@@ -28,6 +28,7 @@
 [ext_resource type="Resource" uid="uid://c7fp7ybb8byhd" path="res://items/trash.tres" id="22_i8cec"]
 [ext_resource type="PackedScene" uid="uid://cweqfmgmpdgtt" path="res://Object_Scenes/beacon.tscn" id="22_t3ov0"]
 [ext_resource type="PackedScene" uid="uid://cfxmbqkmripdp" path="res://Object_Models/SteelPileVisual.tscn" id="28_n0v23"]
+[ext_resource type="FontFile" uid="uid://bkabuxvj3gnjd" path="res://themes_for_ui/Minecraftia-Regular.ttf" id="29_adcst"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lvpka"]
 _surfaces = [{
@@ -421,6 +422,7 @@ text = "Чтобы собрать маяк нужно:
 15 железа
 15 стали
 "
+font = ExtResource("29_adcst")
 
 [node name="Player" parent="." unique_id=452002403 instance=ExtResource("1_a5bde")]
 transform = Transform3D(-0.9888865, 0, -0.1486724, 0, 1, 0, 0.1486724, 0, -0.9888865, 0.06519142, -1.6779938, -3.7412457)
@@ -432,7 +434,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.41229272, -3.3074937, -4.26
 script = ExtResource("9_q3his")
 mold_scene = ExtResource("10_6m3iq")
 spawn_points = [NodePath("MOLDPOINT"), NodePath("MOLDPOINT2"), NodePath("MOLDPOINT3"), NodePath("MOLDPOINT4"), NodePath("MOLDPOINT5"), NodePath("MOLDPOINT6")]
-spawn_interval = 10.0
+spawn_interval = 5.0
 
 [node name="MOLDPOINT" type="Marker3D" parent="Molder" unique_id=497293562]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5310497, 1.463758, -0.99699783)
@@ -566,9 +568,10 @@ text = "СВАЛКА
 
 здесь штуки для крафта 
 самогонного аппарата"
+font = ExtResource("29_adcst")
 
 [node name="Label3D2" type="Label3D" parent="." unique_id=281690563]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.92395, 2.2126656, 19.165703)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.373907, 2.2126656, 19.165703)
 billboard = 1
 text = "РАДИОАКТИВНЫЕ ОТХОДЫ
 
@@ -579,9 +582,10 @@ text = "РАДИОАКТИВНЫЕ ОТХОДЫ
 
 если уровень радиации красный - ты мертвец. 
 если оранжевый - выбегай и жди пока спадёт."
+font = ExtResource("29_adcst")
 
 [node name="Label3D3" type="Label3D" parent="." unique_id=565019209]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26852292, -0.49922204, -5.173278)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42939347, -0.49922204, -4.9301043)
 billboard = 1
 text = "УБЕЖИЩЕ
 
@@ -590,6 +594,8 @@ text = "УБЕЖИЩЕ
  иначе умрешь от отравления.
 Из плесени вари водку на 
 самогонном аппарате."
+font = ExtResource("29_adcst")
+font_size = 25
 
 [node name="Label3D4" type="Label3D" parent="." unique_id=1181265428]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6532204, 1.4261146, 6.198326)
@@ -599,7 +605,9 @@ text = "СТРОИТЕЛЬСТВО
 Для самогонного аппарата тебе нужно:
 10 железа, 5 стали, 10 мусора
 Ключевые объекты строятся на площадках (маяк) нажатием \"E\"
+Выпить водку - \"ПКМ\"
 "
+font = ExtResource("29_adcst")
 
 [connection signal="body_entered" from="Danger_Zone" to="Danger_Zone" method="_on_body_entered"]
 [connection signal="body_exited" from="Danger_Zone" to="Danger_Zone" method="_on_body_exited"]

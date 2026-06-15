@@ -20,4 +20,4 @@ seamless_blend_skirt = 1.0
 albedo_color = Color(1.3266667, 1.3266667, 1.3266667, 1)
 albedo_texture = SubResource("NoiseTexture2D_r5jrh")
 metallic_specular = 0.0
-texture_filter = 2
+texture_filter = 0

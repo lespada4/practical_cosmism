@@ -14,6 +14,8 @@
 [ext_resource type="AudioStream" uid="uid://c2nn5ik6ax5lo" path="res://SFX/Schetchik_gejgera_-_Malaya_aktivnost_(SkySound.cc).mp3" id="7_gu6f8"]
 [ext_resource type="AudioStream" uid="uid://bib5tbmyo3i35" path="res://SFX/radiaciya-zvuk-radiacii (1).mp3" id="9_dkpta"]
 [ext_resource type="AudioStream" uid="uid://7f4hp4q82gvh" path="res://SFX/zvuk-radiacii.mp3" id="12_5htga"]
+[ext_resource type="Theme" uid="uid://g2g5gbk23gia" path="res://themes_for_ui/ui_theme.tres" id="12_lfmf2"]
+[ext_resource type="AudioStream" uid="uid://bpybfm4kg24cu" path="res://SFX/842188__aardsreal__footstep-leaves.wav" id="15_dkpta"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_apopc"]
 shader = ExtResource("2_x3vf3")
@@ -34,7 +36,7 @@ height = 1.8
 
 [sub_resource type="Gradient" id="Gradient_l8h54"]
 interpolation_mode = 1
-offsets = PackedFloat32Array(0.13945578, 0.1632653, 0.19387755)
+offsets = PackedFloat32Array(0, 0.06462585, 0.11904762)
 colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_4ntmi"]
@@ -46,8 +48,14 @@ fill_from = Vector2(0.5, 0.5)
 collision_layer = 2
 collision_mask = 49
 script = ExtResource("1_l8h54")
+footstep_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
+footstep_sounds_sprint = Array[AudioStream]([ExtResource("15_dkpta")])
+footstep_interval_sprint = 0.4
+jump_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
+land_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
 
 [node name="Shader" type="ColorRect" parent="." unique_id=1941807911]
+texture_filter = 1
 material = SubResource("ShaderMaterial_apopc")
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,12 +91,15 @@ script = ExtResource("3_vtle1")
 
 [node name="GeigerLight" type="AudioStreamPlayer" parent="HealthSystem" unique_id=336254355]
 stream = ExtResource("7_gu6f8")
+volume_db = -10.0
 
 [node name="GeigerMid" type="AudioStreamPlayer" parent="HealthSystem" unique_id=680598123]
 stream = ExtResource("12_5htga")
+volume_db = -10.0
 
 [node name="GeigerHeavy" type="AudioStreamPlayer" parent="HealthSystem" unique_id=814992116]
 stream = ExtResource("9_dkpta")
+volume_db = -10.0
 
 [node name="BuildingSystem" type="Node" parent="." unique_id=1048852922]
 script = ExtResource("4_od3ui")
@@ -96,12 +107,14 @@ script = ExtResource("4_od3ui")
 [node name="UI_LAYER" type="CanvasLayer" parent="." unique_id=1060750778]
 
 [node name="Control" type="Control" parent="UI_LAYER" unique_id=346092612]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("12_lfmf2")
 
 [node name="item name" type="Label" parent="UI_LAYER/Control" unique_id=1175331805]
 layout_mode = 0
@@ -197,12 +210,22 @@ slot_scene = ExtResource("4_gwnis")
 [node name="FullInventory" parent="UI_LAYER/Control" unique_id=594815198 instance=ExtResource("5_k53q1")]
 visible = false
 layout_mode = 1
-offset_left = -128.0
-offset_right = 128.0
 
 [node name="craftingUI" parent="UI_LAYER/Control" unique_id=1454859508 instance=ExtResource("6_fhl08")]
 visible = false
 layout_mode = 1
+
+[node name="hint_label" type="Label" parent="UI_LAYER/Control" unique_id=1975417936]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -136.0
+offset_top = 25.0
+offset_right = 136.0
+offset_bottom = 53.0
+grow_horizontal = 2
 
 [node name="StairsAhead" type="RayCast3D" parent="." unique_id=896469524]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3574887, -0.5209211)
@@ -211,3 +234,12 @@ target_position = Vector3(0, -0.55, 0)
 [node name="StairsBelow" type="RayCast3D" parent="." unique_id=701526348]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8957086, 0)
 target_position = Vector3(0, -0.75, 0)
+
+[node name="FootstepAudio" type="AudioStreamPlayer" parent="." unique_id=612954745]
+stream = ExtResource("15_dkpta")
+pitch_scale = 1.07
+
+[node name="JumpLandAudio" type="AudioStreamPlayer" parent="." unique_id=1431648502]
+stream = ExtResource("15_dkpta")
+volume_db = 2.921
+pitch_scale = 1.73

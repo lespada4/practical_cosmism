@@ -30,10 +30,28 @@ const GRAVITY_DOWN = 32.0
 @onready var crafting_ui: Panel = $UI_LAYER/Control/craftingUI
 @onready var protection_label: Label = $UI_LAYER/Control/protection_label
 
+# Footstep sounds
+@onready var footstep_audio: AudioStreamPlayer = $FootstepAudio
+@onready var jump_land_audio: AudioStreamPlayer = $JumpLandAudio
+@export var footstep_sounds: Array[AudioStream] = []
+@export var footstep_sounds_sprint: Array[AudioStream] = []
+@export var footstep_interval_walk: float = 0.5
+@export var footstep_interval_sprint: float = 0.3
+@export var jump_sounds: Array[AudioStream] = []
+@export var land_sounds: Array[AudioStream] = []
+@export var min_land_volume: float = -15.0
+@export var max_land_volume: float = -5.0
+
 var coyote_timer = 0.0
 var is_jumping: bool = false
 var is_sprinting: bool = false
 var jump_held: bool = false
+
+# Footstep state
+var footstep_timer: float = 0.0
+var last_foot: bool = false
+var was_in_air: bool = false
+var last_velocity_y: float = 0.0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -52,6 +70,10 @@ func _ready():
 	update_health_display(health_system.health)
 	update_radiation_display(health_system.radiation, health_system.radiation_stage)
 	health_system.protection_changed.connect(update_protection_display)
+	
+	# Проверка звуков при старте
+	if footstep_sounds.is_empty():
+		print("WARNING: No footstep sounds assigned!")
 
 func _input(event):
 	camera_controller.handle_input(event)
@@ -86,6 +108,8 @@ func _process(delta: float) -> void:
 	camera_controller.update_rotation(delta)
 
 func _physics_process(delta):
+	last_velocity_y = velocity.y
+	
 	var input_dir = Input.get_vector("left", "right", "forward", "back")
 
 	var camera_forward = camera_controller.get_camera_forward()
@@ -102,6 +126,10 @@ func _physics_process(delta):
 	if is_on_floor():
 		coyote_timer = coyote_time
 		is_jumping = false
+		
+		if was_in_air:
+			_play_land_sound()
+			was_in_air = false
 
 		if direction != Vector3.ZERO:
 			velocity.x = move_toward(velocity.x, direction.x * current_speed, acceleration * delta)
@@ -114,8 +142,10 @@ func _physics_process(delta):
 			velocity.y = jump_velocity
 			is_jumping = true
 			coyote_timer = 0
+			_play_jump_sound()
 	else:
 		coyote_timer -= delta
+		was_in_air = true
 
 		if is_jumping:
 			if direction != Vector3.ZERO:
@@ -128,6 +158,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and coyote_timer > 0:
 		velocity.y = jump_velocity
 		is_jumping = true
+		_play_jump_sound()
 		if is_sprinting and direction != Vector3.ZERO:
 			velocity.x = direction.x * sprint_speed * 1.2
 			velocity.z = direction.z * sprint_speed * 1.2
@@ -144,6 +175,7 @@ func _physics_process(delta):
 	stair_stepper.process_camera_smooth(delta, current_speed)
 
 	camera_controller.update_head_bob(delta, direction != Vector3.ZERO, is_on_floor())
+	_handle_footsteps(delta, direction != Vector3.ZERO)
 
 	if building_system.is_build_mode:
 		building_system.update_ghost_position()
@@ -251,3 +283,63 @@ func show_demo_complete():
 		$UI_LAYER/Control/DemoCompleteLabel.visible = true
 		await get_tree().create_timer(3.0).timeout
 		$UI_LAYER/Control/DemoCompleteLabel.visible = false
+
+# ============================================
+# FOOTSTEP SYSTEM
+# ============================================
+
+func _handle_footsteps(delta: float, moving: bool) -> void:
+	if not is_on_floor() or not moving:
+		footstep_timer = 0.0
+		return
+	
+	var interval = footstep_interval_sprint if is_sprinting else footstep_interval_walk
+	
+	var current_speed = velocity.length()
+	var speed_factor = clamp(current_speed / sprint_speed, 0.5, 1.5)
+	interval /= speed_factor
+	
+	footstep_timer += delta
+	if footstep_timer >= interval:
+		footstep_timer = 0.0
+		_play_footstep_sound()
+
+func _play_footstep_sound() -> void:
+	if not footstep_audio:
+		return
+	
+	var sound_pool = footstep_sounds_sprint if (is_sprinting and not footstep_sounds_sprint.is_empty()) else footstep_sounds
+	
+	if sound_pool.is_empty():
+		return
+	
+	var sound = sound_pool[randi() % sound_pool.size()]
+	footstep_audio.stream = sound
+	
+	# Чередование громкости вместо panning
+	footstep_audio.volume_db = -3.0 if last_foot else 0.0
+	last_foot = not last_foot
+	
+	footstep_audio.pitch_scale = randf_range(0.9, 1.1)
+	footstep_audio.play()
+
+func _play_land_sound() -> void:
+	if not jump_land_audio or land_sounds.is_empty():
+		return
+	
+	var fall_speed = abs(last_velocity_y)
+	if fall_speed < 2.0:
+		return
+	
+	var volume = lerp(min_land_volume, max_land_volume, clamp(fall_speed / 10.0, 0.0, 1.0))
+	jump_land_audio.volume_db = volume
+	jump_land_audio.stream = land_sounds[randi() % land_sounds.size()]
+	jump_land_audio.pitch_scale = randf_range(0.9, 1.1)
+	jump_land_audio.play()
+
+func _play_jump_sound() -> void:
+	if not jump_land_audio or jump_sounds.is_empty():
+		return
+	jump_land_audio.stream = jump_sounds[randi() % jump_sounds.size()]
+	jump_land_audio.pitch_scale = randf_range(0.95, 1.05)
+	jump_land_audio.play()

@@ -55,3 +55,7 @@ func get_inventory():
 func close():
 	if is_open:
 		toggle()
+
+
+func _on_button_pressed() -> void:
+	toggle()

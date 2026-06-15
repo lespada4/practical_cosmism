@@ -13,7 +13,7 @@ func register_recipes():
 	add_recipe(5, 1, {1: 3, 2: 2}, "workbench")
 	
 	# Самогонный аппарат
-	add_recipe(3, 1, {4: 2,}, "still")
+	add_recipe(3, 1, {4: 1,}, "still")
 	
 	# Печка (furnace)
 	add_recipe(6, 1, {1: 2}, "furnace")  # 2 iron = 1 molten iron
