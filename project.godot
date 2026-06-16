@@ -53,6 +53,10 @@ folder_colors={
 "res://blueprints/ghost/": "green",
 "res://buildings/": "blue",
 "res://items/": "gray",
+"res://items/item_resources/": "green",
+"res://items/item_resources/consumables/": "orange",
+"res://items/item_resources/resources/": "orange",
+"res://items/item_resources/tools/": "orange",
 "res://themes_for_ui/": "gray"
 }
 

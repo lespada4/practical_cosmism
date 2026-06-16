@@ -1,6 +1,7 @@
 extends StaticBody3D
 
 @export var station_type: String = "still"
+@export var connection_point: Marker3D  # НОВОЕ
 
 var is_crafting_open: bool = false
 var crafting_ui_ref: Control = null
@@ -21,6 +22,16 @@ func _process(delta: float) -> void:
 	if is_crafting_open and crafting_ui_ref and not consumer.has_power():
 		crafting_ui_ref.close()
 		is_crafting_open = false
+
+func deconstruct(player):
+	var blueprint_id = BlueprintRegistry.get_blueprint_id_by_building(self)
+	var blueprint = BlueprintRegistry.get_blueprint(blueprint_id)
+	
+	if blueprint:
+		for item_id in blueprint.build_costs:
+			player.inventory.add_item(item_id, blueprint.build_costs[item_id])
+		
+		queue_free()
 
 func can_craft() -> bool:
 	return consumer.has_power()

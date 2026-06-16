@@ -51,10 +51,11 @@ shadow_mesh = SubResource("ArrayMesh_6gov4")
 [sub_resource type="BoxShape3D" id="BoxShape3D_w4b6p"]
 size = Vector3(1, 0.67581177, 1)
 
-[node name="Still" type="StaticBody3D" unique_id=994451120 groups=["building"]]
+[node name="Still" type="StaticBody3D" unique_id=994451120 node_paths=PackedStringArray("connection_point") groups=["building"]]
 collision_layer = 36
 collision_mask = 35
 script = ExtResource("1_buw0a")
+connection_point = NodePath("Marker3D")
 
 [node name="Cylinder" type="MeshInstance3D" parent="." unique_id=1286672247]
 transform = Transform3D(0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0, 0.72703373, 0)
@@ -66,3 +67,6 @@ shape = SubResource("BoxShape3D_w4b6p")
 
 [node name="ElectricConsumer" type="Node" parent="." unique_id=376236065]
 script = ExtResource("3_xvcsc")
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=1884528616]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2188803, 0)

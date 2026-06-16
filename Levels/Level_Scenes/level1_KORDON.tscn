@@ -5,11 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://c0xj6ejvhp3if" path="res://Object_Scenes/resource_pile.tscn" id="2_o78as"]
 [ext_resource type="Resource" uid="uid://bkhxcqsquw1yg" path="res://addons/func_godot/func_godot_default_map_settings.tres" id="2_vndgd"]
 [ext_resource type="Script" uid="uid://cboqshlyq5vga" path="res://Objects_Scripts/danger_zone.gd" id="3_0riot"]
-[ext_resource type="Resource" uid="uid://boccx0roxggnf" path="res://items/iron.tres" id="3_blk61"]
+[ext_resource type="Resource" uid="uid://boccx0roxggnf" path="res://items/item_resources/resources/iron.tres" id="3_blk61"]
 [ext_resource type="Material" uid="uid://2qmwpx0e1nd7" path="res://Textures/Textures32x32/concrete_32.tres" id="3_jrpjm"]
 [ext_resource type="PackedScene" uid="uid://cx0631ojhnuue" path="res://Object_Scenes/building_site.tscn" id="4_4kpr1"]
 [ext_resource type="Material" uid="uid://b328pvv7n62vc" path="res://Textures/Textures32x32/concrete_orange_32.tres" id="4_n0v23"]
-[ext_resource type="Resource" uid="uid://s1hymwyfxif8" path="res://items/steel.tres" id="4_q3his"]
+[ext_resource type="Resource" uid="uid://s1hymwyfxif8" path="res://items/item_resources/resources/steel.tres" id="4_q3his"]
 [ext_resource type="Material" uid="uid://c64nre6v5dry3" path="res://Textures/Textures32x32/iron_32.tres" id="5_adcst"]
 [ext_resource type="Material" uid="uid://jmgcp61cbbbx" path="res://Textures/Textures32x32/steel_32.tres" id="6_i8cec"]
 [ext_resource type="Material" uid="uid://crbv4bpdm6rv8" path="res://Textures/Textures32x32/grass_32.tres" id="7_lvpka"]
@@ -21,17 +21,17 @@
 [ext_resource type="Shader" uid="uid://05fk07gdr2m5" path="res://Shaders/sky.gdshader" id="10_jrpjm"]
 [ext_resource type="Script" uid="uid://c7syr5jnxqe8h" path="res://Objects_Scripts/mold_zone_danger.gd" id="11_6m3iq"]
 [ext_resource type="PackedScene" uid="uid://b6e18wolxwimm" path="res://Object_Models/trash_pile.tscn" id="12_pei8c"]
-[ext_resource type="Resource" uid="uid://cgr67bxgyf8tu" path="res://items/radioactive_parts.tres" id="12_vndgd"]
+[ext_resource type="Resource" uid="uid://cgr67bxgyf8tu" path="res://items/item_resources/resources/radioactive_parts.tres" id="12_vndgd"]
 [ext_resource type="PackedScene" uid="uid://bjwyxjxt8viqs" path="res://Object_Models/parts_pile.tscn" id="13_3pxnk"]
 [ext_resource type="PackedScene" uid="uid://665q208y2yxl" path="res://Object_Models/rusty_iron_pile.tscn" id="16_jrpjm"]
 [ext_resource type="PackedScene" uid="uid://bqgr7wbsj6l03" path="res://NPC/scenes/cockroach.tscn" id="22_h2myv"]
-[ext_resource type="Resource" uid="uid://c7fp7ybb8byhd" path="res://items/trash.tres" id="22_i8cec"]
+[ext_resource type="Resource" uid="uid://c7fp7ybb8byhd" path="res://items/item_resources/resources/trash.tres" id="22_i8cec"]
 [ext_resource type="PackedScene" uid="uid://cweqfmgmpdgtt" path="res://Object_Scenes/beacon.tscn" id="22_t3ov0"]
 [ext_resource type="PackedScene" uid="uid://cfxmbqkmripdp" path="res://Object_Models/SteelPileVisual.tscn" id="28_n0v23"]
 [ext_resource type="FontFile" uid="uid://bkabuxvj3gnjd" path="res://themes_for_ui/Minecraftia-Regular.ttf" id="29_adcst"]
 [ext_resource type="PackedScene" uid="uid://bvf8hc31dmraf" path="res://buildings/still.tscn" id="30_i8cec"]
 [ext_resource type="PackedScene" uid="uid://b6br1ew7m3afw" path="res://buildings/hard_fuel_generator.tscn" id="31_lc3uf"]
-[ext_resource type="Resource" uid="uid://c8u8mils1hx31" path="res://items/coal.tres" id="32_h846c"]
+[ext_resource type="Resource" uid="uid://c8u8mils1hx31" path="res://items/item_resources/resources/coal.tres" id="32_h846c"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_lvpka"]
 _surfaces = [{
@@ -419,6 +419,7 @@ build_scene = ExtResource("22_t3ov0")
 
 [node name="Label3D" type="Label3D" parent="Building_Site" unique_id=1656597299]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2220283, 0.9105592, 0)
+visible = false
 billboard = 1
 text = "Чтобы собрать маяк нужно:
 10 радиоактивных запчастей
@@ -566,6 +567,7 @@ size_preset = 0
 
 [node name="Label3D" type="Label3D" parent="." unique_id=776294896]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2441177, 2.680523, 18.706865)
+visible = false
 billboard = 1
 text = "СВАЛКА
 
@@ -575,6 +577,7 @@ font = ExtResource("29_adcst")
 
 [node name="Label3D2" type="Label3D" parent="." unique_id=281690563]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.373907, 2.2126656, 19.165703)
+visible = false
 billboard = 1
 text = "РАДИОАКТИВНЫЕ ОТХОДЫ
 
@@ -589,6 +592,7 @@ font = ExtResource("29_adcst")
 
 [node name="Label3D3" type="Label3D" parent="." unique_id=565019209]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42939347, -0.49922204, -4.9301043)
+visible = false
 billboard = 1
 text = "УБЕЖИЩЕ
 
@@ -602,6 +606,7 @@ font_size = 25
 
 [node name="Label3D4" type="Label3D" parent="." unique_id=1181265428]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6532204, 1.4261146, 6.198326)
+visible = false
 billboard = 1
 text = "СТРОИТЕЛЬСТВО
 Чтобы открыть меню строительства нажми \"B\"
@@ -619,9 +624,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8040104, 0.33566186, 10.49
 transform = Transform3D(0.44288346, 0, 0.8965792, 0, 1, 0, -0.8965792, 0, 0.44288346, -1.62293, 0.25371218, 8.047532)
 
 [node name="Garbage7" parent="." unique_id=1376751483 instance=ExtResource("2_o78as")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8070011, 0.6917932, 11.90851)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8070011, 0.27589536, 11.90851)
 item = ExtResource("32_h846c")
-visual_scene = ExtResource("28_n0v23")
+visual_scene = ExtResource("16_jrpjm")
 size_preset = 0
 
 [connection signal="body_entered" from="Danger_Zone" to="Danger_Zone" method="_on_body_entered"]

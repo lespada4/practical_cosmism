@@ -22,8 +22,18 @@ emission_energy_multiplier = 2.0
 [sub_resource type="BoxShape3D" id="BoxShape3D_ohknv"]
 size = Vector3(0.5563965, 1.508667, 0.59472656)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qhnbu"]
+no_depth_test = true
+emission_enabled = true
+emission = Color(0.9280579, 0.6336168, 0.3865834, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_ohknv"]
+material = SubResource("StandardMaterial3D_qhnbu")
+rings = 7
+ring_segments = 3
+
 [node name="CablePole" type="StaticBody3D" unique_id=1389217617 node_paths=PackedStringArray("connection_point") groups=["building"]]
-collision_layer = 128
+collision_layer = 132
 collision_mask = 32
 script = ExtResource("1_qhnbu")
 connection_point = NodePath("ConnectionPoint")
@@ -51,7 +61,7 @@ transform = Transform3D(0.2, 0, 0, 0, 1.5, 0, 0, 0, 0.2, 0, 0.696458, 0)
 material_override = SubResource("StandardMaterial3D_ohknv")
 mesh = SubResource("BoxMesh_o0jdu")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=347184325]
+[node name="PowerLight" type="MeshInstance3D" parent="." unique_id=347184325]
 transform = Transform3D(0.295, 0, 0, 0, 0.295, 0, 0, 0, 0.295, 0, 1.5525134, 0)
 mesh = SubResource("BoxMesh_o0jdu")
 surface_material_override/0 = SubResource("StandardMaterial3D_5u70r")
@@ -66,3 +76,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5995103, 0)
 [node name="RayCast3D" type="RayCast3D" parent="." unique_id=1253108146]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6026926, 0)
 collision_mask = 128
+
+[node name="SelectionIndicator" type="MeshInstance3D" parent="." unique_id=1114744318]
+transform = Transform3D(0.8, 0, 0, 0, 0.09, 0, 0, 0, 0.8, 0, 0.24069327, 0)
+visible = false
+mesh = SubResource("TorusMesh_ohknv")

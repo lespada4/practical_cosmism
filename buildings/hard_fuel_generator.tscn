@@ -10,10 +10,11 @@ size = Vector3(2, 1, 1)
 [sub_resource type="BoxShape3D" id="BoxShape3D_iwrqi"]
 size = Vector3(2, 1, 1)
 
-[node name="HardFuelGenerator" type="StaticBody3D" unique_id=1500136369 groups=["building"]]
+[node name="HardFuelGenerator" type="StaticBody3D" unique_id=1500136369 node_paths=PackedStringArray("connection_point") groups=["building"]]
 collision_layer = 36
 collision_mask = 35
 script = ExtResource("1_iwrqi")
+connection_point = NodePath("Marker3D")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=421822802]
 transform = Transform3D(0.445, 0, 0, 0, 0.445, 0, 0, 0, 0.445, 0, 0, 0)
@@ -31,3 +32,5 @@ font = ExtResource("2_j3py5")
 
 [node name="ElectricProducer" type="Node" parent="." unique_id=84796830]
 script = ExtResource("3_wi4ic")
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=1311402243]

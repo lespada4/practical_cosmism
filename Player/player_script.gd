@@ -63,7 +63,8 @@ func _ready():
 	health_system.died.connect(_on_death)
 	health_system.health_changed.connect(update_health_display)
 	health_system.radiation_changed.connect(update_radiation_display)
-
+	inventory.add_item(11, 1)
+	inventory.add_item(4, 32)
 	inventory.inventory_updated.connect(_on_inventory_updated)
 	inventory.inventory_updated.connect(update_inventory_display)
 	update_inventory_display()
@@ -276,6 +277,16 @@ func drop_item_in_world(item_id: int, quantity: int):
 	throw_dir = throw_dir.normalized()
 	if collectable.has_method("apply_velocity"):
 		collectable.apply_velocity(throw_dir * 6.0)
+
+func get_interaction_target():
+	if not interaction_ray.is_colliding():
+		return null
+	return interaction_ray.get_collider()
+
+func use_crowbar(target: Node):
+	if building_system.try_deconstruct(target):
+		# Успешно демонтировали
+		pass
 
 func show_demo_complete():
 	print("DEMO COMPLETE! Congratulations!")

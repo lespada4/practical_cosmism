@@ -25,13 +25,11 @@ func find_player_and_connect():
 		find_player_and_connect()
 
 func _input(event):
-	# Цифровые клавиши 1-9
 	for i in range(slot_count):
 		if event.is_action_pressed("hotbar_" + str(i + 1)):
 			set_active_slot(i)
 			break
 	
-	# Прокрутка колесиком мыши
 	if event.is_action_pressed("scroll_up"):
 		var new_slot = active_slot - 1
 		if new_slot < 0:
@@ -50,7 +48,6 @@ func _input(event):
 func is_build_mode_active() -> bool:
 	if not player:
 		return false
-	# Проверяем, есть ли у игрока BuildingSystem и активен ли режим строительства
 	if player.has_node("BuildingSystem"):
 		var building_system = player.get_node("BuildingSystem")
 		return building_system.is_build_mode
@@ -79,27 +76,32 @@ func _on_slot_gui_input(event: InputEvent, slot_index: int):
 
 func use_item_from_slot(slot_index: int):
 	if is_build_mode_active():
-		return  # Блокируем использование предметов в режиме строительства
+		return
 	
-	print("use_item_from_slot: ", slot_index)
 	if not player or not player.inventory:
 		return
+	
 	var slot = player.inventory.get_hotbar_slot(slot_index)
 	if slot and slot.item:
-		use_item(slot.item.id)
+		var target = _get_interaction_target() if slot.item.id == 11 else null
+		ItemActions.use(player, slot.item.id, target)
+
+func _get_interaction_target():
+	if not player:
+		return null
+	return player.get_interaction_target()
 
 func use_current_item():
 	if is_build_mode_active():
-		return  # Блокируем использование предметов в режиме строительства
+		return
 	
 	if not player or not player.inventory:
 		return
+	
 	var slot = player.inventory.get_hotbar_slot(active_slot)
 	if slot and slot.item:
-		use_item(slot.item.id)
-
-func use_item(item_id: int):
-	ItemActions.use(player, item_id)
+		var target = _get_interaction_target() if slot.item.id == 11 else null
+		ItemActions.use(player, slot.item.id, target)
 
 func update_hotbar():
 	if not player or not player.inventory:

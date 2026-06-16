@@ -17,7 +17,7 @@ func update_power_status():
 		power_changed.emit(is_powered)
 		_on_power_changed(is_powered)
 
-func _on_power_changed(powered: bool):
+func _on_power_changed(_powered: bool):
 	pass
 
 func has_power() -> bool:

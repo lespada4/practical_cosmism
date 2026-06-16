@@ -25,6 +25,8 @@ var player_inventory: Inventory = null
 var available_blueprints: Array[String] = ["still", "generator", "cable_pole"]
 var current_index: int = 0
 
+const CROWBAR_ID = 11
+
 func initialize(player_node: CharacterBody3D, camera_node: Camera3D, crosshair_node: TextureRect):
 	player = player_node
 	camera = camera_node
@@ -62,6 +64,40 @@ func _input(event: InputEvent):
 		
 		if event.is_action_pressed("rotate_building") and current_ghost:
 			current_ghost.rotate_y(deg_to_rad(45))
+
+func _has_crowbar() -> bool:
+	if not player or not player.inventory:
+		return false
+	return player.inventory.get_item_count(CROWBAR_ID) > 0
+
+func toggle_build_mode():
+	if not _has_crowbar():
+		_show_no_crowbar_message()
+		return
+	
+	if not is_build_mode:
+		_show_hint(true)
+		enter_build_mode(available_blueprints[current_index])
+	else:
+		exit_build_mode()
+
+func _show_no_crowbar_message():
+	var hint_label = $"../UI_LAYER/Control/hint_label"
+	if hint_label:
+		hint_label.text = "НУЖНА МОНТИРОВКА ДЛЯ СТРОИТЕЛЬСТВА"
+		hint_label.visible = true
+		await get_tree().create_timer(2.0).timeout
+		hint_label.visible = false
+
+func try_deconstruct(target: Node) -> bool:
+	if not _has_crowbar():
+		return false
+	
+	if not target.has_method("deconstruct"):
+		return false
+	
+	target.deconstruct(player)
+	return true
 
 func _switch_to_prev():
 	current_index = (current_index - 1 + available_blueprints.size()) % available_blueprints.size()
@@ -120,13 +156,6 @@ func _switch_blueprint(index: int):
 		current_ghost.setup(blueprint, player_inventory)
 		current_ghost.global_transform = old_transform
 		current_ghost.rotation = old_rotation
-
-func toggle_build_mode():
-	if not is_build_mode:
-		_show_hint(true)
-		enter_build_mode(available_blueprints[current_index])
-	else:
-		exit_build_mode()
 
 func _show_hint(show: bool):
 	var hint_label = $"../UI_LAYER/Control/hint_label"

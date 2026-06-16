@@ -27,6 +27,16 @@ func register_all_blueprints():
 	cable_pole_bp.preview_color = Color(0, 1, 0, 0.5)
 	register_blueprint("cable_pole", cable_pole_bp)
 
+func get_blueprint_id_by_building(building: Node) -> String:
+	for id in blueprints:
+		var bp = blueprints[id]
+		if bp.building_scene and bp.building_scene.can_instantiate():
+			var instance = bp.building_scene.instantiate()
+			var result = instance.get_script() == building.get_script()
+			instance.queue_free()
+			if result:
+				return id
+	return ""
 
 func register_blueprint(id: String, blueprint: Blueprint):
 	blueprints[id] = blueprint
