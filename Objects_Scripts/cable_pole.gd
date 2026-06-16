@@ -5,6 +5,7 @@ class_name CablePole
 @export var pole_connection_radius: float = 8.0
 @export var is_powered: bool = false
 @export var connection_point: Marker3D
+@export var require_line_of_sight: bool = true
 
 var connected_poles: Array = []
 var connected_consumers: Array = []
@@ -31,6 +32,22 @@ func _ready():
 	pole_connection_area.body_exited.connect(_on_pole_exited)
 	
 	call_deferred("update_all_wires")
+
+func _has_line_of_sight(other_pole: CablePole) -> bool:
+	if not require_line_of_sight:
+		return true
+	if not connection_point or not other_pole.connection_point:
+		return false
+	
+	var space_state = get_world_3d().direct_space_state
+	var from = connection_point.global_position
+	var to = other_pole.connection_point.global_position
+	
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.exclude = [self, other_pole]
+	
+	var result = space_state.intersect_ray(query)
+	return result.is_empty()
 
 func _on_device_entered(body):
 	var consumer = _get_consumer(body)
@@ -65,6 +82,9 @@ func _on_producer_running_changed(running: bool):
 func _on_pole_entered(body):
 	if body is CablePole and body != self:
 		if body not in connected_poles:
+			if not _has_line_of_sight(body):
+				return
+			
 			connected_poles.append(body)
 			_create_wire(body)
 			body._on_pole_entered(self)

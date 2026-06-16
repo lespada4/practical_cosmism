@@ -612,9 +612,8 @@ text = "СТРОИТЕЛЬСТВО
 "
 font = ExtResource("29_adcst")
 
-[node name="Still" parent="." unique_id=994451120 node_paths=PackedStringArray("generator") instance=ExtResource("30_i8cec")]
+[node name="Still" parent="." unique_id=994451120 instance=ExtResource("30_i8cec")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8040104, 0.33566186, 10.49334)
-generator = NodePath("../HardFuelGenerator")
 
 [node name="HardFuelGenerator" parent="." unique_id=1500136369 instance=ExtResource("31_lc3uf")]
 transform = Transform3D(0.44288346, 0, 0.8965792, 0, 1, 0, -0.8965792, 0, 0.44288346, -1.62293, 0.25371218, 8.047532)
