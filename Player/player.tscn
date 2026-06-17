@@ -46,7 +46,7 @@ fill_from = Vector2(0.5, 0.5)
 
 [node name="Player" type="CharacterBody3D" unique_id=452002403 groups=["player"]]
 collision_layer = 2
-collision_mask = 49
+collision_mask = 305
 script = ExtResource("1_l8h54")
 footstep_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
 footstep_sounds_sprint = Array[AudioStream]([ExtResource("15_dkpta")])
@@ -310,9 +310,10 @@ target_position = Vector3(0, -0.75, 0)
 
 [node name="FootstepAudio" type="AudioStreamPlayer" parent="." unique_id=612954745]
 stream = ExtResource("15_dkpta")
+volume_db = -10.0
 pitch_scale = 1.07
 
 [node name="JumpLandAudio" type="AudioStreamPlayer" parent="." unique_id=1431648502]
 stream = ExtResource("15_dkpta")
-volume_db = 2.921
+volume_db = -10.0
 pitch_scale = 1.73

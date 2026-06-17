@@ -49,7 +49,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6gov4")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_w4b6p"]
-size = Vector3(1, 0.67581177, 1)
+size = Vector3(1, 0.91212463, 1)
 
 [node name="Still" type="StaticBody3D" unique_id=994451120 node_paths=PackedStringArray("connection_point") groups=["building"]]
 collision_layer = 36
@@ -62,7 +62,7 @@ transform = Transform3D(0.425, 0, 0, 0, 0.425, 0, 0, 0, 0.425, 0, 0.72703373, 0)
 mesh = SubResource("ArrayMesh_ud5ox")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=114453733]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6730423, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.79119873, 0)
 shape = SubResource("BoxShape3D_w4b6p")
 
 [node name="ElectricConsumer" type="Node" parent="." unique_id=376236065]

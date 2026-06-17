@@ -6,18 +6,25 @@ class_name CablePole
 @export var is_powered: bool = false
 @export var connection_point: Marker3D
 @export var require_line_of_sight: bool = true
+@export var selection_indicator: MeshInstance3D = null
 
 var connected_poles: Array = []
 var connected_consumers: Array = []
 var connected_producers: Array = []
 var is_selected: bool = false
+var player_ref: Node = null
+var _producer_node: Node = null
+var _consumer_node: Node = null
 
 @onready var connection_area: Area3D = $ConnectionArea
 @onready var pole_connection_area: Area3D = $PoleConnectionArea
 @onready var power_light: MeshInstance3D = $PowerLight
-@onready var selection_indicator: MeshInstance3D = $SelectionIndicator
+
+var cleanup_timer: Timer = null
 
 func _ready():
+	add_to_group("cable_poles")
+	
 	connection_area.body_entered.connect(_on_device_entered)
 	connection_area.body_exited.connect(_on_device_exited)
 	
@@ -34,29 +41,45 @@ func _ready():
 	if selection_indicator:
 		selection_indicator.visible = false
 	
+	cleanup_timer = Timer.new()
+	cleanup_timer.wait_time = 0.5
+	cleanup_timer.timeout.connect(_on_cleanup_timer_timeout)
+	add_child(cleanup_timer)
+	cleanup_timer.start()
+	
 	call_deferred("update_all_wires")
+
+func _on_cleanup_timer_timeout():
+	_cleanup_invalid_references()
+	_update_power_from_producers()
+
+func _process(_delta: float):
+	if is_selected and not _is_player_in_range():
+		_deselect()
 
 func interact(player):
 	if not player:
 		return
 	
+	player_ref = player
+	
 	if is_selected:
 		_deselect()
 		return
 	
-	var selected_pole = _find_selected_pole_in_range()
-	if selected_pole:
-		_toggle_connection(selected_pole)
-		selected_pole._deselect()
-	else:
-		_select()
-
-func _find_selected_pole_in_range():
 	for body in pole_connection_area.get_overlapping_bodies():
 		if body is CablePole and body != self:
 			if body.is_selected and _has_line_of_sight(body):
-				return body
-	return null
+				_toggle_connection(body)
+				body._deselect()
+				return
+	
+	_select()
+
+func _is_player_in_range() -> bool:
+	if not player_ref:
+		return false
+	return global_position.distance_to(player_ref.global_position) <= pole_connection_radius
 
 func _select():
 	is_selected = true
@@ -68,24 +91,63 @@ func _deselect():
 	if selection_indicator:
 		selection_indicator.visible = false
 
-func _toggle_connection(other_pole: CablePole):
-	if other_pole == self:
-		return
+func connect_to_device(device: Node) -> bool:
+	if not is_selected:
+		return false
 	
-	if other_pole in connected_poles:
-		_remove_wire(other_pole)
-		connected_poles.erase(other_pole)
-		other_pole.connected_poles.erase(self)
-		other_pole._remove_wire(self)
-	else:
-		if _has_line_of_sight(other_pole):
-			connected_poles.append(other_pole)
-			other_pole.connected_poles.append(self)
-			_create_wire(other_pole)
-			other_pole._create_wire(self)
+	if not "connection_point" in device:
+		return false
 	
-	_update_power_from_poles()
-	other_pole._update_power_from_poles()
+	var point = device.connection_point
+	if not point:
+		return false
+	
+	var existing_wire = null
+	for child in get_children():
+		if child is Wire and child.end_point == point:
+			existing_wire = child
+			break
+	
+	if existing_wire:
+		existing_wire.queue_free()
+		
+		_producer_node = _get_producer(device)
+		if _producer_node and _producer_node in connected_producers:
+			connected_producers.erase(_producer_node)
+			_producer_node.running_changed.disconnect(_on_producer_running_changed)
+		
+		_consumer_node = _get_consumer(device)
+		if _consumer_node and _consumer_node in connected_consumers:
+			connected_consumers.erase(_consumer_node)
+			if _consumer_node.power_source == self:
+				_consumer_node.set_power_source(null)
+				_consumer_node.update_power_status()
+		
+		_update_power_from_producers()
+		_deselect()
+		return true
+	
+	var wire = Wire.new()
+	add_child(wire)
+	wire.start_point = connection_point
+	wire.end_point = point
+	wire.wire_color = Color.YELLOW
+	wire.wire_thickness = 0.015
+	
+	_producer_node = _get_producer(device)
+	if _producer_node and _producer_node not in connected_producers:
+		connected_producers.append(_producer_node)
+		_producer_node.running_changed.connect(_on_producer_running_changed)
+		_update_power_from_producers()
+	
+	_consumer_node = _get_consumer(device)
+	if _consumer_node and _consumer_node not in connected_consumers:
+		connected_consumers.append(_consumer_node)
+		_consumer_node.set_power_source(self)
+		_consumer_node.update_power_status()
+	
+	_deselect()
+	return true
 
 func _has_line_of_sight(other_pole: CablePole) -> bool:
 	if not require_line_of_sight:
@@ -103,38 +165,13 @@ func _has_line_of_sight(other_pole: CablePole) -> bool:
 	var result = space_state.intersect_ray(query)
 	return result.is_empty()
 
-func _on_device_entered(body):
-	var consumer = _get_consumer(body)
-	if consumer and consumer not in connected_consumers:
-		connected_consumers.append(consumer)
-		consumer.set_power_source(self)
-		consumer.update_power_status()
-		_create_device_wire(body)
-	
-	var producer = _get_producer(body)
-	if producer and producer not in connected_producers:
-		connected_producers.append(producer)
-		producer.running_changed.connect(_on_producer_running_changed)
-		_update_power_from_producers()
-		_create_device_wire(body)
+func _on_device_entered(_body):
+	pass
 
-func _on_device_exited(body):
-	var consumer = _get_consumer(body)
-	if consumer in connected_consumers:
-		connected_consumers.erase(consumer)
-		if consumer.power_source == self:
-			consumer.set_power_source(null)
-			consumer.update_power_status()
-	
-	var producer = _get_producer(body)
-	if producer in connected_producers:
-		connected_producers.erase(producer)
-		producer.running_changed.disconnect(_on_producer_running_changed)
-		_update_power_from_producers()
-	
-	_remove_device_wire(body)
+func _on_device_exited(_body):
+	pass
 
-func _on_producer_running_changed(running: bool):
+func _on_producer_running_changed(_running: bool):
 	_update_power_from_producers()
 
 func _get_consumer(body):
@@ -147,10 +184,32 @@ func _get_producer(body):
 		return body.get_node("ElectricProducer")
 	return null
 
+func _cleanup_invalid_references():
+	var changed = false
+	var old_count = connected_producers.size()
+	connected_producers = connected_producers.filter(func(p): return is_instance_valid(p))
+	if connected_producers.size() != old_count:
+		changed = true
+	
+	old_count = connected_consumers.size()
+	connected_consumers = connected_consumers.filter(func(c): return is_instance_valid(c))
+	if connected_consumers.size() != old_count:
+		changed = true
+	
+	old_count = connected_poles.size()
+	connected_poles = connected_poles.filter(func(p): return is_instance_valid(p))
+	if connected_poles.size() != old_count:
+		changed = true
+	
+	if changed:
+		print("Cleaned up invalid references")
+
 func _update_power_from_producers():
+	_cleanup_invalid_references()
+	
 	var has_producer = false
 	for producer in connected_producers:
-		if producer.is_running:
+		if is_instance_valid(producer) and producer.is_running:
 			has_producer = true
 			break
 	
@@ -160,9 +219,11 @@ func _update_power_from_producers():
 		_update_power_from_poles()
 
 func _update_power_from_poles():
+	_cleanup_invalid_references()
+	
 	var has_power_from_pole = false
 	for pole in connected_poles:
-		if pole.is_powered:
+		if is_instance_valid(pole) and pole.is_powered:
 			has_power_from_pole = true
 			break
 	
@@ -183,14 +244,42 @@ func set_powered(powered: bool):
 		power_light.material_override = mat
 	
 	for consumer in connected_consumers:
-		consumer.update_power_status()
+		if is_instance_valid(consumer):
+			consumer.update_power_status()
 	
 	for pole in connected_poles:
-		pole._update_power_from_poles()
+		if is_instance_valid(pole):
+			pole._update_power_from_poles()
 
 func receive_power_from_neighbor(powered: bool):
 	if powered and not is_powered:
 		_update_power_from_poles()
+
+func _toggle_connection(other_pole: CablePole):
+	if other_pole == self:
+		return
+	
+	var existing = false
+	for child in get_children():
+		if child is Wire and ((child.start_point == connection_point and child.end_point == other_pole.connection_point) or
+							  (child.start_point == other_pole.connection_point and child.end_point == connection_point)):
+			existing = true
+			break
+	
+	if existing:
+		_remove_wire(other_pole)
+		connected_poles.erase(other_pole)
+		other_pole.connected_poles.erase(self)
+		other_pole._remove_wire(self)
+	else:
+		if _has_line_of_sight(other_pole):
+			connected_poles.append(other_pole)
+			other_pole.connected_poles.append(self)
+			_create_wire(other_pole)
+			other_pole._create_wire(self)
+	
+	_update_power_from_poles()
+	other_pole._update_power_from_poles()
 
 func _create_wire(other_pole: CablePole):
 	if not connection_point or not other_pole.connection_point:
@@ -222,7 +311,6 @@ func _create_device_wire(device):
 	var device_point = null
 	if "connection_point" in device:
 		device_point = device.connection_point
-	
 	if not device_point:
 		return
 	
@@ -241,7 +329,6 @@ func _remove_device_wire(device):
 	var device_point = null
 	if "connection_point" in device:
 		device_point = device.connection_point
-	
 	if not device_point:
 		return
 	
@@ -250,16 +337,32 @@ func _remove_device_wire(device):
 			child.queue_free()
 			return
 
+func update_all_wires():
+	for pole in connected_poles:
+		_create_wire(pole)
+
 func deconstruct(player):
+	_cleanup_invalid_references()
+	
+	for pole in connected_poles:
+		_remove_wire(pole)
+		pole.connected_poles.erase(self)
+		pole._remove_wire(self)
+	
+	for consumer in connected_consumers:
+		_remove_device_wire(consumer)
+		if is_instance_valid(consumer) and consumer.power_source == self:
+			consumer.set_power_source(null)
+			consumer.update_power_status()
+	
+	for producer in connected_producers:
+		_remove_device_wire(producer)
+	
 	var blueprint_id = BlueprintRegistry.get_blueprint_id_by_building(self)
 	var blueprint = BlueprintRegistry.get_blueprint(blueprint_id)
 	
 	if blueprint:
 		for item_id in blueprint.build_costs:
 			player.inventory.add_item(item_id, blueprint.build_costs[item_id])
-		
-		queue_free()
-
-func update_all_wires():
-	for pole in connected_poles:
-		_create_wire(pole)
+	
+	queue_free()

@@ -32,11 +32,12 @@ material = SubResource("StandardMaterial3D_qhnbu")
 rings = 7
 ring_segments = 3
 
-[node name="CablePole" type="StaticBody3D" unique_id=1389217617 node_paths=PackedStringArray("connection_point") groups=["building"]]
+[node name="CablePole" type="StaticBody3D" unique_id=1389217617 node_paths=PackedStringArray("connection_point", "selection_indicator") groups=["building", "cable_poles"]]
 collision_layer = 132
 collision_mask = 32
 script = ExtResource("1_qhnbu")
 connection_point = NodePath("ConnectionPoint")
+selection_indicator = NodePath("SelectionIndicator")
 
 [node name="PoleConnectionArea" type="Area3D" parent="." unique_id=279729477]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8021101, 0)

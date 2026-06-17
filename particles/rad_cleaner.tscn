@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dftt41rqkda0s"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j78ml"]
+emission_shape = 1
+emission_sphere_radius = 16.0
+angle_min = -245.59999
+angle_max = 234.40001
+gravity = Vector3(0, 3, 0)
+tangential_accel_min = -1.0000023
+tangential_accel_max = 0.99999774
+scale_min = 0.29999998
+
+[sub_resource type="Gradient" id="Gradient_2rbjj"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.13385826)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uj68x"]
+gradient = SubResource("Gradient_2rbjj")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w6aci"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(1.0588765e-05, 0.68288857, 0.9319831, 1)
+albedo_texture = SubResource("GradientTexture2D_uj68x")
+emission_enabled = true
+emission = Color(0, 0.7999997, 1, 1)
+emission_energy_multiplier = 5.0
+texture_filter = 0
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_0epkx"]
+material = SubResource("StandardMaterial3D_w6aci")
+size = Vector2(0.6, 0.6)
+
+[node name="RadCleaner" type="GPUParticles3D" unique_id=624717743]
+amount = 16
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_j78ml")
+draw_pass_1 = SubResource("QuadMesh_0epkx")

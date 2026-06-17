@@ -17,23 +17,76 @@ var radiation: float = 0.0
 var radiation_stage: int = 0
 var last_stage: int = -1
 
-# Входящая радиация от зон
 var environment_radiation: float = 0.0
-
-# Защита от радиации (от водки)
 var radiation_resistance: float = 0.0
 var resistance_timer: float = 0.0
-
-# Отравление (плесень)
 var poison_damage_per_sec: float = 0.0
-
-# Радиация от предметов в инвентаре
 var inventory_radiation: float = 0.0
+
+var derad_zone_count: int = 0
+var derad_zones: Array = []  # Кэш активных зон
 
 func _ready():
 	health = max_health
 	radiation = 0.0
 	update_geiger_sound()
+	
+	call_deferred("connect_to_derad_zones")
+
+func connect_to_derad_zones():
+	for zone in get_tree().get_nodes_in_group("derad_zones"):
+		_connect_to_zone(zone)
+
+func _connect_to_zone(zone):
+	if zone not in derad_zones:
+		derad_zones.append(zone)
+	
+	if zone.has_signal("player_entered_zone"):
+		if not zone.player_entered_zone.is_connected(_on_player_entered_derad_zone):
+			zone.player_entered_zone.connect(_on_player_entered_derad_zone)
+	if zone.has_signal("player_exited_zone"):
+		if not zone.player_exited_zone.is_connected(_on_player_exited_derad_zone):
+			zone.player_exited_zone.connect(_on_player_exited_derad_zone)
+	if zone.has_signal("active_state_changed"):
+		if not zone.active_state_changed.is_connected(_on_derad_active_changed):
+			zone.active_state_changed.connect(_on_derad_active_changed)
+	
+	print("Connected to derad zone: ", zone.name)
+
+func _on_derad_active_changed(active: bool):
+	print("Derad zone active changed to: ", active)
+	# Проверяем, находится ли игрок в этой зоне
+	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		return
+	
+	for zone in derad_zones:
+		if zone.is_player_in_zone(player) and zone.is_active:
+			derad_zone_count += 1
+			print("Player in active derad zone. Count: ", derad_zone_count)
+			return
+	
+	# Если ни одна активная зона не содержит игрока — сбрасываем счётчик
+	derad_zone_count = 0
+	print("No active derad zone contains player. Count: 0")
+
+func _on_player_entered_derad_zone():
+	# Проверяем, активна ли зона, в которую вошёл игрок
+	var player = get_tree().get_first_node_in_group("player")
+	for zone in derad_zones:
+		if zone.is_player_in_zone(player) and zone.is_active:
+			derad_zone_count += 1
+			print("Player entered active derad zone. Count: ", derad_zone_count)
+			return
+
+func _on_player_exited_derad_zone():
+	derad_zone_count -= 1
+	if derad_zone_count < 0:
+		derad_zone_count = 0
+	print("Player exited derad zone. Count: ", derad_zone_count)
+
+func is_in_derad_zone() -> bool:
+	return derad_zone_count > 0
 
 func _process(delta):
 	process_resistance_timer(delta)
@@ -41,7 +94,6 @@ func _process(delta):
 	process_inventory_radiation(delta)
 	process_poison_damage(delta)
 	
-	# Урон от радиации ВСЕГДА (вынесен отдельно)
 	var radiation_damage = get_radiation_damage()
 	if radiation_damage > 0:
 		health -= radiation_damage * delta
@@ -62,6 +114,15 @@ func process_resistance_timer(delta):
 func process_environment_radiation(delta):
 	var changed = false
 	
+	if is_in_derad_zone():
+		if radiation > 0:
+			radiation = max(radiation - 15.0 * delta, 0.0)
+			changed = true
+		update_radiation_stage()
+		radiation_changed.emit(radiation, radiation_stage)
+		update_geiger_sound()
+		return
+	
 	if environment_radiation > 0:
 		var reduction = min(radiation_resistance / 100.0, 0.8)
 		var actual_radiation = environment_radiation * (1.0 - reduction)
@@ -81,6 +142,14 @@ func process_environment_radiation(delta):
 		update_geiger_sound()
 
 func process_inventory_radiation(delta):
+	if is_in_derad_zone():
+		if radiation > 0:
+			radiation = max(radiation - 15.0 * delta, 0.0)
+			update_radiation_stage()
+			radiation_changed.emit(radiation, radiation_stage)
+			update_geiger_sound()
+		return
+	
 	if inventory_radiation > 0:
 		var reduction = min(radiation_resistance / 100.0, 0.8)
 		var actual_radiation = inventory_radiation * (1.0 - reduction)
@@ -117,8 +186,6 @@ func get_radiation_damage() -> float:
 		4: return 10.0 + (radiation - 120) * 0.5
 	return 0.0
 
-# ========== ЗВУК ГЕЙГЕРА ==========
-
 func update_geiger_sound():
 	if radiation_stage == last_stage:
 		return
@@ -140,8 +207,6 @@ func update_geiger_sound():
 		_:
 			pass
 
-# ========== ВНЕШНИЕ ВОЗДЕЙСТВИЯ ==========
-
 func apply_environment_radiation(amount: float):
 	environment_radiation = amount
 
@@ -160,8 +225,6 @@ func apply_inventory_radiation(amount: float):
 func heal_health(amount: float):
 	health = min(health + amount, max_health)
 	health_changed.emit(health)
-
-# ========== ПРЕДМЕТЫ ==========
 
 func use_moonshine():
 	radiation = max(radiation - 15, 0)

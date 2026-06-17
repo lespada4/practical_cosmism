@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://c8w0nmo2be575"]
+
+[ext_resource type="Script" uid="uid://bmgn3nmer83ps" path="res://Objects_Scripts/electricity/electricity_consumer.gd" id="1_aa81t"]
+[ext_resource type="Script" uid="uid://cve0mku1m03la" path="res://Objects_Scripts/deradiation_station.gd" id="1_xtvhh"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xtvhh"]
+height = 1.0
+radial_segments = 5
+rings = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_oevyn"]
+height = 0.8829346
+
+[sub_resource type="BoxMesh" id="BoxMesh_na755"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_upnxt"]
+radius = 6.0
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hh2il"]
+emission_shape = 1
+emission_sphere_radius = 6.9
+angle_min = -245.59999
+angle_max = 234.40001
+gravity = Vector3(0, 3, 0)
+tangential_accel_min = -1.0000023
+tangential_accel_max = 0.99999774
+scale_min = 0.29999998
+
+[sub_resource type="Gradient" id="Gradient_2rbjj"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.13385826)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uj68x"]
+gradient = SubResource("Gradient_2rbjj")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w6aci"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(1.0588765e-05, 0.68288857, 0.9319831, 1)
+albedo_texture = SubResource("GradientTexture2D_uj68x")
+emission_enabled = true
+emission = Color(0, 0.7999997, 1, 1)
+emission_energy_multiplier = 5.0
+texture_filter = 0
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_0epkx"]
+material = SubResource("StandardMaterial3D_w6aci")
+size = Vector2(0.6, 0.6)
+
+[node name="DeRad1" type="StaticBody3D" unique_id=156058288 node_paths=PackedStringArray("connection_point") groups=["building"]]
+collision_layer = 36
+collision_mask = 35
+script = ExtResource("1_xtvhh")
+connection_point = NodePath("Marker3D")
+radius = 6.0
+is_active = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=460904403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5118768, 0)
+mesh = SubResource("CylinderMesh_xtvhh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=918175595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58066344, 0)
+shape = SubResource("CylinderShape3D_oevyn")
+
+[node name="ElectricConsumer" type="Node" parent="." unique_id=108842419]
+script = ExtResource("1_aa81t")
+
+[node name="Indicator" type="MeshInstance3D" parent="." unique_id=1319013918]
+transform = Transform3D(0.255, 0, 0, 0, 0.255, 0, 0, 0, 0.255, 0, 1.0549073, 0)
+mesh = SubResource("BoxMesh_na755")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1968544683 groups=["derad_zones"]]
+collision_layer = 256
+collision_mask = 10
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1026452932]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9210429, 0)
+shape = SubResource("SphereShape3D_upnxt")
+debug_color = Color(0, 0.63, 0.462, 1)
+
+[node name="Particles" type="GPUParticles3D" parent="." unique_id=624717743]
+amount = 16
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_hh2il")
+draw_pass_1 = SubResource("QuadMesh_0epkx")
+
+[node name="Marker3D" type="Marker3D" parent="." unique_id=1178109077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7324389, 0)

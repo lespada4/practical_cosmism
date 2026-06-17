@@ -22,7 +22,7 @@ var camera: Camera3D
 var crosshair: TextureRect
 var player_inventory: Inventory = null
 
-var available_blueprints: Array[String] = ["still", "generator", "cable_pole"]
+var available_blueprints: Array[String] = ["still", "generator", "cable_pole", "derad"]
 var current_index: int = 0
 
 const CROWBAR_ID = 11
@@ -235,6 +235,13 @@ func try_build(inventory: Inventory) -> bool:
 	building.rotation = current_ghost.rotation
 	building.position.y -= 0.2
 	player.get_parent().add_child(building)
+	
+	# Если это дерадиатор — подключаем к HealthSystem
+	if building.is_in_group("derad_zones"):
+		var health_system = player.get_node("HealthSystem")
+		if health_system and health_system.has_method("_connect_to_zone"):
+			health_system._connect_to_zone(building)
+			print("DeRad connected to HealthSystem on build")
 	
 	exit_build_mode()
 	return true

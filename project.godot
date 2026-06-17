@@ -57,6 +57,7 @@ folder_colors={
 "res://items/item_resources/consumables/": "orange",
 "res://items/item_resources/resources/": "orange",
 "res://items/item_resources/tools/": "orange",
+"res://particles/": "teal",
 "res://themes_for_ui/": "gray"
 }
 
@@ -66,6 +67,8 @@ resource=""
 building_area=""
 player=""
 building=""
+cable_poles=""
+derad_zones=""
 
 [input]
 
@@ -204,6 +207,7 @@ switch_camera_buildmode={
 3d_physics/layer_6="Buildings"
 3d_physics/layer_7="GhostChecker"
 3d_physics/layer_8="Cables"
+3d_physics/layer_9="Deradiation"
 
 [physics]
 

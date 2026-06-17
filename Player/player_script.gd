@@ -65,6 +65,7 @@ func _ready():
 	health_system.radiation_changed.connect(update_radiation_display)
 	inventory.add_item(11, 1)
 	inventory.add_item(4, 32)
+	inventory.add_item(9, 32)
 	inventory.inventory_updated.connect(_on_inventory_updated)
 	inventory.inventory_updated.connect(update_inventory_display)
 	update_inventory_display()
@@ -183,14 +184,23 @@ func _physics_process(delta):
 
 func try_interact():
 	if not interaction_ray.is_colliding():
+		# Если есть выбранная опора — отменяем выделение
+		_deselect_all_poles()
 		return
+	
 	var hit = interaction_ray.get_collider()
 	if not is_instance_valid(hit):
 		return
+	
 	if hit.is_in_group("resource") and hit.has_method("collect"):
 		hit.collect()
 	elif hit.has_method("interact"):
 		hit.interact(self)
+
+func _deselect_all_poles():
+	for pole in get_tree().get_nodes_in_group("cable_poles"):
+		if pole.is_selected:
+			pole._deselect()
 
 func collect_item(item_id: int, amount: int):
 	inventory.add_item(item_id, amount)

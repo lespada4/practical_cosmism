@@ -12,20 +12,23 @@ func register_all_blueprints():
 	still_bp.build_costs = {1: 10, 2: 5, 9: 10}  # 10 iron, 5 steel, 10 scrap
 	register_blueprint("still", still_bp)
 	
-	# Генератор (тестовый крафт)
 	var generator_bp = Blueprint.new()
 	generator_bp.display_name = "Generator"
 	generator_bp.building_scene = preload("res://buildings/hard_fuel_generator.tscn")
-	generator_bp.build_costs = {9: 1}  # 1 scrap для теста
-	#generator_bp.preview_color = Color(0, 1, 0, 0.5)
+	generator_bp.build_costs = {9: 1}
 	register_blueprint("generator", generator_bp)
 
 	var cable_pole_bp = Blueprint.new()
 	cable_pole_bp.display_name = "Cable Pole"
 	cable_pole_bp.building_scene = preload("res://buildings/cable_pole.tscn")
-	cable_pole_bp.build_costs = {9: 1}  # 1 scrap
-	cable_pole_bp.preview_color = Color(0, 1, 0, 0.5)
+	cable_pole_bp.build_costs = {9: 1}
 	register_blueprint("cable_pole", cable_pole_bp)
+
+	var derad_bp = Blueprint.new()
+	derad_bp.display_name = "DeRad"
+	derad_bp.building_scene = preload("res://buildings/de_rad_1.tscn")
+	derad_bp.build_costs = {9: 1}  # 1 scrap
+	register_blueprint("derad", derad_bp)
 
 func get_blueprint_id_by_building(building: Node) -> String:
 	for id in blueprints:
