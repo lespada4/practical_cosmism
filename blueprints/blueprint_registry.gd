@@ -9,7 +9,7 @@ func register_all_blueprints():
 	var still_bp = Blueprint.new()
 	still_bp.display_name = "Still"
 	still_bp.building_scene = preload("res://buildings/still.tscn")
-	still_bp.build_costs = {1: 10, 2: 5, 9: 10}  # 10 iron, 5 steel, 10 scrap
+	still_bp.build_costs = {1: 10, 2: 5, 9: 10}
 	register_blueprint("still", still_bp)
 	
 	var generator_bp = Blueprint.new()
@@ -27,7 +27,7 @@ func register_all_blueprints():
 	var derad_bp = Blueprint.new()
 	derad_bp.display_name = "DeRad"
 	derad_bp.building_scene = preload("res://buildings/de_rad_1.tscn")
-	derad_bp.build_costs = {9: 1}  # 1 scrap
+	derad_bp.build_costs = {9: 1}
 	register_blueprint("derad", derad_bp)
 
 func get_blueprint_id_by_building(building: Node) -> String:

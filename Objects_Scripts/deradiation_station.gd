@@ -26,22 +26,24 @@ func _ready():
 	area.body_entered.connect(_on_body_entered)
 	area.body_exited.connect(_on_body_exited)
 	
+	area.monitoring = false
+	area.monitorable = false
+	
 	add_to_group("derad_zones")
 	_update_visual(false)
 
 func _find_selected_pole_in_range() -> CablePole:
+	var search_radius = 8.0
 	for pole in get_tree().get_nodes_in_group("cable_poles"):
-		if pole.is_selected and global_position.distance_to(pole.global_position) <= radius:
+		if pole.is_selected and global_position.distance_to(pole.global_position) <= search_radius:
 			return pole
 	return null
 
 func interact(_player):
 	var selected_pole = _find_selected_pole_in_range()
 	if selected_pole:
-		print("DeRad: connecting to pole")
 		selected_pole.connect_to_device(self)
 		return
-	print("DeRad: no selected pole")
 
 func set_power_source(source: Node):
 	if consumer:
@@ -58,21 +60,15 @@ func _on_power_changed(powered: bool):
 	var was_active = is_active
 	is_active = powered
 	
+	area.monitoring = powered
+	area.monitorable = powered
+	
 	if was_active != is_active:
 		active_state_changed.emit(is_active)
-		
-		# Если зона выключилась, а игрок внутри — эмитим выход
-		if not is_active and is_player_in_zone(get_tree().get_first_node_in_group("player")):
-			player_exited_zone.emit()
-		# Если зона включилась, а игрок внутри — эмитим вход
-		elif is_active and is_player_in_zone(get_tree().get_first_node_in_group("player")):
-			player_entered_zone.emit()
 	
 	_update_visual(powered)
 
 func _update_visual(powered: bool):
-	print("DeRad: update visual, powered = ", powered)
-	
 	if indicator:
 		var mat = StandardMaterial3D.new()
 		mat.albedo_color = Color.GREEN if powered else Color.RED
@@ -82,21 +78,19 @@ func _update_visual(powered: bool):
 	
 	if particles:
 		particles.emitting = powered
-		print("DeRad: particles emitting = ", particles.emitting)
 
 func _on_body_entered(body):
-	if body.is_in_group("player"):
-		print("Player ENTERED derad zone")
-		if is_active:
-			player_entered_zone.emit()
+	if body.is_in_group("player") and is_active:
+		player_entered_zone.emit()
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):
-		print("Player EXITED derad zone")
 		player_exited_zone.emit()
 
 func is_player_in_zone(player: Node) -> bool:
 	if not player:
+		return false
+	if not area.monitoring:
 		return false
 	var bodies = area.get_overlapping_bodies()
 	return player in bodies

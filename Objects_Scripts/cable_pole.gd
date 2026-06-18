@@ -227,10 +227,7 @@ func _update_power_from_poles():
 			has_power_from_pole = true
 			break
 	
-	if has_power_from_pole:
-		set_powered(true)
-	elif connected_producers.is_empty():
-		set_powered(false)
+	set_powered(has_power_from_pole)
 
 func set_powered(powered: bool):
 	if is_powered == powered:

@@ -79,6 +79,7 @@ mesh = SubResource("BoxMesh_na755")
 [node name="Area3D" type="Area3D" parent="." unique_id=1968544683 groups=["derad_zones"]]
 collision_layer = 256
 collision_mask = 10
+collision_priority = 0.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1026452932]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9210429, 0)

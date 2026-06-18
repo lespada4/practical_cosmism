@@ -12,14 +12,17 @@ extends StaticBody3D
 
 var is_running: bool = false
 
+
 func _find_selected_pole_in_range() -> CablePole:
-	var radius = 8.0
+	var search_radius = 8.0
 	for pole in get_tree().get_nodes_in_group("cable_poles"):
-		if pole.is_selected and global_position.distance_to(pole.global_position) <= radius:
+		if pole.is_selected and global_position.distance_to(pole.global_position) <= search_radius:
 			return pole
 	return null
 
 func _process(delta: float) -> void:
+	var was_running = is_running
+	
 	if fuel > 0:
 		is_running = true
 		fuel -= fuel_consumption_rate * delta
@@ -30,9 +33,20 @@ func _process(delta: float) -> void:
 	
 	producer.is_running = is_running
 	
+	# Принудительно обновляем опоры при изменении состояния
+	if is_running != was_running:
+		_notify_poles()
+	
 	if energy_label:
 		var coal_count = int(ceil(fuel / coal_energy))
 		energy_label.text = "ENERGY " + str(round(fuel)) + "/" + str(max_fuel) + "\nCOAL " + str(coal_count)
+
+func _notify_poles():
+	print("Generator: notifying poles, is_running = ", is_running)
+	var poles = get_tree().get_nodes_in_group("cable_poles")
+	for pole in poles:
+		if pole.has_method("_update_power_from_producers"):
+			pole._update_power_from_producers()
 
 func interact(player) -> void:
 	var selected_pole = _find_selected_pole_in_range()
@@ -58,6 +72,7 @@ func deconstruct(player):
 			player.inventory.add_item(item_id, blueprint.build_costs[item_id])
 	
 	queue_free()
+
 
 func is_active() -> bool:
 	return is_running

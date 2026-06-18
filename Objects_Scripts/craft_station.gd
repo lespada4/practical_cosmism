@@ -8,9 +8,9 @@ var crafting_ui_ref: Control = null
 var consumer: ElectricConsumer
 
 func _find_selected_pole_in_range() -> CablePole:
-	var radius = 8.0
+	var search_radius = 8.0
 	for pole in get_tree().get_nodes_in_group("cable_poles"):
-		if pole.is_selected and global_position.distance_to(pole.global_position) <= radius:
+		if pole.is_selected and global_position.distance_to(pole.global_position) <= search_radius:
 			return pole
 	return null
 

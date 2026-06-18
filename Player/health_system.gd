@@ -24,13 +24,12 @@ var poison_damage_per_sec: float = 0.0
 var inventory_radiation: float = 0.0
 
 var derad_zone_count: int = 0
-var derad_zones: Array = []  # Кэш активных зон
+var derad_zones: Array = []
 
 func _ready():
 	health = max_health
 	radiation = 0.0
 	update_geiger_sound()
-	
 	call_deferred("connect_to_derad_zones")
 
 func connect_to_derad_zones():
@@ -50,12 +49,8 @@ func _connect_to_zone(zone):
 	if zone.has_signal("active_state_changed"):
 		if not zone.active_state_changed.is_connected(_on_derad_active_changed):
 			zone.active_state_changed.connect(_on_derad_active_changed)
-	
-	print("Connected to derad zone: ", zone.name)
 
-func _on_derad_active_changed(active: bool):
-	print("Derad zone active changed to: ", active)
-	# Проверяем, находится ли игрок в этой зоне
+func _on_derad_active_changed(_active: bool):
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
@@ -63,27 +58,21 @@ func _on_derad_active_changed(active: bool):
 	for zone in derad_zones:
 		if zone.is_player_in_zone(player) and zone.is_active:
 			derad_zone_count += 1
-			print("Player in active derad zone. Count: ", derad_zone_count)
 			return
 	
-	# Если ни одна активная зона не содержит игрока — сбрасываем счётчик
 	derad_zone_count = 0
-	print("No active derad zone contains player. Count: 0")
 
 func _on_player_entered_derad_zone():
-	# Проверяем, активна ли зона, в которую вошёл игрок
 	var player = get_tree().get_first_node_in_group("player")
 	for zone in derad_zones:
 		if zone.is_player_in_zone(player) and zone.is_active:
 			derad_zone_count += 1
-			print("Player entered active derad zone. Count: ", derad_zone_count)
 			return
 
 func _on_player_exited_derad_zone():
 	derad_zone_count -= 1
 	if derad_zone_count < 0:
 		derad_zone_count = 0
-	print("Player exited derad zone. Count: ", derad_zone_count)
 
 func is_in_derad_zone() -> bool:
 	return derad_zone_count > 0
@@ -204,8 +193,6 @@ func update_geiger_sound():
 			geiger_mid.play()
 		4:
 			geiger_heavy.play()
-		_:
-			pass
 
 func apply_environment_radiation(amount: float):
 	environment_radiation = amount
