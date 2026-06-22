@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://665q208y2yxl"]
 
-[ext_resource type="Texture2D" uid="uid://cgbawopqcvy2" path="res://Textures/64x64_textures/rusty_metal_64.png" id="1_q572d"]
-[ext_resource type="Texture2D" uid="uid://cm7aqmvsmykmj" path="res://Textures/Textures32x32/iron_32.png" id="2_iiphj"]
+[ext_resource type="Texture2D" uid="uid://cgbawopqcvy2" path="res://textures/64x64_textures/rusty_metal_64.png" id="1_q572d"]
+[ext_resource type="Texture2D" uid="uid://cm7aqmvsmykmj" path="res://textures/textures32x32/iron_32.png" id="2_iiphj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1oqm"]
 resource_name = "Parts"

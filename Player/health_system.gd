@@ -27,6 +27,7 @@ var derad_zone_count: int = 0
 var derad_zones: Array = []
 
 func _ready():
+	add_to_group("health_system")
 	health = max_health
 	radiation = 0.0
 	update_geiger_sound()
@@ -50,7 +51,12 @@ func _connect_to_zone(zone):
 		if not zone.active_state_changed.is_connected(_on_derad_active_changed):
 			zone.active_state_changed.connect(_on_derad_active_changed)
 
+func _cleanup_invalid_zones():
+	derad_zones = derad_zones.filter(func(z): return is_instance_valid(z))
+
 func _on_derad_active_changed(_active: bool):
+	_cleanup_invalid_zones()
+	
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
 		return
@@ -63,6 +69,8 @@ func _on_derad_active_changed(_active: bool):
 	derad_zone_count = 0
 
 func _on_player_entered_derad_zone():
+	_cleanup_invalid_zones()
+	
 	var player = get_tree().get_first_node_in_group("player")
 	for zone in derad_zones:
 		if zone.is_player_in_zone(player) and zone.is_active:
@@ -70,6 +78,7 @@ func _on_player_entered_derad_zone():
 			return
 
 func _on_player_exited_derad_zone():
+	_cleanup_invalid_zones()
 	derad_zone_count -= 1
 	if derad_zone_count < 0:
 		derad_zone_count = 0

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" format=3 uid="uid://coto3nbsuw142"]
+[gd_resource type="Resource" script_class="Blueprint" format=3 uid="uid://coto3nbsuw142"]
 
 [ext_resource type="Script" uid="uid://b03b17di3c3vt" path="res://blueprints/Blueprint_script.gd" id="1_flex1"]
 

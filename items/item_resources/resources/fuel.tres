@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Item" format=3 uid="uid://d0641pjr6e130"]
+
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://object_Scenes/collectable.tscn" id="1_3g2xq"]
+[ext_resource type="Texture2D" uid="uid://bcb2iub2itlb7" path="res://textures/item_icons/fuel.png" id="2_fohbo"]
+[ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/item_res/Item_Res_Script.gd" id="2_hbx2u"]
+
+[resource]
+script = ExtResource("2_hbx2u")
+id = 12
+display_name = "Gas"
+icon = ExtResource("2_fohbo")
+max_stack = 16
+collectable_scene = ExtResource("1_3g2xq")
+metadata/_custom_type_script = "uid://cjv8wtpf5o1id"

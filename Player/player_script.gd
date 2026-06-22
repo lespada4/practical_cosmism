@@ -29,6 +29,7 @@ const GRAVITY_DOWN = 32.0
 @onready var full_inventory: Panel = $UI_LAYER/Control/FullInventory
 @onready var crafting_ui: Panel = $UI_LAYER/Control/craftingUI
 @onready var protection_label: Label = $UI_LAYER/Control/protection_label
+@onready var checklist: Panel = $UI_LAYER/Control/Checklist
 
 # Footstep sounds
 @onready var footstep_audio: AudioStreamPlayer = $FootstepAudio
@@ -104,6 +105,8 @@ func _input(event):
 		jump_held = true
 	if event.is_action_released("jump"):
 		jump_held = false
+	if event.is_action_pressed("checklist"):
+			checklist.toggle()
 
 func _process(delta: float) -> void:
 	rotation.y = camera_controller.get_h_rotation()
@@ -181,7 +184,9 @@ func _physics_process(delta):
 
 	if building_system.is_build_mode:
 		building_system.update_ghost_position()
-
+	if Engine.get_physics_frames() % 120 == 0:
+			if checklist and checklist.visible:
+				checklist.update_all_tasks()
 func try_interact():
 	if not interaction_ray.is_colliding():
 		# Если есть выбранная опора — отменяем выделение

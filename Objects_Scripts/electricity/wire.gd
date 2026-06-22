@@ -3,7 +3,7 @@ class_name Wire
 
 @export var start_point: Marker3D
 @export var end_point: Marker3D
-@export var wire_color: Color = Color.YELLOW
+@export var wire_color: Color = Color.SADDLE_BROWN
 @export var wire_thickness: float = 0.03
 
 var line_mesh: MeshInstance3D

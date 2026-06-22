@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dmxcjxvnqclac"]
 
-[ext_resource type="Script" uid="uid://cooo5x83rxmmt" path="res://Objects_Scripts/electricity/wire.gd" id="1_burph"]
+[ext_resource type="Script" uid="uid://cooo5x83rxmmt" path="res://objects_Scripts/electricity/wire.gd" id="1_burph"]
 
 [node name="Wire" type="Node3D" unique_id=769848086]
 script = ExtResource("1_burph")

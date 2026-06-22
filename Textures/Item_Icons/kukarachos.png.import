@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://daeqy5pke2070"
-path.s3tc="res://.godot/imported/kukarachos.png-2330972907bc6adc70f30a3601fdfa86.s3tc.ctex"
+path.s3tc="res://.godot/imported/kukarachos.png-8841371f9f4e09a6d606b676056180fe.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Textures/Item_Icons/kukarachos.png"
-dest_files=["res://.godot/imported/kukarachos.png-2330972907bc6adc70f30a3601fdfa86.s3tc.ctex"]
+source_file="res://textures/item_icons/kukarachos.png"
+dest_files=["res://.godot/imported/kukarachos.png-8841371f9f4e09a6d606b676056180fe.s3tc.ctex"]
 
 [params]
 

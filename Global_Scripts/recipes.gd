@@ -7,18 +7,16 @@ func _ready():
 
 func register_recipes():
 	# Ручной крафт
-	#add_recipe(4, 1, {1: 2, 2: 1}, "player")
+	add_recipe(11, 1, {1: 2, 9: 1}, "player")  # Монтировка: 2 iron + 1 scrap
 	
 	# Верстак
 	add_recipe(5, 1, {1: 3, 2: 2}, "workbench")
 	
 	# Самогонный аппарат
-	add_recipe(3, 1, {4: 1,}, "still")
+	add_recipe(3, 1, {4: 1}, "still")
 	
 	# Печка (furnace)
-	add_recipe(6, 1, {1: 2}, "furnace")  # 2 iron = 1 molten iron
-	# recipe_registry.gd
-
+	add_recipe(6, 1, {1: 2}, "furnace")
 
 func add_recipe(result_id: int, quantity: int, ingredients: Dictionary, station: String):
 	recipes.append({

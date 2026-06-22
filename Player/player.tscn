@@ -1,21 +1,23 @@
 [gd_scene format=3 uid="uid://cr4xuiouukpdx"]
 
-[ext_resource type="Script" uid="uid://d1odc4de7pkdt" path="res://Player/player_script.gd" id="1_l8h54"]
-[ext_resource type="Script" uid="uid://vo74e4st4k1j" path="res://Player/CameraController.gd" id="2_00tjw"]
-[ext_resource type="Script" uid="uid://dbtt5ap7725tm" path="res://Player/inventory_system/inventory.gd" id="2_4ntmi"]
-[ext_resource type="Shader" uid="uid://c2d6nvrfhvkhw" path="res://Shaders/filter_retro_fps.gdshader" id="2_x3vf3"]
-[ext_resource type="Script" uid="uid://cfhangcefpspl" path="res://Player/inventory_system/inventory_bar.gd" id="3_btcbx"]
-[ext_resource type="Script" uid="uid://dcqaclfu5yi0m" path="res://Player/health_system.gd" id="3_vtle1"]
-[ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="4_gwnis"]
-[ext_resource type="Script" uid="uid://dfcpgvuw2dtw8" path="res://Player/building_system.gd" id="4_od3ui"]
-[ext_resource type="Script" uid="uid://py3dohw4lbye" path="res://Player/stair_stepper.gd" id="5_apopc"]
-[ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://Player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
-[ext_resource type="PackedScene" uid="uid://ds8ha6qxiwji4" path="res://Player/inventory_system/CraftUI.tscn" id="6_fhl08"]
-[ext_resource type="AudioStream" uid="uid://c2nn5ik6ax5lo" path="res://SFX/Schetchik_gejgera_-_Malaya_aktivnost_(SkySound.cc).mp3" id="7_gu6f8"]
-[ext_resource type="AudioStream" uid="uid://bib5tbmyo3i35" path="res://SFX/radiaciya-zvuk-radiacii (1).mp3" id="9_dkpta"]
-[ext_resource type="AudioStream" uid="uid://7f4hp4q82gvh" path="res://SFX/zvuk-radiacii.mp3" id="12_5htga"]
+[ext_resource type="Script" uid="uid://d1odc4de7pkdt" path="res://player/player_script.gd" id="1_l8h54"]
+[ext_resource type="Script" uid="uid://vo74e4st4k1j" path="res://player/CameraController.gd" id="2_00tjw"]
+[ext_resource type="Script" uid="uid://dbtt5ap7725tm" path="res://player/inventory_system/inventory.gd" id="2_4ntmi"]
+[ext_resource type="Shader" uid="uid://c2d6nvrfhvkhw" path="res://shaders/filter_retro_fps.gdshader" id="2_x3vf3"]
+[ext_resource type="Script" uid="uid://cfhangcefpspl" path="res://player/inventory_system/inventory_bar.gd" id="3_btcbx"]
+[ext_resource type="Script" uid="uid://dcqaclfu5yi0m" path="res://player/health_system.gd" id="3_vtle1"]
+[ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://player/inventory_system/InventorySlot.tscn" id="4_gwnis"]
+[ext_resource type="Script" uid="uid://dfcpgvuw2dtw8" path="res://player/building_system.gd" id="4_od3ui"]
+[ext_resource type="Script" uid="uid://py3dohw4lbye" path="res://player/stair_stepper.gd" id="5_apopc"]
+[ext_resource type="PackedScene" uid="uid://du8seix03gmxp" path="res://player/inventory_system/inventory_panel.tscn" id="5_k53q1"]
+[ext_resource type="PackedScene" uid="uid://ds8ha6qxiwji4" path="res://player/inventory_system/CraftUI.tscn" id="6_fhl08"]
+[ext_resource type="AudioStream" uid="uid://c2nn5ik6ax5lo" path="res://sfx/Schetchik_gejgera_-_Malaya_aktivnost_(SkySound.cc).mp3" id="7_gu6f8"]
+[ext_resource type="AudioStream" uid="uid://bib5tbmyo3i35" path="res://sfx/radiaciya-zvuk-radiacii (1).mp3" id="9_dkpta"]
+[ext_resource type="AudioStream" uid="uid://7f4hp4q82gvh" path="res://sfx/zvuk-radiacii.mp3" id="12_5htga"]
 [ext_resource type="Theme" uid="uid://g2g5gbk23gia" path="res://themes_for_ui/ui_theme.tres" id="12_lfmf2"]
-[ext_resource type="AudioStream" uid="uid://bpybfm4kg24cu" path="res://SFX/842188__aardsreal__footstep-leaves.wav" id="15_dkpta"]
+[ext_resource type="AudioStream" uid="uid://bpybfm4kg24cu" path="res://sfx/842188__aardsreal__footstep-leaves.wav" id="15_dkpta"]
+[ext_resource type="Script" uid="uid://njjnuudqvmax" path="res://player/checklist.gd" id="17_b1ygp"]
+[ext_resource type="PackedScene" uid="uid://ceis30d51kuex" path="res://player/checklist/checklist_item.tscn" id="18_b1ygp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_apopc"]
 shader = ExtResource("2_x3vf3")
@@ -48,11 +50,6 @@ fill_from = Vector2(0.5, 0.5)
 collision_layer = 2
 collision_mask = 305
 script = ExtResource("1_l8h54")
-footstep_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
-footstep_sounds_sprint = Array[AudioStream]([ExtResource("15_dkpta")])
-footstep_interval_sprint = 0.4
-jump_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
-land_sounds = Array[AudioStream]([ExtResource("15_dkpta")])
 
 [node name="Shader" type="ColorRect" parent="." unique_id=1941807911]
 texture_filter = 1
@@ -65,6 +62,7 @@ grow_vertical = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1605091897]
 shape = SubResource("CapsuleShape3D_hvfyp")
+debug_color = Color(0, 0.63, 0.48299998, 1)
 
 [node name="CameraController" type="Node3D" parent="." unique_id=1104547581]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6199315, 0)
@@ -86,7 +84,7 @@ script = ExtResource("2_4ntmi")
 [node name="StairStepper" type="Node" parent="." unique_id=459112024]
 script = ExtResource("5_apopc")
 
-[node name="HealthSystem" type="Node" parent="." unique_id=2105577971]
+[node name="HealthSystem" type="Node" parent="." unique_id=2105577971 groups=["health_system"]]
 script = ExtResource("3_vtle1")
 
 [node name="GeigerLight" type="AudioStreamPlayer" parent="HealthSystem" unique_id=336254355]
@@ -101,7 +99,7 @@ volume_db = -10.0
 stream = ExtResource("9_dkpta")
 volume_db = -10.0
 
-[node name="BuildingSystem" type="Node" parent="." unique_id=1048852922]
+[node name="BuildingSystem" type="Node" parent="." unique_id=1048852922 groups=["building_system"]]
 script = ExtResource("4_od3ui")
 
 [node name="UI_LAYER" type="CanvasLayer" parent="." unique_id=1060750778]
@@ -117,13 +115,21 @@ grow_vertical = 2
 theme = ExtResource("12_lfmf2")
 
 [node name="item name" type="Label" parent="UI_LAYER/Control" unique_id=1175331805]
-layout_mode = 0
-offset_left = 534.0
-offset_top = 558.0
-offset_right = 618.0
-offset_bottom = 581.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = 231.0
+offset_right = 44.0
+offset_bottom = 259.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "item name"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="crosshair" type="TextureRect" parent="UI_LAYER/Control" unique_id=776713406]
 texture_filter = 1
@@ -142,6 +148,7 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_4ntmi")
 
 [node name="inventory_label" type="Label" parent="UI_LAYER/Control" unique_id=2058826100]
+visible = false
 layout_mode = 0
 offset_right = 41.0
 offset_bottom = 23.0
@@ -230,17 +237,29 @@ grow_horizontal = 2
 [node name="BuildingUI" type="Control" parent="UI_LAYER/Control" unique_id=1794425566]
 texture_filter = 1
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BUILDING_COST" type="Label" parent="UI_LAYER/Control/BuildingUI" unique_id=963140174]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 418.0
-offset_top = 157.0
-offset_right = 458.0
-offset_bottom = 197.0
+offset_left = -67.5
+offset_top = 201.0
+offset_right = 67.5
+offset_bottom = 226.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "BUILDING_COST"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Panel" type="Panel" parent="UI_LAYER/Control/BuildingUI" unique_id=1852427276]
 layout_mode = 1
@@ -249,10 +268,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -102.0
-offset_top = -67.0
-offset_right = 102.0
-offset_bottom = -27.0
+offset_left = 270.0
+offset_top = 81.0
+offset_right = 474.0
+offset_bottom = 121.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -270,6 +289,7 @@ offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 14
+text = "BUILDING_NAME"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -280,13 +300,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -102.0
-offset_top = -20.0
-offset_right = 102.0
-offset_bottom = 20.0
+offset_left = 270.0
+offset_top = 128.0
+offset_right = 474.0
+offset_bottom = 168.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 67
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="<" type="Button" parent="UI_LAYER/Control/BuildingUI/SwitchBetweenBuildings" unique_id=1033714339]
@@ -300,13 +320,49 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 text = ">"
 
+[node name="Checklist" type="Panel" parent="UI_LAYER/Control" unique_id=1736589223 node_paths=PackedStringArray("task_container")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.11800001
+anchor_top = 0.261
+anchor_right = 0.11800001
+anchor_bottom = 0.261
+offset_left = -127.936005
+offset_top = -160.128
+offset_right = 128.064
+offset_bottom = 127.871994
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("17_b1ygp")
+task_item_scene = ExtResource("18_b1ygp")
+task_container = NodePath("TaskContainer")
+
+[node name="TaskContainer" type="VBoxContainer" parent="UI_LAYER/Control/Checklist" unique_id=523155725]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.5
+offset_top = -135.0
+offset_right = 110.5
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
 [node name="StairsAhead" type="RayCast3D" parent="." unique_id=896469524]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3574887, -0.5209211)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3574887, -0.36935347)
 target_position = Vector3(0, -0.55, 0)
 
 [node name="StairsBelow" type="RayCast3D" parent="." unique_id=701526348]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.8957086, 0)
 target_position = Vector3(0, -0.75, 0)
+
+[node name="StairsCeiling" type="RayCast3D" parent="." unique_id=1037794457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.012332022, 0)
+target_position = Vector3(0, 1, 0)
 
 [node name="FootstepAudio" type="AudioStreamPlayer" parent="." unique_id=612954745]
 stream = ExtResource("15_dkpta")

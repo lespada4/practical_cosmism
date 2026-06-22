@@ -9,5 +9,4 @@
 
 [resource]
 script = ExtResource("2_ns6ah")
-game_name = "PracticalCosmism"
-textures_root_folder = "Textures"
+game_name = "Practical_Cosmism"

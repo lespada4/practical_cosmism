@@ -52,6 +52,10 @@ enum GameConfigVersion {
 ## See [url="https://trenchbroom.github.io/manual/latest/#game_configuration_files_entities"]TrenchBroom Manual Entity Configuration Information[/url] for more information.
 @export var entity_scale: String = "32"
 
+## Controls whether default entity properties are instantiated automatically when TrenchBroom creates a new entity.
+## See [url="https://trenchbroom.github.io/manual/latest/#entity_properties_defaults"]TrenchBroom Manual Default Entity Properties[/url] for more information.
+@export var set_default_properties: bool = false
+
 ## Toggles whether [FuncGodotFGDModelPointClass] resources will generate models from their [PackedScene] files.
 @export var generate_model_point_class_models: bool = true
 
@@ -124,6 +128,7 @@ func _build_class_text() -> String:
 				palette_path,
 				fgd_filename_str,
 				entity_scale,
+				set_default_properties,
 				brush_tags_str,
 				brushface_tags_str,
 				uv_scale_str
@@ -233,8 +238,13 @@ func export_file() -> void:
 	# FGD
 	var export_fgd : FuncGodotFGDFile = fgd_file.duplicate()
 	export_fgd.generate_model_point_class_models = generate_model_point_class_models
-	export_fgd.do_export_file(FuncGodotFGDFile.FuncGodotTargetMapEditors.TRENCHBROOM, config_folder)
-	print("TrenchBroom Game Config export complete\n")
+
+	var export_err := export_fgd.do_export_file(FuncGodotFGDFile.FuncGodotTargetMapEditors.TRENCHBROOM, config_folder)
+
+	if export_err != OK:
+		printerr("Could not export FGD.")
+	else:
+		print("TrenchBroom Game Config export complete\n")
 
 #region GameConfigDeclarations
 func _get_game_config_v4_text() -> String:
@@ -304,7 +314,8 @@ func _get_game_config_v9v8_text() -> String:
 	"entities": {
 		"definitions": [ %s ],
 		"defaultcolor": "0.6 0.6 0.6 1.0",
-		"scale": %s
+		"scale": %s,
+		"setDefaultProperties": %s
 	},
 	"tags": {
 		"brush": [

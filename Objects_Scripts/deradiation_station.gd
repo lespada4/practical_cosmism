@@ -31,6 +31,17 @@ func _ready():
 	
 	add_to_group("derad_zones")
 	_update_visual(false)
+	
+	call_deferred("_connect_to_health_system")
+
+func _connect_to_health_system():
+	var health_system = get_tree().get_first_node_in_group("health_system")
+	print("DeRad: health_system found = ", health_system)
+	if health_system and health_system.has_method("_connect_to_zone"):
+		health_system._connect_to_zone(self)
+		print("DeRad connected to HealthSystem")
+	else:
+		print("DeRad: health_system not found or no _connect_to_zone method")
 
 func _find_selected_pole_in_range() -> CablePole:
 	var search_radius = 8.0
@@ -39,10 +50,14 @@ func _find_selected_pole_in_range() -> CablePole:
 			return pole
 	return null
 
-func interact(_player):
+func interact(player):
 	var selected_pole = _find_selected_pole_in_range()
 	if selected_pole:
 		selected_pole.connect_to_device(self)
+		return
+	
+	if not consumer.has_power():
+		MessageSystem.show_message("НЕТ ЭНЕРГИИ! Поставь генератор, кабельную опору и подключи их.")
 		return
 
 func set_power_source(source: Node):

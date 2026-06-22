@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://cfxmbqkmripdp"]
 
-[ext_resource type="Texture2D" uid="uid://bt8dyy26tofew" path="res://Textures/Textures32x32/gravel_32.png" id="1_kdlmm"]
-[ext_resource type="Texture2D" uid="uid://cxxlvjuep5qhq" path="res://Textures/Textures32x32/steel_32.png" id="2_1db7l"]
+[ext_resource type="Texture2D" uid="uid://bt8dyy26tofew" path="res://textures/textures32x32/gravel_32.png" id="1_kdlmm"]
+[ext_resource type="Texture2D" uid="uid://cxxlvjuep5qhq" path="res://textures/textures32x32/steel_32.png" id="2_1db7l"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h67v6"]
 resource_name = "Parts"

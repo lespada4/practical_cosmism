@@ -2,12 +2,14 @@ extends Node
 class_name BuildingSystem
 
 signal build_mode_toggled(enabled: bool)
+signal building_built(blueprint_id: String)
 
 @export var build_distance_min: float = 1.0
 @export var build_distance_max: float = 5.0
 
 @onready var building_ui: Control = $"../UI_LAYER/Control/BuildingUI"
 @onready var building_name: Label = $"../UI_LAYER/Control/BuildingUI/Panel/BUILDING_NAME"
+@onready var building_cost: Label = $"../UI_LAYER/Control/BuildingUI/BUILDING_COST"
 @onready var prev_arrow: Button = $"../UI_LAYER/Control/BuildingUI/SwitchBetweenBuildings/<"
 @onready var next_arrow: Button = $"../UI_LAYER/Control/BuildingUI/SwitchBetweenBuildings/>"
 
@@ -146,16 +148,30 @@ func _switch_blueprint(index: int):
 	if building_name:
 		building_name.text = blueprint.display_name
 	
+	if building_cost:
+		building_cost.text = _format_cost(blueprint.build_costs)
+	
 	if current_ghost:
-		var old_transform = current_ghost.global_transform
-		var old_rotation = current_ghost.rotation
 		current_ghost.queue_free()
-		
-		current_ghost = preload("res://blueprints/ghost/ghost.tscn").instantiate()
-		player.add_child(current_ghost)
-		current_ghost.setup(blueprint, player_inventory)
-		current_ghost.global_transform = old_transform
-		current_ghost.rotation = old_rotation
+		current_ghost = null
+	
+	current_ghost = preload("res://blueprints/ghost/ghost.tscn").instantiate()
+	player.add_child(current_ghost)
+	current_ghost.setup(blueprint, player_inventory)
+	
+	if camera:
+		var forward = -camera.global_transform.basis.z
+		forward.y = 0
+		forward = forward.normalized()
+		current_ghost.global_position = camera.global_position + forward * build_distance
+
+func _format_cost(costs: Dictionary) -> String:
+	var parts = []
+	for item_id in costs:
+		var item = ItemRegistry.get_item(item_id)
+		var item_name = item.display_name if item else "Неизвестно"
+		parts.append(str(costs[item_id]) + " " + item_name)
+	return "Стоимость: " + ", ".join(parts)
 
 func _show_hint(show: bool):
 	var hint_label = $"../UI_LAYER/Control/hint_label"
@@ -175,6 +191,10 @@ func enter_build_mode(blueprint_id: String):
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
+	if current_ghost:
+		current_ghost.queue_free()
+		current_ghost = null
+	
 	current_ghost = preload("res://blueprints/ghost/ghost.tscn").instantiate()
 	player.add_child(current_ghost)
 	current_ghost.setup(blueprint, player_inventory)
@@ -183,6 +203,8 @@ func enter_build_mode(blueprint_id: String):
 		building_ui.visible = true
 		if building_name:
 			building_name.text = blueprint.display_name
+		if building_cost:
+			building_cost.text = _format_cost(blueprint.build_costs)
 	
 	if crosshair:
 		crosshair.visible = false
@@ -201,6 +223,7 @@ func exit_build_mode():
 	if current_ghost:
 		current_ghost.queue_free()
 		current_ghost = null
+	
 	is_build_mode = false
 	current_blueprint_id = ""
 	
@@ -221,27 +244,47 @@ func update_ghost_position():
 
 func try_build(inventory: Inventory) -> bool:
 	if not is_build_mode or not current_ghost or not current_ghost.get_valid():
+		print("Build failed: invalid state")
 		return false
 	
 	var blueprint = BlueprintRegistry.get_blueprint(current_blueprint_id)
+	if not blueprint:
+		print("Build failed: blueprint not found")
+		return false
+	
+	print("=== TRY BUILD ===")
+	print("Blueprint ID: ", current_blueprint_id)
+	print("Ghost rotation: ", current_ghost.rotation)
+	print("Ghost rotation_degrees: ", current_ghost.rotation_degrees)
+	print("Ghost global_transform: ", current_ghost.global_transform)
 	
 	if not inventory.has_items(blueprint.build_costs):
+		print("Build failed: not enough resources")
 		return false
 	
 	inventory.consume_items(blueprint.build_costs)
 	
 	var building = blueprint.building_scene.instantiate()
-	building.global_transform = current_ghost.global_transform
-	building.rotation = current_ghost.rotation
-	building.position.y -= 0.2
+	
+	# Сначала добавляем в дерево
 	player.get_parent().add_child(building)
 	
-	# Если это дерадиатор — подключаем к HealthSystem
+	# Теперь устанавливаем глобальный трансформ (работает, так как узел в дереве)
+	building.global_transform = current_ghost.global_transform
+	
+	print("Building rotation: ", building.rotation)
+	print("Building global_transform: ", building.global_transform)
+	
+	building.position.y -= 0.2
+	building.add_to_group("buildings")
+	
 	if building.is_in_group("derad_zones"):
 		var health_system = player.get_node("HealthSystem")
 		if health_system and health_system.has_method("_connect_to_zone"):
 			health_system._connect_to_zone(building)
 			print("DeRad connected to HealthSystem on build")
+	
+	building_built.emit(current_blueprint_id)
 	
 	exit_build_mode()
 	return true

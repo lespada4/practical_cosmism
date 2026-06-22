@@ -2,6 +2,7 @@ extends Node
 class_name Inventory
 
 signal inventory_updated
+signal item_added(item_id: int, amount: int)
 
 var hotbar_slots: Array[ItemStack] = []
 var main_slots: Array[ItemStack] = []
@@ -21,8 +22,10 @@ func clear():
 
 func add_item(item_id: int, amount: int) -> bool:
 	if try_add_to_slots(hotbar_slots, item_id, amount):
+		item_added.emit(item_id, amount)
 		return true
 	if try_add_to_slots(main_slots, item_id, amount):
+		item_added.emit(item_id, amount)
 		return true
 	return false
 

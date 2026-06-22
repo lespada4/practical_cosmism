@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Item" format=3 uid="uid://c8u8mils1hx31"]
 
-[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="1_a3t63"]
-[ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/Item_Res/Item_Res_Script.gd" id="3_byuxg"]
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://object_Scenes/collectable.tscn" id="1_a3t63"]
+[ext_resource type="Script" uid="uid://cjv8wtpf5o1id" path="res://items/item_res/Item_Res_Script.gd" id="3_byuxg"]
 
 [sub_resource type="Gradient" id="Gradient_oevel"]
 offsets = PackedFloat32Array(0.99659866)

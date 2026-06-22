@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://7f4hp4q82gvh"
-path="res://.godot/imported/zvuk-radiacii.mp3-5154456b6a0364a40e46b108386cd80e.mp3str"
+path="res://.godot/imported/zvuk-radiacii.mp3-57a4a7847d619ef078aa078fade661d0.mp3str"
 
 [deps]
 
-source_file="res://SFX/zvuk-radiacii.mp3"
-dest_files=["res://.godot/imported/zvuk-radiacii.mp3-5154456b6a0364a40e46b108386cd80e.mp3str"]
+source_file="res://sfx/zvuk-radiacii.mp3"
+dest_files=["res://.godot/imported/zvuk-radiacii.mp3-57a4a7847d619ef078aa078fade661d0.mp3str"]
 
 [params]
 

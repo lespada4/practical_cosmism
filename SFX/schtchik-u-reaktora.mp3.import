@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bl2xoym1e52hs"
-path="res://.godot/imported/schtchik-u-reaktora.mp3-62af8196e5368bbda82cd2a38a14fb12.mp3str"
+path="res://.godot/imported/schtchik-u-reaktora.mp3-b30d1c1846df1a053ff733a4bdcf1410.mp3str"
 
 [deps]
 
-source_file="res://SFX/schtchik-u-reaktora.mp3"
-dest_files=["res://.godot/imported/schtchik-u-reaktora.mp3-62af8196e5368bbda82cd2a38a14fb12.mp3str"]
+source_file="res://sfx/schtchik-u-reaktora.mp3"
+dest_files=["res://.godot/imported/schtchik-u-reaktora.mp3-b30d1c1846df1a053ff733a4bdcf1410.mp3str"]
 
 [params]
 

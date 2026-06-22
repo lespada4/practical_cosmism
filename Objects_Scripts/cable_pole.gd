@@ -21,6 +21,7 @@ var _consumer_node: Node = null
 @onready var power_light: MeshInstance3D = $PowerLight
 
 var cleanup_timer: Timer = null
+var tutorial_shown: bool = false
 
 func _ready():
 	add_to_group("cable_poles")
@@ -73,6 +74,14 @@ func interact(player):
 				_toggle_connection(body)
 				body._deselect()
 				return
+	
+	# Если нет подключений и подсказка ещё не показана
+	if connected_poles.is_empty() and connected_consumers.is_empty() and connected_producers.is_empty() and not tutorial_shown:
+		tutorial_shown = true
+		MessageSystem.show_message(
+			"Нажми E на опоре, затем подойди к другой опоре или станции и нажми E снова, чтобы соединить их.",
+			4.0
+		)
 	
 	_select()
 
@@ -131,7 +140,7 @@ func connect_to_device(device: Node) -> bool:
 	add_child(wire)
 	wire.start_point = connection_point
 	wire.end_point = point
-	wire.wire_color = Color.YELLOW
+	wire.wire_color = Color.SADDLE_BROWN
 	wire.wire_thickness = 0.015
 	
 	_producer_node = _get_producer(device)
@@ -291,7 +300,7 @@ func _create_wire(other_pole: CablePole):
 	add_child(wire)
 	wire.start_point = connection_point
 	wire.end_point = other_pole.connection_point
-	wire.wire_color = Color.YELLOW
+	wire.wire_color = Color.SADDLE_BROWN
 	wire.wire_thickness = 0.03
 
 func _remove_wire(other_pole: CablePole):
@@ -319,7 +328,7 @@ func _create_device_wire(device):
 	add_child(wire)
 	wire.start_point = connection_point
 	wire.end_point = device_point
-	wire.wire_color = Color.YELLOW
+	wire.wire_color = Color.BROWN
 	wire.wire_thickness = 0.015
 
 func _remove_device_wire(device):

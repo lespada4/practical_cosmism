@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://t68m8a033qv4"]
 
-[ext_resource type="Script" uid="uid://ngxuwvaqagrn" path="res://Objects_Scripts/ghost.gd" id="1_njiek"]
+[ext_resource type="Script" uid="uid://ngxuwvaqagrn" path="res://objects_Scripts/ghost.gd" id="1_njiek"]
 
 [node name="Ghost" type="Area3D" unique_id=1036920598]
 collision_layer = 2

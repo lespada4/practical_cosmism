@@ -12,7 +12,7 @@ config_version=5
 
 config/name="PRACTICAL COSMISM"
 run/main_scene="uid://bkiul8xv6adjg"
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 ItemRegistry="*uid://pe8ot1sgm8u7"
 BlueprintRegistry="*uid://b1cixqvc7iatw"
 RecipeRegistry="*uid://cch04wj31wyml"
+MessageSystem="*uid://c4mdro046o10"
 
 [debug]
 
@@ -37,28 +38,29 @@ enabled=PackedStringArray("res://addons/func_godot/plugin.cfg")
 [file_customization]
 
 folder_colors={
-"res://Cosmism_Trenchbroom/": "yellow",
-"res://Global_Scripts/": "pink",
-"res://Levels/": "teal",
-"res://NPC/": "purple",
-"res://Object_Models/": "green",
-"res://Object_Scenes/": "green",
-"res://Objects_Scripts/": "green",
-"res://Objects_Scripts/electricity/": "yellow",
-"res://Player/": "pink",
-"res://SFX/": "orange",
-"res://Shaders/": "purple",
 "res://Textures/": "purple",
 "res://blueprints/": "blue",
 "res://blueprints/ghost/": "green",
 "res://buildings/": "blue",
+"res://global_scripts/": "pink",
 "res://items/": "gray",
 "res://items/item_resources/": "green",
 "res://items/item_resources/consumables/": "orange",
 "res://items/item_resources/resources/": "orange",
 "res://items/item_resources/tools/": "orange",
+"res://levels/": "teal",
+"res://npcs/": "purple",
+"res://object_Models/": "green",
+"res://object_Scenes/": "green",
+"res://objects_Scripts/": "green",
+"res://objects_Scripts/electricity/": "yellow",
 "res://particles/": "teal",
-"res://themes_for_ui/": "gray"
+"res://player/": "pink",
+"res://sfx/": "orange",
+"res://shaders/": "purple",
+"res://textures/": "green",
+"res://themes_for_ui/": "gray",
+"res://trenchbroom/": "yellow"
 }
 
 [global_group]
@@ -66,9 +68,11 @@ folder_colors={
 resource=""
 building_area=""
 player=""
-building=""
 cable_poles=""
 derad_zones=""
+buildings=""
+building_system=""
+health_system=""
 
 [input]
 
@@ -194,6 +198,11 @@ scroll_down={
 switch_camera_buildmode={
 "deadzone": 0.2,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+checklist={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":74,"key_label":0,"unicode":1086,"location":0,"echo":false,"script":null)
 ]
 }
 

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ceis30d51kuex"]
+
+[ext_resource type="Script" uid="uid://qbsoph4kop6u" path="res://player/checklist_item.gd" id="1_1uj4i"]
+
+[node name="ChecklistItem" type="HBoxContainer" unique_id=266042556]
+script = ExtResource("1_1uj4i")
+
+[node name="Checkmark" type="Label" parent="." unique_id=624785679]
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="TaskLabel" type="Label" parent="." unique_id=1164188318]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "CHECKLIST"
+horizontal_alignment = 1
+vertical_alignment = 1

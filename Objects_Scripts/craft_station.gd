@@ -24,6 +24,7 @@ func interact(player):
 		return
 	
 	if not consumer.has_power():
+		MessageSystem.show_message("НЕТ ЭНЕРГИИ! Поставь генератор, кабельную опору и подключи их.")
 		return
 	
 	crafting_ui_ref = player.crafting_ui

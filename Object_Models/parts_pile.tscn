@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://bjwyxjxt8viqs"]
 
-[ext_resource type="Texture2D" uid="uid://bqoet1pn8cnx0" path="res://Textures/64x64_textures/parts_64.png" id="1_u2gw4"]
-[ext_resource type="Texture2D" uid="uid://cxxlvjuep5qhq" path="res://Textures/Textures32x32/steel_32.png" id="2_6i45y"]
+[ext_resource type="Texture2D" uid="uid://bqoet1pn8cnx0" path="res://textures/64x64_textures/parts_64.png" id="1_u2gw4"]
+[ext_resource type="Texture2D" uid="uid://cxxlvjuep5qhq" path="res://textures/textures32x32/steel_32.png" id="2_6i45y"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f141k"]
 resource_name = "Parts"

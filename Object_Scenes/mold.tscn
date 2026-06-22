@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dvbyvnu26s18h"]
 
-[ext_resource type="Script" uid="uid://cekunvhjg3hpk" path="res://Objects_Scripts/mold.gd" id="1_bgnjn"]
-[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://Object_Scenes/collectable.tscn" id="2_ydni5"]
-[ext_resource type="Texture2D" uid="uid://bga5us7gpk2y5" path="res://Textures/Textures32x32/mold_64.png" id="3_ybysb"]
+[ext_resource type="Script" uid="uid://cekunvhjg3hpk" path="res://objects_Scripts/mold.gd" id="1_bgnjn"]
+[ext_resource type="PackedScene" uid="uid://c3hfprlw4lu7g" path="res://object_Scenes/collectable.tscn" id="2_ydni5"]
+[ext_resource type="Texture2D" uid="uid://bga5us7gpk2y5" path="res://textures/textures32x32/mold_64.png" id="3_ybysb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ybysb"]
 size = Vector3(0.6286621, 0.011889648, 0.6738281)

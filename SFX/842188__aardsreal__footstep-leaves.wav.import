@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bpybfm4kg24cu"
-path="res://.godot/imported/842188__aardsreal__footstep-leaves.wav-918da24f1fc8e049d372c271e49d67ab.sample"
+path="res://.godot/imported/842188__aardsreal__footstep-leaves.wav-ee92c92888cdc4e15c7b91224238c0f8.sample"
 
 [deps]
 
-source_file="res://SFX/842188__aardsreal__footstep-leaves.wav"
-dest_files=["res://.godot/imported/842188__aardsreal__footstep-leaves.wav-918da24f1fc8e049d372c271e49d67ab.sample"]
+source_file="res://sfx/842188__aardsreal__footstep-leaves.wav"
+dest_files=["res://.godot/imported/842188__aardsreal__footstep-leaves.wav-ee92c92888cdc4e15c7b91224238c0f8.sample"]
 
 [params]
 

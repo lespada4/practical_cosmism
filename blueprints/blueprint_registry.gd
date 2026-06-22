@@ -14,7 +14,7 @@ func register_all_blueprints():
 	
 	var generator_bp = Blueprint.new()
 	generator_bp.display_name = "Generator"
-	generator_bp.building_scene = preload("res://buildings/hard_fuel_generator.tscn")
+	generator_bp.building_scene = preload("res://buildings/gasoline_generator.tscn")
 	generator_bp.build_costs = {9: 1}
 	register_blueprint("generator", generator_bp)
 

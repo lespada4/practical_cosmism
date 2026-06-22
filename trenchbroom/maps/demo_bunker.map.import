@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://ojng5ha570rr"
+path="res://.godot/imported/demo_bunker.map-bf37c458b301c447a43814a14f341f80.tres"
+
+[deps]
+
+source_file="res://trenchbroom/maps/demo_bunker.map"
+dest_files=["res://.godot/imported/demo_bunker.map-bf37c458b301c447a43814a14f341f80.tres"]
+
+[params]
+

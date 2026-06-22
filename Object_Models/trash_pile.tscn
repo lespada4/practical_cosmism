@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://b6e18wolxwimm"]
 
-[ext_resource type="Texture2D" uid="uid://2xelvqguf7kb" path="res://Textures/64x64_textures/trash_64.png" id="1_8l8je"]
+[ext_resource type="Texture2D" uid="uid://2xelvqguf7kb" path="res://textures/64x64_textures/trash_64.png" id="1_8l8je"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f4oka"]
 resource_name = "Parts"

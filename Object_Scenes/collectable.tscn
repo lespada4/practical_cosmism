@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c3hfprlw4lu7g"]
 
-[ext_resource type="Script" uid="uid://botu2x00ekqad" path="res://Objects_Scripts/collectable.gd" id="1_cb2ip"]
+[ext_resource type="Script" uid="uid://botu2x00ekqad" path="res://objects_Scripts/collectable.gd" id="1_cb2ip"]
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_cb2ip"]
 width = 32

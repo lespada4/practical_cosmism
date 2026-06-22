@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bnboun1eldk73"]
 
-[ext_resource type="Script" uid="uid://ba2oo4pu7imsi" path="res://Player/inventory_system/inventory_slot.gd" id="1_hsol6"]
+[ext_resource type="Script" uid="uid://ba2oo4pu7imsi" path="res://player/inventory_system/inventory_slot.gd" id="1_hsol6"]
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_5i21w"]
 

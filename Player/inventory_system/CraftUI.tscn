@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ds8ha6qxiwji4"]
 
-[ext_resource type="Script" uid="uid://p5uiujbpsy6k" path="res://Player/inventory_system/craft_ui.gd" id="1_w41so"]
+[ext_resource type="Script" uid="uid://p5uiujbpsy6k" path="res://player/inventory_system/craft_ui.gd" id="1_w41so"]
 
 [node name="Control" type="Panel" unique_id=1454859508]
 anchors_preset = 8

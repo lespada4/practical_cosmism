@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ddtyacrpigtx7"
-path="res://.godot/imported/vodka.png-1044c5b3d90fcc556465fd11b4f6a788.ctex"
+path="res://.godot/imported/vodka.png-85c5f4109b03165be4f802a1ea8501ea.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Item_Icons/vodka.png"
-dest_files=["res://.godot/imported/vodka.png-1044c5b3d90fcc556465fd11b4f6a788.ctex"]
+source_file="res://textures/item_icons/vodka.png"
+dest_files=["res://.godot/imported/vodka.png-85c5f4109b03165be4f802a1ea8501ea.ctex"]
 
 [params]
 

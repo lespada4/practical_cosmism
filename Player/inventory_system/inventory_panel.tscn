@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://du8seix03gmxp"]
 
-[ext_resource type="Script" uid="uid://b83r8xod2lws4" path="res://Player/inventory_system/inventory_panel.gd" id="1_32xni"]
-[ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://Player/inventory_system/InventorySlot.tscn" id="1_nrpbs"]
+[ext_resource type="Script" uid="uid://b83r8xod2lws4" path="res://player/inventory_system/inventory_panel.gd" id="1_32xni"]
+[ext_resource type="PackedScene" uid="uid://bnboun1eldk73" path="res://player/inventory_system/InventorySlot.tscn" id="1_nrpbs"]
 
 [node name="InventoryPanel" type="Panel" unique_id=594815198 node_paths=PackedStringArray("grid_container")]
 custom_minimum_size = Vector2(256, 256)
