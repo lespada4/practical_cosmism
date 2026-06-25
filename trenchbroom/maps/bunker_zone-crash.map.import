@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://coyb31ln3nl1p"
+path="res://.godot/imported/bunker_zone-crash.map-a70723b6039e596416b1ab8be40afcc2.tres"
+
+[deps]
+
+source_file="res://trenchbroom/maps/bunker_zone-crash.map"
+dest_files=["res://.godot/imported/bunker_zone-crash.map-a70723b6039e596416b1ab8be40afcc2.tres"]
+
+[params]
+

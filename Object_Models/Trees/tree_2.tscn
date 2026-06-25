@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://c4ryyx74funs3"]
+
+[ext_resource type="PackedScene" uid="uid://ck6ip3m55cq4m" path="res://object_Models/glbs/tree_2.glb" id="1_8rqpo"]
+[ext_resource type="Material" uid="uid://bniakyj6lnd1u" path="res://object_Models/Trees/bark_1.tres" id="2_qoii4"]
+[ext_resource type="Material" uid="uid://dy8eg3asvxlno" path="res://object_Models/Trees/leaves_orang.tres" id="3_8rqpo"]
+
+[node name="tree_2" unique_id=834307980 instance=ExtResource("1_8rqpo")]
+
+[node name="Cylinder" parent="." index="0" unique_id=686290870]
+surface_material_override/0 = ExtResource("2_qoii4")
+
+[node name="Cylinder_001" parent="." index="1" unique_id=1582305613]
+surface_material_override/0 = ExtResource("2_qoii4")
+
+[node name="Cylinder_002" parent="." index="2" unique_id=792812813]
+surface_material_override/0 = ExtResource("2_qoii4")
+
+[node name="Cylinder_003" parent="." index="3" unique_id=846989437]
+surface_material_override/0 = ExtResource("2_qoii4")
+
+[node name="Cylinder_004" parent="." index="4" unique_id=2071761517]
+surface_material_override/0 = ExtResource("2_qoii4")
+
+[node name="Leaves_003" parent="." index="5" unique_id=329118544]
+surface_material_override/0 = ExtResource("3_8rqpo")
+
+[node name="Leaves_001" parent="." index="6" unique_id=1832339912]
+surface_material_override/0 = ExtResource("3_8rqpo")
+
+[node name="Leaves_002" parent="." index="7" unique_id=906577867]
+surface_material_override/0 = ExtResource("3_8rqpo")
+
+[node name="Leaves_004" parent="." index="8" unique_id=161906557]
+surface_material_override/0 = ExtResource("3_8rqpo")
+
+[node name="Leaves_005" parent="." index="9" unique_id=247343161]
+surface_material_override/0 = ExtResource("3_8rqpo")

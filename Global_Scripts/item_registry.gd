@@ -1,42 +1,40 @@
+# ItemRegistry.gd (автозагрузка)
 extends Node
 
-var items: Dictionary = {}
+const ITEMS = {
+	3: preload("res://items/item_resources/consumables/moonshine.tres"),
+	8: preload("res://items/item_resources/consumables/tarakan.tres"),
+	10: preload("res://items/item_resources/resources/coal.tres"),
+	12: preload("res://items/item_resources/resources/fuel.tres"),
+	1: preload("res://items/item_resources/resources/iron.tres"),
+	4: preload("res://items/item_resources/resources/mold.tres"),
+	6: preload("res://items/item_resources/resources/molten_iron.tres"),
+	7: preload("res://items/item_resources/resources/radioactive_parts.tres"),
+	2: preload("res://items/item_resources/resources/steel.tres"),
+	9: preload("res://items/item_resources/resources/trash.tres"),
+	11: preload("res://items/item_resources/tools/crowbar.tres"),
+}
+
+
 var items_by_name: Dictionary = {}
 
 func _ready():
-	load_all_items()
+	# Заполняем словарь по имени
+	for id in ITEMS:
+		var item = ITEMS[id]
+		if item:
+			items_by_name[item.display_name.to_lower()] = id
+	print("Items registered: ", ITEMS.size())
 
-func load_all_items():
-	var dir_path = "res://items/item_resources/"
-	_load_items_recursive(dir_path)
+func get_item(id: int) -> Item:
+	return ITEMS.get(id)
 
-func _load_items_recursive(path: String):
-	var dir = DirAccess.open(path)
-	if not dir:
-		return
-	
-	var files = dir.get_files()
-	for file in files:
-		if file.ends_with(".tres") or file.ends_with(".res"):
-			var full_path = path + file
-			var item = ResourceLoader.load(full_path) as Item
-			if item:
-				register_item(item)
-	
-	var subdirs = dir.get_directories()
-	for subdir in subdirs:
-		_load_items_recursive(path + subdir + "/")
+func get_item_by_name(name: String) -> Item:
+	var id = items_by_name.get(name.to_lower())
+	return get_item(id)
 
-func register_item(item: Item):
-	items[item.id] = item
-	items_by_name[item.display_name.to_lower()] = item.id
+func get_id_by_name(name: String) -> int:
+	return items_by_name.get(name.to_lower(), -1)
 
-func get_item(item_id: int) -> Item:
-	return items.get(item_id)
-
-func get_item_by_name(item_name: String) -> Item:
-	var id = items_by_name.get(item_name.to_lower())
-	return items.get(id) if id else null
-
-func get_id_by_name(item_name: String) -> int:
-	return items_by_name.get(item_name.to_lower(), -1)
+func get_all_items() -> Array:
+	return ITEMS.values()

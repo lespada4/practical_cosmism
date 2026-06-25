@@ -24,9 +24,14 @@ func handle_input(event: InputEvent):
 		_target_v_rotation -= event.relative.y * mouse_sensitivity
 		_target_v_rotation = clamp(_target_v_rotation, deg_to_rad(-89.0), deg_to_rad(89.0))
 
-func update_rotation(_delta: float):
-	_current_h_rotation = lerp(_current_h_rotation, _target_h_rotation, 0.2)
-	_current_v_rotation = lerp(_current_v_rotation, _target_v_rotation, 0.2)
+func set_initial_rotation(rotation_y: float):
+	_target_h_rotation = rotation_y
+	_current_h_rotation = rotation_y
+
+func update_rotation(delta: float):
+	var smoothness = 1.0 - exp(-15.0 * delta)
+	_current_h_rotation = lerp(_current_h_rotation, _target_h_rotation, smoothness)
+	_current_v_rotation = lerp(_current_v_rotation, _target_v_rotation, smoothness)
 	camera.rotation.x = _current_v_rotation
 
 func get_h_rotation() -> float:

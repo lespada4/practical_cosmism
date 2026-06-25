@@ -34,7 +34,7 @@ shader_parameter/vignette_radius = 0.9
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hvfyp"]
 radius = 0.28222656
-height = 1.8
+height = 1.6001221
 
 [sub_resource type="Gradient" id="Gradient_l8h54"]
 interpolation_mode = 1
@@ -61,6 +61,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1605091897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09993893, 0)
 shape = SubResource("CapsuleShape3D_hvfyp")
 debug_color = Color(0, 0.63, 0.48299998, 1)
 

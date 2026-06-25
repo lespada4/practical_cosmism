@@ -77,6 +77,9 @@ func _ready():
 	# Проверка звуков при старте
 	if footstep_sounds.is_empty():
 		print("WARNING: No footstep sounds assigned!")
+	
+	# Синхронизируем поворот камеры с поворотом игрока в редакторе
+	camera_controller.set_initial_rotation(rotation.y)
 
 func _input(event):
 	camera_controller.handle_input(event)

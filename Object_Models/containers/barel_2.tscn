@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dkm5kte1840w0"]
+
+[ext_resource type="PackedScene" uid="uid://b3m7cctujgsxq" path="res://object_Models/glbs/barel2.glb" id="1_xxvnw"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_xxvnw"]
+data = PackedVector3Array(0, -0.75, -0.5, 0.433, 0.75, -0.25, 0, 0.75, -0.5, 0, -0.75, -0.5, 0.433, -0.75, -0.25, 0.433, 0.75, -0.25, 0.433, -0.75, -0.25, 0.433, 0.75, 0.25, 0.433, 0.75, -0.25, 0.433, -0.75, -0.25, 0.433, -0.75, 0.25, 0.433, 0.75, 0.25, 0.433, -0.75, 0.25, 0, 0.75, 0.5, 0.433, 0.75, 0.25, 0.433, -0.75, 0.25, 0, -0.75, 0.5, 0, 0.75, 0.5, 0, -0.75, 0.5, -0.433, 0.75, 0.25, 0, 0.75, 0.5, 0, -0.75, 0.5, -0.433, -0.75, 0.25, -0.433, 0.75, 0.25, -0.319, 0.75, -0.18419999, -0.319, 0.5624, 0.18419999, -0.319, 0.75, 0.18419999, -0.319, 0.75, -0.18419999, -0.319, 0.5624, -0.18419999, -0.319, 0.5624, 0.18419999, -0.433, -0.75, 0.25, -0.433, 0.75, -0.25, -0.433, 0.75, 0.25, -0.433, -0.75, 0.25, -0.433, -0.75, -0.25, -0.433, 0.75, -0.25, -0.433, -0.75, -0.25, 0, 0.75, -0.5, -0.433, 0.75, -0.25, -0.433, -0.75, -0.25, 0, -0.75, -0.5, 0, 0.75, -0.5, 0, -0.75, -0.5, 0.433, -0.75, 0.25, 0.433, -0.75, -0.25, 0, -0.75, -0.5, -0.433, -0.75, -0.25, 0.433, -0.75, 0.25, 0.319, 0.75, 0.18419999, 0.319, 0.5624, -0.18419999, 0.319, 0.75, -0.18419999, 0.319, 0.75, 0.18419999, 0.319, 0.5624, 0.18419999, 0.319, 0.5624, -0.18419999, -0.433, -0.75, -0.25, 0, -0.75, 0.5, 0.433, -0.75, 0.25, -0.433, -0.75, -0.25, -0.433, -0.75, 0.25, 0, -0.75, 0.5, 0, 0.75, -0.36839998, 0.433, 0.75, -0.25, 0.319, 0.75, -0.18419999, 0.319, 0.75, -0.18419999, 0.433, 0.75, -0.25, 0.433, 0.75, 0.25, 0.319, 0.75, -0.18419999, 0.433, 0.75, 0.25, 0.319, 0.75, 0.18419999, 0, 0.75, -0.36839998, 0, 0.75, -0.5, 0.433, 0.75, -0.25, -0.319, 0.75, -0.18419999, 0, 0.75, -0.5, 0, 0.75, -0.36839998, -0.319, 0.75, -0.18419999, -0.433, 0.75, -0.25, 0, 0.75, -0.5, 0.319, 0.75, 0.18419999, 0, 0.75, 0.5, 0, 0.75, 0.3683, 0.319, 0.75, 0.18419999, 0.433, 0.75, 0.25, 0, 0.75, 0.5, 0, 0.75, 0.3683, 0, 0.75, 0.5, -0.433, 0.75, 0.25, 0, 0.75, 0.3683, -0.433, 0.75, 0.25, -0.319, 0.75, 0.18419999, -0.319, 0.75, 0.18419999, -0.433, 0.75, 0.25, -0.433, 0.75, -0.25, -0.319, 0.75, 0.18419999, -0.433, 0.75, -0.25, -0.319, 0.75, -0.18419999, 0.319, 0.5624, -0.18419999, -0.319, 0.5624, -0.18419999, 0, 0.5624, -0.36839998, 0.319, 0.5624, -0.18419999, 0.319, 0.5624, 0.18419999, -0.319, 0.5624, -0.18419999, 0.319, 0.5624, 0.18419999, -0.319, 0.5624, 0.18419999, -0.319, 0.5624, -0.18419999, 0.319, 0.5624, 0.18419999, 0, 0.5624, 0.3683, -0.319, 0.5624, 0.18419999, 0, 0.75, 0.3683, 0.319, 0.5624, 0.18419999, 0.319, 0.75, 0.18419999, 0, 0.75, 0.3683, 0, 0.5624, 0.3683, 0.319, 0.5624, 0.18419999, 0.319, 0.75, -0.18419999, 0, 0.5624, -0.36839998, 0, 0.75, -0.36839998, 0.319, 0.75, -0.18419999, 0.319, 0.5624, -0.18419999, 0, 0.5624, -0.36839998, 0, 0.75, -0.36839998, -0.319, 0.5624, -0.18419999, -0.319, 0.75, -0.18419999, 0, 0.75, -0.36839998, 0, 0.5624, -0.36839998, -0.319, 0.5624, -0.18419999, -0.319, 0.75, 0.18419999, 0, 0.5624, 0.3683, 0, 0.75, 0.3683, -0.319, 0.75, 0.18419999, -0.319, 0.5624, 0.18419999, 0, 0.5624, 0.3683)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s1fef"]
+emission_shape_scale = Vector3(0.4, 0.4, 0.4)
+emission_shape = 1
+emission_sphere_radius = 1.0
+gravity = Vector3(0, 2, 0)
+
+[sub_resource type="Gradient" id="Gradient_xxvnw"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.1826087, 0.28695652)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wb4oo"]
+gradient = SubResource("Gradient_xxvnw")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_xbcfn"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xkrm3"]
+noise_type = 0
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_bowr3"]
+width = 12
+height = 12
+noise = SubResource("FastNoiseLite_xkrm3")
+color_ramp = SubResource("Gradient_xbcfn")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qsuaf"]
+transparency = 1
+albedo_color = Color(1, 0.68333334, 0, 1)
+albedo_texture = SubResource("GradientTexture2D_wb4oo")
+emission_enabled = true
+emission = Color(1, 0.36666667, 0, 1)
+emission_energy_multiplier = 1.23
+emission_texture = SubResource("NoiseTexture2D_bowr3")
+texture_filter = 0
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_khhxn"]
+material = SubResource("StandardMaterial3D_qsuaf")
+size = Vector2(0.3, 0.3)
+
+[node name="barel2" unique_id=579223892 instance=ExtResource("1_xxvnw")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Cylinder" parent_id_path=PackedInt32Array(1566643028) index="0" unique_id=763232880]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cylinder/StaticBody3D" index="0" unique_id=1423054510]
+shape = SubResource("ConcavePolygonShape3D_xxvnw")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="1" unique_id=1751643573]
+transform = Transform3D(1.4285715, 0, 0, 0, 1.4285715, 0, 0, 0, 1.4285715, 0, 1.9691703, 0)
+light_color = Color(1, 0.5882353, 0.08627451, 1)
+shadow_enabled = true
+omni_range = 4.0
+omni_attenuation = 0.5
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." index="2" unique_id=566952131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7391895, 0)
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_s1fef")
+draw_pass_1 = SubResource("QuadMesh_khhxn")

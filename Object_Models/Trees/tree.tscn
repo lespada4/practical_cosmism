@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dd07i7xxr6ej7"]
+
+[ext_resource type="PackedScene" uid="uid://2knw7tbwcqf" path="res://object_Models/glbs/tree.glb" id="1_uatvs"]
+[ext_resource type="Material" uid="uid://cxe20id7l6qyp" path="res://textures/textures32x32/roof_2_32.tres" id="2_1fhnl"]
+[ext_resource type="Material" uid="uid://b35gadgtog5cv" path="res://object_Models/Trees/leaves.tres" id="3_vt20o"]
+
+[node name="tree" unique_id=1499538569 instance=ExtResource("1_uatvs")]
+
+[node name="Cylinder" parent="." index="0" unique_id=1532759070]
+surface_material_override/0 = ExtResource("2_1fhnl")
+
+[node name="Leaves" parent="." index="1" unique_id=170131971]
+surface_material_override/0 = ExtResource("3_vt20o")
+
+[node name="Leaves_001" parent="." index="2" unique_id=843522020]
+surface_material_override/0 = ExtResource("3_vt20o")
+
+[node name="Leaves_002" parent="." index="3" unique_id=1832043781]
+surface_material_override/0 = ExtResource("3_vt20o")
+
+[node name="Leaves_003" parent="." index="4" unique_id=726259877]
+surface_material_override/0 = ExtResource("3_vt20o")
+
+[node name="Leaves_004" parent="." index="5" unique_id=50773615]
+surface_material_override/0 = ExtResource("3_vt20o")

@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://jrlcu83glno"]
+
+[ext_resource type="Texture2D" uid="uid://c1mrjnqltfmtw" path="res://textures/128x128_textures/tree2.png" id="1_p7hjq"]
+
+[resource]
+resource_name = "Leaves"
+cull_mode = 2
+albedo_texture = ExtResource("1_p7hjq")
+texture_filter = 0
+metadata/_gltf_primary_texture_coord = 0

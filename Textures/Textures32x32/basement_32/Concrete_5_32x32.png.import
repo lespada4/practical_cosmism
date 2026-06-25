@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://3xgkuorl7h1n"
-path.s3tc="res://.godot/imported/Concrete_5_32x32.png-55bc9a5385861d0d51e021ece483327b.s3tc.ctex"
+path.s3tc="res://.godot/imported/concrete_5_32x32.png-124ee26af6cef95a32005611fe476c94.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/textures32x32/basement_32/Concrete_5_32x32.png"
-dest_files=["res://.godot/imported/Concrete_5_32x32.png-55bc9a5385861d0d51e021ece483327b.s3tc.ctex"]
+source_file="res://textures/textures32x32/basement_32/concrete_5_32x32.png"
+dest_files=["res://.godot/imported/concrete_5_32x32.png-124ee26af6cef95a32005611fe476c94.s3tc.ctex"]
 
 [params]
 

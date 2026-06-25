@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bcvunn12mivpn"
-path="res://.godot/imported/Concrete_tiles_1_32x32.png-741f58f57771fb5706baee452fc291e2.ctex"
+path="res://.godot/imported/concrete_tiles_1_32x32.png-87ccb2fd0265d6798c6eeae7214464b5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/textures32x32/basement_32/Concrete_tiles_1_32x32.png"
-dest_files=["res://.godot/imported/Concrete_tiles_1_32x32.png-741f58f57771fb5706baee452fc291e2.ctex"]
+source_file="res://textures/textures32x32/basement_32/concrete_tiles_1_32x32.png"
+dest_files=["res://.godot/imported/concrete_tiles_1_32x32.png-87ccb2fd0265d6798c6eeae7214464b5.ctex"]
 
 [params]
 
