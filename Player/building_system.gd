@@ -72,12 +72,26 @@ func _has_crowbar() -> bool:
 		return false
 	return player.inventory.get_item_count(CROWBAR_ID) > 0
 
+func _get_blueprint_id(building: Node) -> String:
+	for id in available_blueprints:
+		var blueprint = BlueprintRegistry.get_blueprint(id)
+		if not blueprint:
+			continue
+		if building.scene_file_path == blueprint.building_scene.resource_path:
+			return id
+	return ""
+
 func toggle_build_mode():
 	if not _has_crowbar():
 		_show_no_crowbar_message()
 		return
 	
 	if not is_build_mode:
+		# Закрываем все UI при входе в стройку
+		var ui_manager = player.get_node("UI_LAYER/Control/UI_Manager")
+		if ui_manager and ui_manager.has_method("close_current"):
+			ui_manager.close_current()
+		
 		_show_hint(true)
 		enter_build_mode(available_blueprints[current_index])
 	else:
@@ -166,10 +180,15 @@ func _switch_blueprint(index: int):
 		current_ghost.global_position = camera.global_position + forward * build_distance
 
 func _format_cost(costs: Dictionary) -> String:
+	print("=== _format_cost ===")
+	for item_id in costs:
+		var item = ItemRegistry.get_item(item_id)
+		print("ID: ", item_id, " Item: ", item)
+	
 	var parts = []
 	for item_id in costs:
 		var item = ItemRegistry.get_item(item_id)
-		var item_name = item.display_name if item else "Неизвестно"
+		var item_name = item.display_name if item else "Неизвестно (ID: " + str(item_id) + ")"
 		parts.append(str(costs[item_id]) + " " + item_name)
 	return "Стоимость: " + ", ".join(parts)
 

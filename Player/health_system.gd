@@ -5,12 +5,12 @@ signal health_changed(new_health: float)
 signal radiation_changed(radiation: float, stage: int)
 signal died
 signal protection_changed(resistance: float, timer: float)
+signal damage_taken(amount: float, damage_type: int)
 
-@onready var geiger_light: AudioStreamPlayer = $GeigerLight
-@onready var geiger_mid: AudioStreamPlayer = $GeigerMid
-@onready var geiger_heavy: AudioStreamPlayer = $GeigerHeavy
+@onready var geiger_tick: AudioStreamPlayer = $GeigerTick
 
 @export var max_health: float = 100.0
+@export var max_radiation: float = 100.0
 
 var health: float = 100.0
 var radiation: float = 0.0
@@ -26,11 +26,15 @@ var inventory_radiation: float = 0.0
 var derad_zone_count: int = 0
 var derad_zones: Array = []
 
+# Гейгер
+var tick_timer: float = 0.0
+var current_tick_interval: float = 2.0
+var active_radiation_timer: float = 0.0  # сколько времени игрок активно получает радиацию
+
 func _ready():
 	add_to_group("health_system")
 	health = max_health
 	radiation = 0.0
-	update_geiger_sound()
 	call_deferred("connect_to_derad_zones")
 
 func connect_to_derad_zones():
@@ -94,11 +98,18 @@ func _process(delta):
 	
 	var radiation_damage = get_radiation_damage()
 	if radiation_damage > 0:
-		health -= radiation_damage * delta
+		var damage_this_frame = radiation_damage * delta
+		health -= damage_this_frame
 		if health <= 0:
 			health = 0
 			died.emit()
 		health_changed.emit(health)
+		
+		if Engine.get_physics_frames() % 60 == 0:
+			damage_taken.emit(damage_this_frame * 2, 1)
+	
+	# Гейгер
+	_update_geiger(delta)
 
 func process_resistance_timer(delta):
 	if resistance_timer > 0:
@@ -118,14 +129,17 @@ func process_environment_radiation(delta):
 			changed = true
 		update_radiation_stage()
 		radiation_changed.emit(radiation, radiation_stage)
-		update_geiger_sound()
 		return
+	
+	# Активная радиация от зон
+	var is_active_radiation = false
 	
 	if environment_radiation > 0:
 		var reduction = min(radiation_resistance / 100.0, 0.8)
 		var actual_radiation = environment_radiation * (1.0 - reduction)
 		radiation += actual_radiation * delta
 		changed = true
+		is_active_radiation = true
 		
 	elif environment_radiation == 0 and radiation > 0:
 		if radiation_stage <= 2:
@@ -134,10 +148,15 @@ func process_environment_radiation(delta):
 				radiation = 0
 			changed = true
 	
+	# Обновляем таймер активной радиации
+	if is_active_radiation:
+		active_radiation_timer += delta
+	else:
+		active_radiation_timer = max(active_radiation_timer - delta * 2, 0.0)
+	
 	if changed:
 		update_radiation_stage()
 		radiation_changed.emit(radiation, radiation_stage)
-		update_geiger_sound()
 
 func process_inventory_radiation(delta):
 	if is_in_derad_zone():
@@ -145,8 +164,9 @@ func process_inventory_radiation(delta):
 			radiation = max(radiation - 15.0 * delta, 0.0)
 			update_radiation_stage()
 			radiation_changed.emit(radiation, radiation_stage)
-			update_geiger_sound()
 		return
+	
+	var is_active_radiation = false
 	
 	if inventory_radiation > 0:
 		var reduction = min(radiation_resistance / 100.0, 0.8)
@@ -154,7 +174,12 @@ func process_inventory_radiation(delta):
 		radiation += actual_radiation * delta
 		update_radiation_stage()
 		radiation_changed.emit(radiation, radiation_stage)
-		update_geiger_sound()
+		is_active_radiation = true
+	
+	if is_active_radiation:
+		active_radiation_timer += delta
+	else:
+		active_radiation_timer = max(active_radiation_timer - delta * 2, 0.0)
 
 func process_poison_damage(delta):
 	if poison_damage_per_sec > 0:
@@ -184,24 +209,44 @@ func get_radiation_damage() -> float:
 		4: return 10.0 + (radiation - 120) * 0.5
 	return 0.0
 
-func update_geiger_sound():
-	if radiation_stage == last_stage:
+@export var tick_pitch_min: float = 0.98
+@export var tick_pitch_max: float = 1
+
+@export var min_tick_interval: float = 0.2  # минимальный интервал между тиками
+@export var max_tick_interval: float = 0.8   # максимальный интервал между тиками
+
+func _update_geiger(delta):
+	# Определяем интервал тика
+	var interval = max_tick_interval
+	
+	if radiation <= 0:
+		interval = 999.0  # не тикаем
+	elif active_radiation_timer > 1.0:
+		# Активный режим: частота зависит от длительности нахождения в радиации
+		var intensity = clamp(active_radiation_timer / 5.0, 0.0, 1.0)
+		interval = lerp(0.8, min_tick_interval, intensity)
+	else:
+		# Пассивный режим: частота зависит от уровня радиации
+		var t = clamp(radiation / max_radiation, 0.0, 1.0)
+		interval = lerp(max_tick_interval, min_tick_interval, t)
+	
+	# Принудительно ограничиваем интервал
+	interval = max(interval, min_tick_interval)
+	
+	current_tick_interval = interval
+	tick_timer += delta
+	
+	if tick_timer >= current_tick_interval and radiation > 0:
+		tick_timer = 0.0
+		_play_geiger_tick()
+
+func _play_geiger_tick():
+	if not geiger_tick:
 		return
 	
-	last_stage = radiation_stage
-	
-	geiger_light.stop()
-	geiger_mid.stop()
-	geiger_heavy.stop()
-	
-	match radiation_stage:
-		0: return
-		1, 2:
-			geiger_light.play()
-		3:
-			geiger_mid.play()
-		4:
-			geiger_heavy.play()
+	# Случайный питч в небольшом диапазоне
+	geiger_tick.pitch_scale = randf_range(tick_pitch_min, tick_pitch_max)
+	geiger_tick.play()
 
 func apply_environment_radiation(amount: float):
 	environment_radiation = amount
@@ -222,6 +267,18 @@ func heal_health(amount: float):
 	health = min(health + amount, max_health)
 	health_changed.emit(health)
 
+func take_damage(amount: float, damage_type: int = 0):
+	if amount <= 0:
+		return
+	
+	health -= amount
+	if health <= 0:
+		health = 0
+		died.emit()
+	
+	health_changed.emit(health)
+	damage_taken.emit(amount, damage_type)
+
 func use_moonshine():
 	radiation = max(radiation - 15, 0)
 	radiation_resistance = radiation_resistance + 40
@@ -230,13 +287,11 @@ func use_moonshine():
 	update_radiation_stage()
 	radiation_changed.emit(radiation, radiation_stage)
 	protection_changed.emit(radiation_resistance, resistance_timer)
-	update_geiger_sound()
 
 func use_antirad():
 	radiation = max(radiation - 30, 0)
 	update_radiation_stage()
 	radiation_changed.emit(radiation, radiation_stage)
-	update_geiger_sound()
 
 func use_cockroach():
 	health = min(health + 5, max_health)

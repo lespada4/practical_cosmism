@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://bm60gc3lj7i7j"]
+
+[ext_resource type="Texture2D" uid="uid://metjl4uhvhu0" path="res://textures/textures32x32/vat_iron_32.png" id="1_e8y1c"]
+
+[resource]
+albedo_texture = ExtResource("1_e8y1c")
+metallic_specular = 0.0
+texture_filter = 0

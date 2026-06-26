@@ -50,7 +50,7 @@ func _find_selected_pole_in_range() -> CablePole:
 			return pole
 	return null
 
-func interact(player):
+func interact(_player):
 	var selected_pole = _find_selected_pole_in_range()
 	if selected_pole:
 		selected_pole.connect_to_device(self)

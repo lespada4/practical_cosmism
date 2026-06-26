@@ -1,5 +1,5 @@
 extends HBoxContainer
-
+signal active_slot_changed
 @export var slot_scene: PackedScene
 @export var slot_count: int = 9
 @onready var item_name_label: Label = $"../item name"
@@ -57,6 +57,7 @@ func set_active_slot(index: int):
 	if index == active_slot:
 		return
 	active_slot = index
+	active_slot_changed.emit()
 	update_active_highlight()
 	update_item_name_display()
 

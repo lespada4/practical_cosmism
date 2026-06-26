@@ -9,6 +9,7 @@ script = ExtResource("2_7obt5")
 id = 7
 display_name = "Radioactive Parts"
 icon = ExtResource("2_7fni3")
+max_stack = 15
 collectable_scene = ExtResource("1_bjv71")
 radiation_emission = 0.3
 metadata/_custom_type_script = "uid://cjv8wtpf5o1id"

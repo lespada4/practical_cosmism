@@ -12,6 +12,7 @@ extends CharacterBody3D
 const GRAVITY_UP = 10.0
 const GRAVITY_DOWN = 32.0
 
+@onready var hand: Hand = $CameraController/Camera3D/Hand
 @onready var inventory: Inventory = $Inventory
 @onready var health_system: HealthSystem = $HealthSystem
 @onready var building_system: Node = $BuildingSystem
@@ -20,6 +21,7 @@ const GRAVITY_DOWN = 32.0
 @onready var interaction_ray: RayCast3D = $CameraController/Camera3D/interaction_ray
 @onready var dropper: Marker3D = $CameraController/Camera3D/Dropper
 @onready var stair_stepper: Node = $StairStepper
+@onready var ui_manager: UIManager = $UI_LAYER/Control/UI_Manager
 
 @onready var crosshair: TextureRect = $UI_LAYER/Control/crosshair
 @onready var inventory_label: Label = $UI_LAYER/Control/inventory_label
@@ -48,7 +50,6 @@ var is_jumping: bool = false
 var is_sprinting: bool = false
 var jump_held: bool = false
 
-# Footstep state
 var footstep_timer: float = 0.0
 var last_foot: bool = false
 var was_in_air: bool = false
@@ -64,22 +65,30 @@ func _ready():
 	health_system.died.connect(_on_death)
 	health_system.health_changed.connect(update_health_display)
 	health_system.radiation_changed.connect(update_radiation_display)
-	inventory.add_item(11, 1)
-	inventory.add_item(4, 32)
-	inventory.add_item(9, 32)
+	
+	#inventory.add_item(11, 1)
+	#inventory.add_item(4, 32)
+	#inventory.add_item(9, 32)
+	
 	inventory.inventory_updated.connect(_on_inventory_updated)
 	inventory.inventory_updated.connect(update_inventory_display)
+	
 	update_inventory_display()
 	update_health_display(health_system.health)
 	update_radiation_display(health_system.radiation, health_system.radiation_stage)
-	health_system.protection_changed.connect(update_protection_display)
 	
-	# Проверка звуков при старте
+	health_system.protection_changed.connect(update_protection_display)
+	health_system.damage_taken.connect(_on_damage_taken)
+	
 	if footstep_sounds.is_empty():
 		print("WARNING: No footstep sounds assigned!")
 	
-	# Синхронизируем поворот камеры с поворотом игрока в редакторе
 	camera_controller.set_initial_rotation(rotation.y)
+	
+	call_deferred("update_hand_item")
+	
+	building_system.building_built.connect(_on_building_built)
+	health_system.health_changed.connect(_on_health_changed)
 
 func _input(event):
 	camera_controller.handle_input(event)
@@ -94,7 +103,7 @@ func _input(event):
 			try_interact()
 
 	if event.is_action_pressed("craft"):
-		crafting_ui.open("player")
+		ui_manager.toggle_crafting()
 
 	if event.is_action_pressed("sprint"):
 		is_sprinting = true
@@ -108,8 +117,12 @@ func _input(event):
 		jump_held = true
 	if event.is_action_released("jump"):
 		jump_held = false
+	
 	if event.is_action_pressed("checklist"):
-			checklist.toggle()
+		ui_manager.toggle_checklist()
+	
+	if event.is_action_pressed("toggle_inventory"):
+		ui_manager.toggle_inventory()
 
 func _process(delta: float) -> void:
 	rotation.y = camera_controller.get_h_rotation()
@@ -187,12 +200,16 @@ func _physics_process(delta):
 
 	if building_system.is_build_mode:
 		building_system.update_ghost_position()
+	
 	if Engine.get_physics_frames() % 120 == 0:
-			if checklist and checklist.visible:
-				checklist.update_all_tasks()
+		if checklist and checklist.visible:
+			checklist.update_all_tasks()
+	
+	if inventory_bar.active_slot_changed:
+		update_hand_item()
+
 func try_interact():
 	if not interaction_ray.is_colliding():
-		# Если есть выбранная опора — отменяем выделение
 		_deselect_all_poles()
 		return
 	
@@ -257,6 +274,14 @@ func _on_death():
 func _on_inventory_updated():
 	var emission = inventory.get_total_radiation_emission()
 	health_system.apply_inventory_radiation(emission)
+	SaveManager.save_game(_get_save_data())
+
+func _on_building_built(_blueprint_id: String):
+	SaveManager.save_game(_get_save_data())
+
+func _on_health_changed(_new_health: float):
+	if Engine.get_physics_frames() % 300 == 0:
+		SaveManager.save_game(_get_save_data())
 
 func use_moonshine():
 	health_system.use_moonshine()
@@ -266,6 +291,18 @@ func use_antirad():
 
 func use_cockroach():
 	health_system.use_cockroach()
+
+func _on_damage_taken(amount: float, _damage_type: int):
+	camera_controller.trigger_damage_shake(amount)
+
+func update_hand_item():
+	if not hand:
+		return
+	var slot = inventory.get_hotbar_slot(inventory_bar.active_slot)
+	if slot and slot.item:
+		hand.update_item(slot.item)
+	else:
+		hand.update_item(null)
 
 func drop_current_item():
 	if not inventory:
@@ -303,7 +340,6 @@ func get_interaction_target():
 
 func use_crowbar(target: Node):
 	if building_system.try_deconstruct(target):
-		# Успешно демонтировали
 		pass
 
 func show_demo_complete():
@@ -312,6 +348,57 @@ func show_demo_complete():
 		$UI_LAYER/Control/DemoCompleteLabel.visible = true
 		await get_tree().create_timer(3.0).timeout
 		$UI_LAYER/Control/DemoCompleteLabel.visible = false
+
+func _get_save_data() -> Dictionary:
+	var world_state = SaveManager.current_save.get("world_state", {})
+	
+	for child in get_tree().get_nodes_in_group("resource"):
+		var key = "pile_" + str(child.global_position.x) + "_" + \
+				  str(child.global_position.y) + "_" + str(child.global_position.z)
+		if child.has_method("get_state"):
+			var existing = world_state.get(key, {})
+			# Не перезаписываем если в памяти уже есть актуальное состояние
+			# и куча ещё не восстановила его через restore_state
+			if existing.get("is_queued", false) or existing.get("amount", -1) == 0:
+				continue
+			var live_state = child.get_state()
+			# Берём минимальный amount чтобы не дюпать
+			if existing.has("amount") and int(existing["amount"]) < live_state["amount"]:
+				continue
+			world_state[key] = live_state
+	
+	var data = {
+		"position": [global_position.x, global_position.y, global_position.z],
+		"rotation": rotation.y,
+		"health": health_system.health,
+		"radiation": health_system.radiation,
+		"inventory": _serialize_inventory(),
+		"buildings": _serialize_buildings(),
+		"world_state": world_state,
+	}
+	return data
+
+
+func _serialize_inventory() -> Dictionary:
+	var inv_data = {}
+	for i in range(inventory.hotbar_size):
+		var slot = inventory.get_hotbar_slot(i)
+		if slot and slot.item:
+			inv_data[str(i)] = {"id": slot.item.id, "quantity": slot.quantity}
+	return inv_data
+
+func _serialize_buildings() -> Array:
+	var buildings_data = []
+	for building in get_tree().get_nodes_in_group("buildings"):
+		var blueprint_id = building_system._get_blueprint_id(building)
+		if blueprint_id:
+			var data = {
+				"blueprint_id": blueprint_id,
+				"position": [building.global_position.x, building.global_position.y, building.global_position.z],
+				"rotation": building.rotation.y,
+			}
+			buildings_data.append(data)
+	return buildings_data
 
 # ============================================
 # FOOTSTEP SYSTEM
@@ -345,7 +432,6 @@ func _play_footstep_sound() -> void:
 	var sound = sound_pool[randi() % sound_pool.size()]
 	footstep_audio.stream = sound
 	
-	# Чередование громкости вместо panning
 	footstep_audio.volume_db = -3.0 if last_foot else 0.0
 	last_foot = not last_foot
 	
@@ -365,6 +451,21 @@ func _play_land_sound() -> void:
 	jump_land_audio.stream = land_sounds[randi() % land_sounds.size()]
 	jump_land_audio.pitch_scale = randf_range(0.9, 1.1)
 	jump_land_audio.play()
+
+func _notification(what: int):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		SaveManager.save_game(_get_save_data())
+
+func _serialize_world_state() -> Dictionary:
+	# Этот метод больше не используется напрямую — логика перенесена в _get_save_data.
+	# Оставлен для совместимости на случай вызова извне.
+	var world_state = {}
+	for child in get_tree().get_nodes_in_group("resource"):
+		var key = "pile_" + str(child.global_position.x) + "_" + \
+				  str(child.global_position.y) + "_" + str(child.global_position.z)
+		if child.has_method("get_state"):
+			world_state[key] = child.get_state()
+	return world_state
 
 func _play_jump_sound() -> void:
 	if not jump_land_audio or jump_sounds.is_empty():

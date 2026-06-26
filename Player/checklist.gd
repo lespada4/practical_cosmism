@@ -42,7 +42,7 @@ func _on_building_built(blueprint_id: String):
 	if blueprint_id == "beacon":
 		update_all_tasks()
 
-func _on_item_added(item_id: int, amount: int):
+func _on_item_added(item_id: int, _amount: int):
 	if item_id == 11:  # Монтировка
 		for task in tasks:
 			if task["id"] == "crowbar":

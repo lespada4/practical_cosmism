@@ -1,0 +1,153 @@
+[gd_scene format=3 uid="uid://r7uccecb70bn"]
+
+[ext_resource type="Script" uid="uid://7mdn0r5vbs46" path="res://objects_Scripts/main_menu.gd" id="1_en74x"]
+[ext_resource type="Shader" uid="uid://05fk07gdr2m5" path="res://shaders/sky.gdshader" id="2_jlk7l"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_f33lx"]
+frequency = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8wkq4"]
+width = 96
+height = 96
+noise = SubResource("FastNoiseLite_f33lx")
+seamless = true
+seamless_blend_skirt = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gaax5"]
+albedo_color = Color(0, 1, 0.9166665, 1)
+albedo_texture = SubResource("NoiseTexture2D_8wkq4")
+metallic_specular = 1.0
+roughness = 0.0
+uv1_scale = Vector3(0.16, 0.16, 0.16)
+uv1_triplanar = true
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_bqk6o"]
+material = SubResource("StandardMaterial3D_gaax5")
+size = Vector3(3, 1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_w878c"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yv5wu"]
+emission_enabled = true
+emission = Color(0.15686275, 0.8666667, 0.8392157, 1)
+emission_energy_multiplier = 3.27
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_fk0ua"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 32.0
+radial_segments = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mp041"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.2)
+emission_enabled = true
+emission = Color(0.8509804, 1, 1, 1)
+emission_energy_multiplier = 5.95
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jlk7l"]
+shader = ExtResource("2_jlk7l")
+shader_parameter/time_scale = 0.7670000364325
+shader_parameter/base_color = Color(0.63218004, 0.33324197, 0.3394762, 1)
+shader_parameter/slime_color = Color(0.25410035, 0.1027687, 0.051662415, 1)
+shader_parameter/highlight_color = Color(0.49662188, 0.19184089, 0, 1)
+shader_parameter/tendril_density = 5.4810002603475
+shader_parameter/tendril_thickness = 0.4630000219925
+shader_parameter/animation_speed = 0.3330000158175
+shader_parameter/slime_wetness = 0.5150000244625
+
+[sub_resource type="Sky" id="Sky_en74x"]
+sky_material = SubResource("ShaderMaterial_jlk7l")
+
+[sub_resource type="Environment" id="Environment_en74x"]
+background_mode = 2
+sky = SubResource("Sky_en74x")
+tonemap_mode = 3
+
+[node name="MainMenu" type="CanvasLayer" unique_id=1412864450]
+script = ExtResource("1_en74x")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1711101769]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=747128632]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=428722211]
+transform = Transform3D(1, 0, 0, 0, 0.92143345, 0.38853627, 0, -0.38853627, 0.92143345, -2.0071259, 2.519065, 3.4039855)
+
+[node name="Control" type="Control" parent="." unique_id=311096435]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuButtons" type="VBoxContainer" parent="Control" unique_id=755373509]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -141.0
+offset_right = 423.0
+offset_bottom = 141.0
+grow_vertical = 2
+theme_override_constants/separation = 44
+
+[node name="Title" type="Label" parent="Control/MenuButtons" unique_id=147668823]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "PRACTICAL COSMISM"
+horizontal_alignment = 1
+
+[node name="NEWGAME" type="Button" parent="Control/MenuButtons" unique_id=1761348280]
+layout_mode = 2
+text = "NEW GAME"
+
+[node name="CONTINUE" type="Button" parent="Control/MenuButtons" unique_id=1956645750]
+layout_mode = 2
+text = "CONTINUE"
+
+[node name="OPTIONS" type="Button" parent="Control/MenuButtons" unique_id=141360547]
+layout_mode = 2
+text = "OPTIONS"
+
+[node name="QUIT" type="Button" parent="Control/MenuButtons" unique_id=1945386793]
+layout_mode = 2
+text = "QUIT"
+
+[node name="version" type="Label" parent="Control/MenuButtons" unique_id=2049919342]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "v. 0.0.2"
+horizontal_alignment = 1
+
+[node name="Model" type="MeshInstance3D" parent="." unique_id=234550207]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model" unique_id=998295551]
+mesh = SubResource("BoxMesh_bqk6o")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Model/MeshInstance3D" unique_id=1982288333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0052819, 0)
+mesh = SubResource("BoxMesh_w878c")
+surface_material_override/0 = SubResource("StandardMaterial3D_yv5wu")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Model/MeshInstance3D" unique_id=1263598715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 16.805595, 0)
+mesh = SubResource("CylinderMesh_fk0ua")
+surface_material_override/0 = SubResource("StandardMaterial3D_mp041")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=102344327]
+environment = SubResource("Environment_en74x")
